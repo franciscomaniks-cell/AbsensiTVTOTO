@@ -3,151 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TVTOTO Absensi System v12.0 | Ultra-Pro Edition</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+    <title>TVTOTO Absensi System v18.7 | FINAL EDITION</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #2e3192;
-            --accent: #ffff00;
-            --success: #00ff88;
-            --danger: #ff3333;
-            --glass: rgba(10, 10, 20, 0.95);
-            --border-glass: rgba(255, 255, 255, 0.12);
+            --primary: #2e3192; --accent: #ffff00; --success: #00ff88; --danger: #ff4d4d; --warning: #ffcc00;
+            --glass: rgba(10, 10, 25, 0.96); --border-glass: rgba(255, 255, 255, 0.15);
         }
-
-        * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-
-        body {
-            margin: 0; padding: 20px; color: #fff; height: 100vh;
-            background: #000 url('background.jpg') no-repeat center center fixed;
-            background-size: cover; display: flex; justify-content: center; overflow: hidden;
-            position: relative;
+        * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s ease; }
+        body { 
+            margin: 0; padding: 15px; color: #fff; height: 100vh; 
+            background: #000 url('background.jpg') no-repeat center center fixed; 
+            background-size: cover; display: flex; justify-content: center; overflow: hidden; position: relative; 
         }
-
-        /* --- STYLE LOGO (POJOK KIRI ATAS) --- */
-        .logo-container {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 1000;
-            width: 120px; /* Ukuran logo */
-            height: auto;
-            text-align: center;
-        }
-
-        .logo-container img {
-            width: 100%;
-            height: auto;
-            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
-            border-radius: 8px;
-        }
-
-        .main-container {
-            display: grid; grid-template-columns: 1fr 400px;
-            gap: 20px; width: 100%; max-width: 1800px; height: 95vh;
-        }
-
-        /* --- ABSENSI SECTION --- */
-        .absensi-section {
-            background: var(--glass); backdrop-filter: blur(30px);
-            border-radius: 25px; padding: 30px;
-            border: 1px solid var(--border-glass);
-            display: flex; flex-direction: column;
-            box-shadow: 0 50px 100px rgba(0,0,0,0.9);
-        }
-
-        .header-main {
-            display: flex; margin-bottom: 25px; 
-            border: 3px solid #fff; border-radius: 15px; overflow: hidden;
-        }
-        .date-panel { background: var(--accent); color: #000; padding: 15px 25px; text-align: center; min-width: 180px; }
-        .date-panel h2 { margin: 0; font-size: 1.4rem; font-weight: 800; }
-        .title-panel { 
-            background: linear-gradient(90deg, #000, var(--primary)); 
-            flex-grow: 1; display: flex; align-items: center; justify-content: center; 
-            font-size: 2.5rem; font-weight: 900; letter-spacing: 15px; text-indent: 15px;
-        }
-
-        .tool-bar {
-            display: grid; grid-template-columns: 160px 1fr 160px auto auto auto auto;
-            gap: 10px; background: rgba(255,255,255,0.05);
-            padding: 20px; border-radius: 15px; margin-bottom: 25px; align-items: center;
-        }
-
-        .digital-clock {
-            background: #000 !important; color: #00ff00 !important;
-            border: 2px solid #00ff00 !important; text-align: center;
-            font-family: 'Orbitron', sans-serif; font-size: 1.3rem;
-            height: 50px; border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 0 15px rgba(0,255,0,0.2);
-        }
-
-        input, select { height: 50px; border-radius: 10px; border: none; padding: 0 15px; font-weight: 700; font-size: 1rem; outline: none; }
-        .inp-name { background: #fff; color: #000; }
-
-        .btn { height: 50px; padding: 0 15px; border-radius: 10px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 0.75rem; transition: 0.2s; }
-        .btn-add { background: #3498db; color: #fff; }
-        .btn-filter { background: var(--accent); color: #000; }
-        .btn-filter.active { background: #ff00ff; color: #fff; box-shadow: 0 0 20px #ff00ff; }
-        .btn-export { background: var(--success); color: #000; }
-        .btn-reset { background: var(--danger); color: #fff; }
-        .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
-
-        .table-pro-wrap { 
-            background: #fff; border-radius: 15px; overflow-y: auto; flex-grow: 1;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
-        }
-        table { width: 100%; border-collapse: collapse; color: #111; }
-        th { background: var(--primary); color: #fff; padding: 18px; font-size: 0.75rem; text-transform: uppercase; position: sticky; top: 0; z-index: 10; }
-        td { padding: 12px; text-align: center; border-bottom: 1px solid #eee; font-weight: 700; font-size: 0.95rem; }
         
-        .row-late { background: #ffebeb !important; color: #e74c3c !important; }
-        .row-ontime { background: #f0fff4 !important; color: #2ecc71 !important; }
+        /* Logo Pojok Kiri */
+        .logo-box { position: absolute; top: 20px; left: 20px; z-index: 1000; width: 120px; }
+        .logo-box img { width: 100%; border-radius: 10px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.3)); }
 
-        .sidebar-chat {
-            background: var(--glass); backdrop-filter: blur(30px);
-            border-radius: 25px; border: 1px solid var(--border-glass);
-            display: flex; flex-direction: column; height: 100%; overflow: hidden;
-        }
+        .main-container { display: grid; grid-template-columns: 1fr 380px; gap: 20px; width: 100%; max-width: 1800px; height: 95vh; padding-top: 10px; }
+        
+        /* Statistik Card */
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; margin-left: 140px; }
+        .stat-card { padding: 12px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); }
+        .stat-card h4 { margin: 0; font-size: 0.65rem; text-transform: uppercase; opacity: 0.7; letter-spacing: 1px; }
+        .stat-card p { margin: 5px 0 0; font-size: 1.8rem; font-family: 'Orbitron'; font-weight: 900; }
+        .stat-ontime { border-bottom: 4px solid var(--success); color: var(--success); }
+        .stat-late { border-bottom: 4px solid var(--danger); color: var(--danger); }
+        .stat-absent { border-bottom: 4px solid var(--warning); color: var(--warning); }
 
-        .chat-header {
-            padding: 20px; background: rgba(255,255,255,0.03);
-            border-bottom: 1px solid var(--border-glass);
-            display: flex; align-items: center; gap: 10px;
-        }
-        .online-indicator { width: 10px; height: 10px; background: var(--success); border-radius: 50%; box-shadow: 0 0 10px var(--success); animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
-        .chat-header span { font-weight: 800; font-size: 0.9rem; letter-spacing: 1px; flex-grow: 1; }
+        /* Header Utama */
+        .absensi-section { background: var(--glass); backdrop-filter: blur(30px); border-radius: 25px; padding: 25px; border: 1px solid var(--border-glass); display: flex; flex-direction: column; }
+        .header-main { display: flex; margin-bottom: 20px; border: 2px solid #fff; border-radius: 12px; overflow: hidden; }
+        .date-panel { background: var(--accent); color: #000; padding: 10px 20px; text-align: center; min-width: 160px; }
+        .title-panel { background: linear-gradient(90deg, #000, var(--primary)); flex-grow: 1; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-family: 'Orbitron'; font-weight: 900; letter-spacing: 8px; }
 
-        .chat-messages { flex-grow: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 12px; background: rgba(0,0,0,0.2); }
-        .chat-bubble { align-self: flex-start; background: rgba(255,255,255,0.07); padding: 12px; border-radius: 12px 12px 12px 2px; border-left: 3px solid var(--accent); width: 100%; }
-        .bubble-name { color: var(--accent); font-size: 0.65rem; font-weight: 800; display: block; margin-bottom: 4px; }
-        .bubble-text { font-size: 0.85rem; line-height: 1.4; color: #eee; }
-        .bubble-time { font-size: 0.6rem; opacity: 0.4; display: block; text-align: right; margin-top: 5px; }
+        /* Toolbar & Tombol */
+        .tool-bar { display: grid; grid-template-columns: 160px 1fr 160px auto auto auto auto; gap: 10px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; margin-bottom: 20px; align-items: center; }
+        .digital-clock { background: #000; color: #00ff88; border: 1px solid #00ff88; text-align: center; font-family: 'Orbitron'; font-size: 1.2rem; height: 50px; border-radius: 8px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 10px rgba(0,255,136,0.2); }
+        
+        input, select { height: 50px; border-radius: 8px; border: none; padding: 0 12px; font-weight: 700; background: #fff; color: #000; }
+        .btn { height: 50px; padding: 0 15px; border-radius: 8px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 0.75rem; }
+        .btn-add { background: #007bff; color: #fff; }
+        .btn-filter { background: var(--accent); color: #000; }
+        .btn-filter.active { background: #ff00ff; color: #fff; }
+        .btn-csv { background: var(--success); color: #000; }
+        .btn-reset { background: var(--danger); color: #fff; }
 
-        .chat-footer { padding: 15px; border-top: 1px solid var(--border-glass); }
-        .chat-input-box { display: flex; gap: 8px; background: rgba(255,255,255,0.08); padding: 5px; border-radius: 10px; }
-        .chat-input-box input { background: transparent; color: #fff; flex-grow: 1; height: 40px; border: none; font-size: 0.9rem; }
-        .btn-send { background: var(--primary); color: #fff; width: 45px; border-radius: 8px; border: none; cursor: pointer; }
+        /* Tabel Data */
+        .table-pro-wrap { background: #fff; border-radius: 15px; overflow: hidden; flex-grow: 1; display: flex; flex-direction: column; }
+        .table-scroll { overflow-y: auto; flex-grow: 1; }
+        table { width: 100%; border-collapse: collapse; color: #111; }
+        th { background: var(--primary); color: #fff; padding: 15px; position: sticky; top: 0; font-size: 0.7rem; }
+        td { padding: 12px; text-align: center; border-bottom: 1px solid #eee; font-weight: 700; font-size: 0.9rem; }
+        .row-late { background: #fff0f0; color: #d63031; }
+        .row-ontime { background: #f0fff4; color: #27ae60; }
+        .btn-del-pin { background: none; border: none; color: #999; cursor: pointer; font-size: 1.1rem; font-weight: bold; }
 
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        /* Sidebar Chat */
+        .sidebar-chat { background: var(--glass); border-radius: 25px; border: 1px solid var(--border-glass); display: flex; flex-direction: column; overflow: hidden; }
+        .chat-header { padding: 15px; background: rgba(255,255,255,0.05); border-bottom: 1px solid var(--border-glass); display: flex; justify-content: space-between; align-items: center; }
+        .chat-messages { flex-grow: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .chat-bubble { background: rgba(255,255,255,0.08); padding: 10px; border-radius: 10px; border-left: 3px solid var(--accent); }
+        .bubble-name { color: var(--accent); font-size: 0.65rem; font-weight: 800; }
+        .chat-footer { padding: 15px; background: rgba(0,0,0,0.3); border-top: 1px solid var(--border-glass); }
+        .chat-footer input { width: 100%; height: 40px; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid var(--border-glass); padding: 0 10px; border-radius: 8px; }
     </style>
 </head>
 <body>
 
-<div class="logo-container">
-    <img src="logo.png" onerror="this.src='logo.jpg'; this.onerror=null;" alt="TVTOTO Logo">
-</div>
+<div class="logo-box"><img src="logo.png" onerror="this.src='logo.jpg';"></div>
 
 <div class="main-container">
     <div class="absensi-section">
+        <div class="stat-grid">
+            <div class="stat-card stat-ontime"><h4>Tepat Waktu</h4><p id="sOn">0</p></div>
+            <div class="stat-card stat-late"><h4>Terlambat</h4><p id="sLate">0</p></div>
+            <div class="stat-card stat-absent"><h4>Belum Absen</h4><p id="sAbs">65</p></div>
+        </div>
+
         <div class="header-main">
-            <div class="date-panel">
-                <p id="pDay" style="margin:0; font-size:0.75rem; font-weight:800; opacity:0.8;">MINGGU</p>
-                <h2 id="pDate">25 JAN 2026</h2>
-            </div>
+            <div class="date-panel"><p id="pDay" style="margin:0; font-size:0.6rem; font-weight:800;">SENIN</p><h2 id="pDate">26 JAN 2026</h2></div>
             <div class="title-panel">ABSEN TVTOTO</div>
         </div>
 
@@ -159,59 +95,182 @@
                 <option value="SORE">SORE (15:45)</option>
                 <option value="MALAM">MALAM (21:45)</option>
             </select>
-            <input type="text" id="iName" class="inp-name" placeholder="Input Nama Staff..." list="staffs">
+            <input type="text" id="iName" placeholder="Ketik Nama Staff..." list="staffs">
             <datalist id="staffs"></datalist>
-            
             <div id="clockDisplay" class="digital-clock">00:00:00</div>
-            
-            <button class="btn btn-add" onclick="tambahAbsen()">TAMBAH</button>
+            <button class="btn btn-add" onclick="tambahAbsen()">ABSEN</button>
             <button class="btn btn-filter" id="btnF" onclick="filterTelat()">CEK TELAT</button>
-            <button class="btn btn-export" onclick="exportData()">EXPORT</button>
-            <button class="btn btn-reset" onclick="resetAll()">RESET</button>
-        </div>
-
-        <div style="margin-bottom: 15px; font-weight: 800; letter-spacing: 1px;">
-            TOTAL HADIR: <span id="countH" style="color:var(--success); font-size:1.8rem;">0</span> <span style="opacity:0.4">/ 65 STAFF</span>
+            <button class="btn btn-csv" onclick="exportData()">CSV</button>
+            <button class="btn btn-reset" onclick="resetData()">RESET</button>
         </div>
 
         <div class="table-pro-wrap">
-            <table id="tblMain">
-                <thead>
-                    <tr>
-                        <th width="12%">SHIFT</th>
-                        <th width="38%">NAMA LENGKAP STAFF</th>
-                        <th width="15%">TARGET</th>
-                        <th width="15%">AKTUAL</th>
-                        <th width="15%">STATUS</th>
-                        <th width="5%"></th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            <div class="table-scroll">
+                <table id="tblMain">
+                    <thead><tr><th>SHIFT</th><th>NAMA STAFF</th><th>TARGET</th><th>AKTUAL</th><th>STATUS</th><th width="40"></th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </div>
     </div>
 
     <div class="sidebar-chat">
-        <div class="chat-header">
-            <div class="online-indicator"></div>
-            <span>LOGS & MESSAGES</span>
-            <button onclick="hapusChat()" style="background:none; border:none; color:var(--danger); font-size:0.65rem; cursor:pointer; font-weight:800;">CLEAR ALL</button>
-        </div>
+        <div class="chat-header"><strong>SYSTEM VOICE LOGS</strong><button onclick="hapusChat()" style="color:red; background:none; border:none; cursor:pointer; font-size:0.7rem;">Clear</button></div>
         <div class="chat-messages" id="chatWrap"></div>
-        <div class="chat-footer">
-            <div class="chat-input-box">
-                <input type="text" id="chatIn" placeholder="Tulis instruksi atau catatan...">
-                <button class="btn-send" onclick="kirimChat()">➤</button>
-            </div>
-        </div>
+        <div class="chat-footer"><input type="text" id="chatIn" placeholder="Pesan admin..."></div>
     </div>
 </div>
 
 <script>
+    // KONFIGURASI PIN
+    const ADMIN_PIN = "741852963"; 
+    
     const NAMES = ["MARKUS FEBRIAN PAMUNGKAS ATJE", "PUTRI CAHAYA", "RADO DINATA", "SELWEN AL KHAIRI", "GIERDAV ALDEN AZUTOS DUMAT", "S PRIYA DARSIN", "DONY KRIS SANDI", "ALIKA SALSABILAH", "MUHAMMAD HABIB", "RIZKY AULIA", "NOVITA SARI", "ZULMADIL REYDINATA", "INDA AFRITYA", "AMANDA REZKY TANJUNG", "SAWALUDDIN HASIBUAN", "RISKA ARNITA PUTRI", "DIAN THERESA SIMAMORA", "JONATHAN QUEEN", "HENDRA", "SENDI REVIAN", "SYUKUR KURNIAWAN", "OGI CANDRA SAPUTRA", "IRVAN GANESHA", "RAHMA TINA", "JOSIA ROMANDA GINTING", "MUHAMMAD BAKRON MAULANA", "JIMMY", "CINDY NURUL AMALIA HASIBUAN", "DEVA NANDA", "MUHAMMAD JUHARI", "FANNY FADILLA", "WIRA ARIA SAPUTRA", "JANNIFER MENTARI SINGKOH", "AGUSSALIM FAJAR", "SASITHAREN", "JUWAN", "FRENDYCO", "KHOIRUL AMRI", "AL BETO", "APRI YOGO JOHANDA SEMBIRING", "ANDI", "FRANS WILLIAM ISKANDAR TAMBUNAN", "INDRA", "WILSON LEO WU", "ECHA ADELIA", "AHLUN IQBAL", "INDRA KURNIAWAN", "MARIO CHRISTOPHER SUNARWAN", "NADYA TASYA", "LUSI", "YOGI ARDIANSYAH", "SANJELIA PUTRI", "ARUN RAJZ", "KHAIRUL AZHAR", "BOBI ARFANDI", "HARIS MULIA MANURUNG", "ANDRA FAUZI", "ADITYA RIWANA", "JOHANDA JAYUSMAN", "SABAR MORANDO FRANCISCO MANIK", "RAJA EDWARD BANGUN", "DENNIS GOLDSTEIN", "DWIKI RAMDANI", "ABDUL TARIGAN", "RAHMAT HIDAYAT"];
     const TARGETS = { "PAGI": "07:45:00", "SHIFT G": "09:45:00", "SHIFT G2": "11:45:00", "SORE": "15:45:00", "MALAM": "21:45:00" };
     let modeTelat = false;
 
+    // MODUL SUARA
+    function speakAI(text) {
+        const synth = window.speechSynthesis;
+        synth.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'id-ID';
+        utter.rate = 0.9;
+        synth.speak(utter);
+    }
+
+    function hitungSelisih(target, aktual) {
+        const [th, tm, ts] = target.split(':').map(Number);
+        const [ah, am, as] = aktual.split(':').map(Number);
+        const tSec = th*3600 + tm*60 + ts;
+        const aSec = ah*3600 + am*60 + as;
+        let diff = aSec - tSec;
+        if (diff <= 0) return null;
+        const h = Math.floor(diff/3600);
+        const m = Math.floor((diff%3600)/60);
+        const s = diff%60;
+        return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    }
+
+    function tambahAbsen() {
+        const input = document.getElementById('iName');
+        const name = input.value.trim().toUpperCase();
+        const shift = document.getElementById('sShift').value;
+        const time = document.getElementById('clockDisplay').innerText;
+        
+        if(!NAMES.includes(name)) return alert("Nama tidak terdaftar!");
+        let db = JSON.parse(localStorage.getItem('tv_v18') || "[]");
+        if(db.some(x => x.name === name)) return alert("Sudah absen!");
+
+        const telat = hitungSelisih(TARGETS[shift], time);
+        if(telat) {
+            const [h, m] = telat.split(':').map(Number);
+            speakAI(`Perhatian ${name.toLowerCase()}, anda terlambat ${h} jam ${m} menit.`);
+        } else {
+            speakAI(`Selamat datang ${name.toLowerCase()}.`);
+        }
+
+        db.push({ shift, name, target: TARGETS[shift], actual: time });
+        localStorage.setItem('tv_v18', JSON.stringify(db));
+        input.value = ""; render();
+    }
+
+    // MODUL HAPUS & RESET
+    function hapusSatu(nama) {
+        if(prompt("PIN ADMIN:") === ADMIN_PIN) {
+            let db = JSON.parse(localStorage.getItem('tv_v18') || "[]");
+            db = db.filter(x => x.name !== nama);
+            localStorage.setItem('tv_v18', JSON.stringify(db));
+            render();
+        } else { alert("PIN Salah!"); }
+    }
+
+    function resetData() {
+        if(prompt("PIN ADMIN:") === ADMIN_PIN) {
+            localStorage.removeItem('tv_v18');
+            render();
+        } else { alert("PIN Salah!"); }
+    }
+
+    function render() {
+        let db = JSON.parse(localStorage.getItem('tv_v18') || "[]");
+        const tbody = document.querySelector('#tblMain tbody');
+        tbody.innerHTML = "";
+        
+        // Update Statistik
+        let onTime = 0, late = 0;
+        db.forEach(d => { if(hitungSelisih(d.target, d.actual)) late++; else onTime++; });
+        document.getElementById('sOn').innerText = onTime;
+        document.getElementById('sLate').innerText = late;
+        document.getElementById('sAbs').innerText = NAMES.length - db.length;
+
+        let displayDb = [...db].reverse();
+        if(modeTelat) displayDb = displayDb.filter(x => hitungSelisih(x.target, x.actual));
+        
+        displayDb.forEach((d) => {
+            const row = tbody.insertRow();
+            const telat = hitungSelisih(d.target, d.actual);
+            row.className = telat ? 'row-late' : 'row-ontime';
+            row.innerHTML = `
+                <td>${d.shift}</td>
+                <td style="text-align:left;">${d.name}</td>
+                <td>${d.target}</td>
+                <td>${d.actual}</td>
+                <td>${telat ? 'TELAT '+telat : 'TEPAT'}</td>
+                <td><button class="btn-del-pin" onclick="hapusSatu('${d.name}')">✕</button></td>`;
+        });
+
+        // Update Datalist
+        const dl = document.getElementById('staffs');
+        dl.innerHTML = "";
+        const sudah = db.map(x=>x.name);
+        NAMES.filter(n => !sudah.includes(n)).forEach(n => {
+            const o = document.createElement('option'); o.value = n; dl.appendChild(o);
+        });
+        renderChat();
+    }
+
+    function filterTelat() {
+        modeTelat = !modeTelat;
+        const btn = document.getElementById('btnF');
+        btn.classList.toggle('active');
+        btn.innerText = modeTelat ? "LIHAT SEMUA" : "CEK TELAT";
+        render();
+    }
+
+    // EXPORT CSV
+    function exportData() {
+        const db = JSON.parse(localStorage.getItem('tv_v18') || "[]");
+        if (db.length === 0) return alert("Tidak ada data!");
+        let csv = "SHIFT,NAMA,TARGET,AKTUAL,STATUS\n";
+        db.forEach(x => {
+            const t = hitungSelisih(x.target, x.actual);
+            csv += `${x.shift},${x.name},${x.target},${x.actual},${t?'TELAT '+t:'TEPAT'}\n`;
+        });
+        const blob = new Blob([csv], {type: 'text/csv'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `ABSEN_TVTOTO_${new Date().toLocaleDateString()}.csv`;
+        a.click();
+    }
+
+    function renderChat() {
+        const box = document.getElementById('chatWrap');
+        const c = JSON.parse(localStorage.getItem('tv_chat_v18') || "[]");
+        box.innerHTML = c.map(m => `<div class="chat-bubble"><span class="bubble-name">ADMIN</span><br><span style="font-size:0.85rem;">${m.text}</span></div>`).join('');
+        box.scrollTop = box.scrollHeight;
+    }
+
+    document.getElementById('chatIn').addEventListener('keypress', (e) => { 
+        if(e.key === 'Enter' && e.target.value.trim()) {
+            let c = JSON.parse(localStorage.getItem('tv_chat_v18') || "[]");
+            c.push({ text: e.target.value });
+            localStorage.setItem('tv_chat_v18', JSON.stringify(c));
+            e.target.value = ""; renderChat();
+        }
+    });
+
+    function hapusChat() { if(confirm("Hapus log?")) { localStorage.removeItem('tv_chat_v18'); renderChat(); } }
     function updateClock() {
         const now = new Date();
         document.getElementById('clockDisplay').innerText = now.toTimeString().split(' ')[0];
@@ -219,83 +278,7 @@
         document.getElementById('pDay').innerText = now.toLocaleDateString('id-ID', {weekday:'long'}).toUpperCase();
     }
     setInterval(updateClock, 1000);
-
-    function tambahAbsen() {
-        const input = document.getElementById('iName');
-        const name = input.value.trim().toUpperCase();
-        const shift = document.getElementById('sShift').value;
-        const time = document.getElementById('clockDisplay').innerText;
-        if(!NAMES.includes(name)) return alert("Staff tidak terdaftar!");
-        let db = JSON.parse(localStorage.getItem('tv_v12') || "[]");
-        if(db.some(x => x.name === name)) return alert("Staff ini sudah absen!");
-        db.push({ shift, name, target: TARGETS[shift], actual: time });
-        localStorage.setItem('tv_v12', JSON.stringify(db));
-        input.value = "";
-        render();
-    }
-
-    function hitungTelat(target, aktual) {
-        const [th, tm, ts] = target.split(':').map(Number);
-        const [ah, am, as] = aktual.split(':').map(Number);
-        const tSec = th*3600 + tm*60 + ts;
-        const aSec = ah*3600 + am*60 + as;
-        const diff = aSec - tSec;
-        return diff > 0 ? new Date(diff * 1000).toISOString().substr(11, 8) : null;
-    }
-
-    function render() {
-        let db = JSON.parse(localStorage.getItem('tv_v12') || "[]");
-        const tbody = document.querySelector('#tblMain tbody');
-        const dl = document.getElementById('staffs');
-        tbody.innerHTML = ""; dl.innerHTML = "";
-        if(modeTelat) db = db.filter(x => hitungTelat(x.target, x.actual));
-        db.forEach((d, i) => {
-            const l = hitungTelat(d.target, d.actual);
-            const row = tbody.insertRow();
-            row.className = l ? 'row-late' : 'row-ontime';
-            row.innerHTML = `<td>${d.shift}</td><td style="text-align:left; padding-left:30px;">${d.name}</td><td>${d.target}</td><td>${d.actual}</td><td>${l ? 'TELAT ' + l : 'TEPAT'}</td><td><button onclick="hapus(${i})" style="border:none; background:none; cursor:pointer; color:#999;">✕</button></td>`;
-        });
-        document.getElementById('countH').innerText = JSON.parse(localStorage.getItem('tv_v12') || "[]").length;
-        const sudahAbsen = JSON.parse(localStorage.getItem('tv_v12') || "[]").map(x=>x.name);
-        NAMES.filter(n => !sudahAbsen.includes(n)).forEach(n => {
-            const o = document.createElement('option'); o.value = n; dl.appendChild(o);
-        });
-        renderChat();
-    }
-
-    function hapus(i) { let db = JSON.parse(localStorage.getItem('tv_v12')); db.splice(i, 1); localStorage.setItem('tv_v12', JSON.stringify(db)); render(); }
-    function filterTelat() { modeTelat = !modeTelat; document.getElementById('btnF').classList.toggle('active'); render(); }
-    function resetAll() { if(confirm("Hapus data?")) { localStorage.removeItem('tv_v12'); render(); } }
-    function exportData() {
-        const db = JSON.parse(localStorage.getItem('tv_v12') || "[]");
-        let csv = "Shift,Nama,Target,Aktual,Status\n";
-        db.forEach(x => { const l = hitungTelat(x.target, x.actual); csv += `${x.shift},${x.name},${x.target},${x.actual},${l ? 'Telat '+l : 'Tepat'}\n`; });
-        const blob = new Blob([csv], {type: 'text/csv'});
-        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `ABSEN_TVTOTO.csv`; a.click();
-    }
-
-    function kirimChat() {
-        const inp = document.getElementById('chatIn');
-        if(!inp.value.trim()) return;
-        let c = JSON.parse(localStorage.getItem('tv_c12') || "[]");
-        c.push({ text: inp.value, time: new Date().toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'}) });
-        localStorage.setItem('tv_c12', JSON.stringify(c));
-        inp.value = ""; renderChat();
-    }
-
-    function renderChat() {
-        const box = document.getElementById('chatWrap');
-        const c = JSON.parse(localStorage.getItem('tv_c12') || "[]");
-        box.innerHTML = c.map(msg => `<div class="chat-bubble"><span class="bubble-name">ADMIN SYSTEM</span><span class="bubble-text">${msg.text}</span><span class="bubble-time">${msg.time}</span></div>`).join('');
-        box.scrollTop = box.scrollHeight;
-    }
-
-    function hapusChat() { if(confirm("Hapus pesan?")) { localStorage.removeItem('tv_c12'); renderChat(); } }
-    document.getElementById('chatIn').addEventListener('keypress', (e) => { if(e.key === 'Enter') kirimChat(); });
-    document.getElementById('iName').addEventListener('keypress', (e) => { if(e.key === 'Enter') tambahAbsen(); });
-
     window.onload = () => { updateClock(); render(); };
 </script>
 </body>
-
 </html>
