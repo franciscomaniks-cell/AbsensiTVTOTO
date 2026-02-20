@@ -1,248 +1,286 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Absensi Kehadiran TVTOTO</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #2e3192; --accent: #d4a017; --success: #00ff88; --danger: #ff4d4d; --warning: #ffcc00;
-            --glass: rgba(10, 10, 25, 0.96); --border-glass: rgba(255, 255, 255, 0.15);
-            --sidebar-width: 250px;
-        }
-        * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s ease; }
-        body { margin: 0; padding: 0; background: #000 url('background.jpg') no-repeat center center fixed; background-size: cover; height: 100vh; overflow: hidden; color: #fff; display: flex; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TVTOTO Absensi System v18.7 | PRO VOICE EDITION</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2e3192; --accent: #ffff00; --success: #00ff88; --danger: #ff4d4d; --warning: #ffcc00;
+            --glass: rgba(10, 10, 25, 0.96); --border-glass: rgba(255, 255, 255, 0.15);
+        }
+        * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s ease; }
+        body { margin: 0; padding: 15px; color: #fff; height: 100vh; background: #000 url('background.jpg') no-repeat center center fixed; background-size: cover; display: flex; justify-content: center; overflow: hidden; position: relative; }
+        
+        .logo-box { position: absolute; top: 20px; left: 20px; z-index: 1000; width: 120px; }
+        .logo-box img { width: 100%; border-radius: 10px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.3)); }
 
-        /* --- SIDEBAR --- */
-        #sidebar {
-            width: var(--sidebar-width); background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(10px);
-            border-right: 1px solid var(--border-glass); padding: 20px 15px; display: flex; flex-direction: column; z-index: 100;
-        }
-        .sidebar-logo { width: 60px; height: 60px; background: var(--danger); border-radius: 12px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: white; border: 2px solid var(--accent); }
-        .menu-label { font-size: 0.65rem; font-weight: 800; color: var(--accent); letter-spacing: 1.5px; margin: 20px 0 10px 10px; text-transform: uppercase; }
-        .menu-item { display: flex; align-items: center; padding: 12px 15px; margin-bottom: 5px; border-radius: 10px; cursor: pointer; color: #ccc; font-size: 0.85rem; font-weight: 600; text-decoration: none; }
-        .menu-item:hover { background: rgba(255,255,255,0.1); color: #fff; }
-        .menu-item.active { background: var(--primary); color: #fff; border-left: 4px solid var(--accent); }
-        .menu-item span { margin-right: 10px; }
+        .main-container { display: grid; grid-template-columns: 1fr 380px; gap: 20px; width: 100%; max-width: 1800px; height: 95vh; padding-top: 10px; }
+        
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; margin-left: 140px; }
+        .stat-card { padding: 12px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); }
+        .stat-card h4 { margin: 0; font-size: 0.65rem; text-transform: uppercase; opacity: 0.7; }
+        .stat-card p { margin: 5px 0 0; font-size: 1.8rem; font-family: 'Orbitron'; font-weight: 900; }
+        .stat-ontime { border-bottom: 4px solid var(--success); color: var(--success); }
+        .stat-late { border-bottom: 4px solid var(--danger); color: var(--danger); }
+        .stat-absent { border-bottom: 4px solid var(--warning); color: var(--warning); }
 
-        /* --- MAIN CONTENT --- */
-        #mainContainer { flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
-        .top-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; padding: 20px; }
-        .stat-card { background: rgba(0,0,0,0.6); padding: 15px; border-radius: 15px; border-bottom: 4px solid #fff; text-align: center; }
-        .stat-card h4 { margin: 0; font-size: 0.7rem; opacity: 0.7; text-transform: uppercase; }
-        .stat-card p { margin: 5px 0 0; font-family: 'Orbitron'; font-size: 1.5rem; font-weight: 700; }
+        .absensi-section { background: var(--glass); backdrop-filter: blur(30px); border-radius: 25px; padding: 25px; border: 1px solid var(--border-glass); display: flex; flex-direction: column; }
+        .header-main { display: flex; margin-bottom: 20px; border: 2px solid #fff; border-radius: 12px; overflow: hidden; }
+        .date-panel { background: var(--accent); color: #000; padding: 10px 20px; text-align: center; min-width: 160px; }
+        .title-panel { background: linear-gradient(90deg, #000, var(--primary)); flex-grow: 1; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-family: 'Orbitron'; font-weight: 900; letter-spacing: 8px; }
 
-        .app-grid { display: grid; grid-template-columns: 1fr 350px; gap: 20px; padding: 0 20px 20px; flex: 1; overflow: hidden; }
-        
-        /* --- PANEL KIRI (ABSENSI) --- */
-        .absen-panel { background: var(--glass); border-radius: 20px; border: 1px solid var(--border-glass); display: flex; flex-direction: column; overflow: hidden; }
-        .header-blue { background: var(--primary); padding: 15px; display: flex; justify-content: space-between; align-items: center; font-family: 'Orbitron'; }
-        .header-blue .title { font-size: 1.2rem; letter-spacing: 2px; }
-        
-        .date-badge { background: var(--warning); color: #000; padding: 5px 15px; border-radius: 5px; font-weight: 800; font-size: 0.8rem; }
+        .tool-bar { display: grid; grid-template-columns: 160px 1fr 160px auto auto auto auto; gap: 10px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; margin-bottom: 20px; align-items: center; }
+        .digital-clock { background: #000; color: #00ff88; border: 1px solid #00ff88; text-align: center; font-family: 'Orbitron'; font-size: 1.2rem; height: 50px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        
+        input, select { height: 50px; border-radius: 8px; border: none; padding: 0 12px; font-weight: 700; background: #fff; color: #000; }
+        .btn { height: 50px; padding: 0 15px; border-radius: 8px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 0.75rem; }
+        .btn-add { background: #007bff; color: #fff; }
+        .btn-filter { background: var(--accent); color: #000; }
+        .btn-filter.active { background: #ff00ff; color: #fff; }
+        .btn-csv { background: var(--success); color: #000; }
+        .btn-reset { background: var(--danger); color: #fff; }
 
-        .control-row { display: grid; grid-template-columns: 160px 1fr 120px auto auto auto; gap: 8px; padding: 15px; background: rgba(255,255,255,0.05); }
-        .control-row input, .control-row select { padding: 10px; border-radius: 8px; border: none; outline: none; font-weight: 600; }
-        .btn { padding: 0 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; color: white; }
-        .btn-absen { background: #3b5bdb; }
-        .btn-csv { background: var(--success); color: #000; }
-        .btn-reset { background: var(--danger); }
+        .table-pro-wrap { background: #fff; border-radius: 15px; overflow: hidden; flex-grow: 1; display: flex; flex-direction: column; }
+        .table-scroll { overflow-y: auto; flex-grow: 1; }
+        table { width: 100%; border-collapse: collapse; color: #111; }
+        th { background: var(--primary); color: #fff; padding: 15px; position: sticky; top: 0; font-size: 0.7rem; }
+        td { padding: 12px; text-align: center; border-bottom: 1px solid #eee; font-weight: 700; }
+        .row-late { background: #fff0f0 !important; color: #d63031 !important; }
+        .row-ontime { background: #f0fff4 !important; color: #27ae60 !important; }
+        .btn-del-pin { background: none; border: none; color: #999; cursor: pointer; font-size: 1.1rem; }
 
-        .table-area { flex: 1; overflow-y: auto; background: white; color: #000; }
-        table { width: 100%; border-collapse: collapse; }
-        th { background: #f1f3f5; padding: 12px; font-size: 0.75rem; text-transform: uppercase; position: sticky; top: 0; }
-        td { padding: 12px; border-bottom: 1px solid #eee; text-align: center; font-weight: 700; }
-
-        /* --- PANEL KANAN (VOICE LOGS) --- */
-        .log-panel { background: var(--glass); border-radius: 20px; border: 1px solid var(--border-glass); display: flex; flex-direction: column; }
-        .log-header { padding: 15px; border-bottom: 1px solid var(--border-glass); font-family: 'Orbitron'; font-size: 0.8rem; }
-        #chatBox { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
-        .chat-item { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; border-left: 3px solid var(--accent); }
-        .chat-item b { color: var(--accent); font-size: 0.75rem; display: block; }
-        .chat-input { padding: 15px; }
-        .chat-input input { width: 100%; padding: 12px; border-radius: 8px; border: none; background: rgba(255,255,255,0.1); color: white; outline: none; }
-    </style>
+        .sidebar-chat { background: var(--glass); border-radius: 25px; border: 1px solid var(--border-glass); display: flex; flex-direction: column; overflow: hidden; }
+        .chat-header { padding: 15px; background: rgba(255,255,255,0.05); border-bottom: 1px solid var(--border-glass); display: flex; justify-content: space-between; align-items: center; }
+        .chat-messages { flex-grow: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .chat-bubble { background: rgba(255,255,255,0.08); padding: 10px; border-radius: 10px; border-left: 3px solid var(--accent); }
+        .bubble-name { color: var(--accent); font-size: 0.65rem; font-weight: 800; }
+        .chat-footer { padding: 15px; background: rgba(0,0,0,0.3); border-top: 1px solid var(--border-glass); }
+        .chat-footer input { width: 100%; height: 40px; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid var(--border-glass); padding: 0 10px; border-radius: 8px; }
+    </style>
 </head>
 <body>
 
-<div id="sidebar">
-    <div class="sidebar-logo">TV</div>
-    <div class="menu-label">Menu Utama</div>
-    <div class="menu-item"><span>📊</span> Dashboard Shift</div>
-    <div class="menu-item"><span>🎲</span> Acak Jobdesk</div>
-    <div class="menu-label">Absensi</div>
-    <div class="menu-item active"><span>🕒</span> Absensi Kehadiran</div>
-    <div class="menu-item"><span>📱</span> Absensi LINE</div>
-    <div class="menu-label">Sistem</div>
-    <div class="menu-item"><span>⚙️</span> Reset Password</div>
-    <div class="menu-item" onclick="location.reload()" style="color:var(--danger)"><span>🚪</span> Logout</div>
-</div>
+<div class="logo-box"><img src="logo.png" onerror="this.src='logo.jpg';"></div>
 
-<div id="mainContainer">
-    <div class="top-stats">
-        <div class="stat-card" style="border-color:var(--success); color:var(--success)">
-            <h4>Tepat Waktu</h4><p id="countTepat">0</p>
-        </div>
-        <div class="stat-card" style="border-color:var(--danger); color:var(--danger)">
-            <h4>Terlambat</h4><p id="countTelat">0</p>
-        </div>
-        <div class="stat-card" style="border-color:var(--warning); color:var(--warning)">
-            <h4>Belum Absen</h4><p id="countBelum">65</p>
-        </div>
-    </div>
+<div class="main-container">
+    <div class="absensi-section">
+        <div class="stat-grid">
+            <div class="stat-card stat-ontime"><h4>Tepat Waktu</h4><p id="sOn">0</p></div>
+            <div class="stat-card stat-late"><h4>Terlambat</h4><p id="sLate">0</p></div>
+            <div class="stat-card stat-absent"><h4>Belum Absen</h4><p id="sAbs">65</p></div>
+        </div>
 
-    <div class="app-grid">
-        <div class="absen-panel">
-            <div class="header-blue">
-                <div class="date-badge" id="displayDate">JUMAT, 20 FEB 2026</div>
-                <div class="title">ABSENSI KEHADIRAN</div>
-                <div style="width:140px"></div>
-            </div>
+        <div class="header-main">
+            <div class="date-panel"><p id="pDay" style="margin:0; font-size:0.6rem; font-weight:800;">SENIN</p><h2 id="pDate">26 JAN 2026</h2></div>
+            <div class="title-panel">ABSEN TVTOTO</div>
+        </div>
 
-            <div class="control-row">
-                <select id="selShift">
-                    <option value="PAGI">PAGI (07:45)</option>
-                    <option value="SHIFT G">SHIFT G (09:45)</option>
-                    <option value="SORE">SORE (15:45)</option>
-                    <option value="MALAM">MALAM (21:45)</option>
-                </select>
-                <input type="text" id="inpName" placeholder="Ketik Nama Staff...">
-                <div id="liveClock" style="background:#000; color:var(--success); display:flex; align-items:center; justify-content:center; border-radius:8px; font-family:'Orbitron'; font-weight:bold; font-size:0.9rem; border:1px solid var(--success);">13:00:00</div>
-                <button class="btn btn-absen" onclick="prosesAbsen()">ABSEN</button>
-                <button class="btn btn-csv" onclick="downloadCSV()">CSV</button>
-                <button class="btn btn-reset" onclick="resetHarian()">RESET</button>
-            </div>
+        <div class="tool-bar">
+            <select id="sShift">
+                <option value="PAGI">PAGI (07:45)</option>
+                <option value="SHIFT G">SHIFT G (09:45)</option>
+                <option value="SHIFT G2">SHIFT G2 (11:45)</option>
+                <option value="SORE">SORE (15:45)</option>
+                <option value="MALAM">MALAM (21:45)</option>
+            </select>
+            <input type="text" id="iName" placeholder="Ketik Nama Staff..." list="staffs">
+            <datalist id="staffs"></datalist>
+            <div id="clockDisplay" class="digital-clock">00:00:00</div>
+            <button class="btn btn-add" onclick="tambahAbsen()">ABSEN</button>
+            <button class="btn btn-filter" id="btnF" onclick="filterTelat()">CEK TELAT</button>
+            <button class="btn btn-csv" onclick="exportData()">CSV</button>
+            <button class="btn btn-reset" onclick="resetData()">RESET</button>
+        </div>
 
-            <div class="table-area">
-                <table id="tableAbsen">
-                    <thead>
-                        <tr>
-                            <th>Shift</th>
-                            <th>Nama Staff</th>
-                            <th>Target</th>
-                            <th>Aktual</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </div>
+        <div class="table-pro-wrap">
+            <div class="table-scroll">
+                <table id="tblMain">
+                    <thead><tr><th>SHIFT</th><th>NAMA STAFF</th><th>TARGET</th><th>AKTUAL</th><th>STATUS</th><th width="40"></th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-        <div class="log-panel">
-            <div class="log-header">VOICE LOGS</div>
-            <div id="chatBox"></div>
-            <div class="chat-input">
-                <input type="text" id="inpChat" placeholder="Ketik pesan lalu tekan Enter..." onkeypress="kirimChat(event)">
-            </div>
-        </div>
-    </div>
+    <div class="sidebar-chat">
+        <div class="chat-header"><strong>SYSTEM VOICE LOGS</strong><button onclick="hapusChat()" style="color:red; background:none; border:none; cursor:pointer; font-size:0.7rem;">Clear</button></div>
+        <div class="chat-messages" id="chatWrap"></div>
+        <div class="chat-footer"><input type="text" id="chatIn" placeholder="Pesan admin..."></div>
+    </div>
 </div>
 
 <script>
-    const TARGET_JAM = { "PAGI": "07:45:00", "SHIFT G": "09:45:00", "SORE": "15:45:00", "MALAM": "21:45:00" };
+    const ADMIN_PIN = "741852963"; 
+    const NAMES = ["MARKUS FEBRIAN PAMUNGKAS ATJE", "PUTRI CAHAYA", "RADO DINATA", "SELWEN AL KHAIRI", "GIERDAV ALDEN AZUTOS DUMAT", "S PRIYA DARSIN", "DONY KRIS SANDI", "ALIKA SALSABILAH", "MUHAMMAD HABIB", "RIZKY AULIA", "NOVITA SARI", "ZULMADIL REYDINATA", "INDA AFRITYA", "AMANDA REZKY TANJUNG", "SAWALUDDIN HASIBUAN", "RISKA ARNITA PUTRI", "DIAN THERESA SIMAMORA", "JONATHAN QUEEN", "HENDRA", "SENDI REVIAN", "SYUKUR KURNIAWAN", "OGI CANDRA SAPUTRA", "IRVAN GANESHA", "RAHMA TINA", "JOSIA ROMANDA GINTING", "MUHAMMAD BAKRON MAULANA", "JIMMY", "CINDY NURUL AMALIA HASIBUAN", "DEVA NANDA", "MUHAMMAD JUHARI", "FANNY FADILLA", "WIRA ARIA SAPUTRA", "JANNIFER MENTARI SINGKOH", "AGUSSALIM FAJAR", "SASITHAREN", "JUWAN", "FRENDYCO", "KHOIRUL AMRI", "AL BETO", "APRI YOGO JOHANDA SEMBIRING", "ANDI", "FRANS WILLIAM ISKANDAR TAMBUNAN", "INDRA", "WILSON LEO WU", "ECHA ADELIA", "AHLUN IQBAL", "INDRA KURNIAWAN", "MARIO CHRISTOPHER SUNARWAN", "NADYA TASYA", "LUSI", "YOGI ARDIANSYAH", "SANJELIA PUTRI", "ARUN RAJZ", "KHAIRUL AZHAR", "BOBI ARFANDI", "HARIS MULIA MANURUNG", "ANDRA FAUZI", "ADITYA RIWANA", "JOHANDA JAYUSMAN", "SABAR MORANDO FRANCISCO MANIK", "RAJA EDWARD BANGUN", "DENNIS GOLDSTEIN", "DWIKI RAMDANI", "ABDUL TARIGAN", "RAHMAT HIDAYAT"];
+    const TARGETS = { "PAGI": "07:45:00", "SHIFT G": "09:45:00", "SHIFT G2": "11:45:00", "SORE": "15:45:00", "MALAM": "21:45:00" };
+    let modeTelat = false;
 
-    function updateTime() {
-        const n = new Date();
-        const timeStr = n.toTimeString().split(' ')[0];
-        document.getElementById('liveClock').innerText = timeStr;
-        
-        const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
-        document.getElementById('displayDate').innerText = n.toLocaleDateString('id-ID', options).toUpperCase();
-    }
+    // PERBAIKAN FUNGSI SUARA (OPTIMIZED)
+    function speakAI(text) {
+        const synth = window.speechSynthesis;
+        synth.cancel(); 
+        
+        // Membersihkan teks agar tidak dieja
+        let cleanText = text.toLowerCase();
+        
+        const utter = new SpeechSynthesisUtterance(cleanText);
+        
+        // Mencari voice Indonesia yang terbaik
+        const voices = synth.getVoices();
+        const idVoice = voices.find(v => v.lang.includes('id-ID'));
+        if (idVoice) utter.voice = idVoice;
 
-    function prosesAbsen() {
-        const name = document.getElementById('inpName').value.trim().toUpperCase();
-        const shift = document.getElementById('selShift').value;
-        const actualTime = document.getElementById('liveClock').innerText;
+        utter.lang = 'id-ID';
+        utter.rate = 1.0;  // Kecepatan normal
+        utter.pitch = 1.0; // Nada normal
+        utter.volume = 1.0;
+        
+        synth.speak(utter);
+    }
 
-        if (!name) { alert("Nama tidak boleh kosong!"); return; }
+    function hitungSelisih(target, aktual) {
+        const [th, tm, ts] = target.split(':').map(Number);
+        const [ah, am, as] = aktual.split(':').map(Number);
+        const tSec = th*3600 + tm*60 + ts;
+        const aSec = ah*3600 + am*60 + as;
+        let diff = aSec - tSec;
+        if (diff <= 0) return null;
+        const h = Math.floor(diff/3600);
+        const m = Math.floor((diff%3600)/60);
+        const s = diff%60;
+        return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    }
 
-        let data = JSON.parse(localStorage.getItem('tvtoto_db') || "[]");
+    function tambahAbsen() {
+        const input = document.getElementById('iName');
+        const name = input.value.trim().toUpperCase();
+        const shift = document.getElementById('sShift').value;
+        const time = document.getElementById('clockDisplay').innerText;
+        
+        if(!NAMES.includes(name)) return alert("Nama tidak terdaftar!");
+        let db = JSON.parse(localStorage.getItem('tv_v18') || "[]");
+        if(db.some(x => x.name === name)) return alert("Sudah absen!");
 
-        // CEK DOUBLE
-        const sudahAbsen = data.find(x => x.name === name && x.shift === shift);
-        if (sudahAbsen) {
-            alert("EROR: Nama " + name + " sudah absen di " + shift);
-            return;
-        }
+        const telat = hitungSelisih(TARGETS[shift], time);
+        if(telat) {
+            const [h, m] = telat.split(':').map(Number);
+            speakAI(`Perhatian ${name.toLowerCase()}, anda terlambat ${h} jam ${m} menit.`);
+        } else {
+            speakAI(`Selamat datang ${name.toLowerCase()}.`);
+        }
 
-        // SIMPAN
-        const entry = {
-            shift: shift,
-            name: name,
-            target: TARGET_JAM[shift],
-            actual: actualTime,
-            status: (actualTime > TARGET_JAM[shift]) ? "TELAT" : "TEPAT"
-        };
+        db.push({ shift, name, target: TARGETS[shift], actual: time });
+        localStorage.setItem('tv_v18', JSON.stringify(db));
+        input.value = ""; render();
+    }
 
-        data.push(entry);
-        localStorage.setItem('tvtoto_db', JSON.stringify(data));
-        document.getElementById('inpName').value = "";
-        refreshTable();
-    }
+    function hapusSatu(nama) {
+        if(prompt("PIN ADMIN:") === ADMIN_PIN) {
+            let db = JSON.parse(localStorage.getItem('tv_v18') || "[]");
+            db = db.filter(x => x.name !== nama);
+            localStorage.setItem('tv_v18', JSON.stringify(db));
+            render();
+        } else { alert("PIN Salah!"); }
+    }
 
-    function refreshTable() {
-        const data = JSON.parse(localStorage.getItem('tvtoto_db') || "[]");
-        const tbody = document.querySelector('#tableAbsen tbody');
-        tbody.innerHTML = "";
-        
-        let telat = 0;
-        [...data].reverse().forEach(x => {
-            if(x.status === "TELAT") telat++;
-            tbody.innerHTML += `
-                <tr style="background:${x.status === 'TELAT' ? '#fff0f0' : '#f0fff4'}">
-                    <td>${x.shift}</td>
-                    <td>${x.name}</td>
-                    <td>${x.target}</td>
-                    <td>${x.actual}</td>
-                    <td style="color:${x.status === 'TELAT' ? 'red' : 'green'}">${x.status}</td>
-                </tr>`;
-        });
+    function resetData() {
+        if(prompt("PIN ADMIN:") === ADMIN_PIN) {
+            localStorage.removeItem('tv_v18');
+            render();
+        } else { alert("PIN Salah!"); }
+    }
 
-        document.getElementById('countTelat').innerText = telat;
-        document.getElementById('countTepat').innerText = data.length - telat;
-        document.getElementById('countBelum').innerText = 65 - data.length;
-    }
+    function render() {
+        let db = JSON.parse(localStorage.getItem('tv_v18') || "[]");
+        const tbody = document.querySelector('#tblMain tbody');
+        tbody.innerHTML = "";
+        
+        let onTime = 0, late = 0;
+        db.forEach(d => { if(hitungSelisih(d.target, d.actual)) late++; else onTime++; });
+        document.getElementById('sOn').innerText = onTime;
+        document.getElementById('sLate').innerText = late;
+        document.getElementById('sAbs').innerText = NAMES.length - db.length;
 
-    function kirimChat(e) {
-        if (e.key === 'Enter') {
-            const val = e.target.value.trim();
-            if (!val) return;
-            const box = document.getElementById('chatBox');
-            const div = document.createElement('div');
-            div.className = 'chat-item';
-            div.innerHTML = `<b>ADMIN - ${new Date().toLocaleTimeString()}</b>${val}`;
-            box.appendChild(div);
-            box.scrollTop = box.scrollHeight;
-            e.target.value = "";
-        }
-    }
+        let displayDb = [...db].reverse();
+        if(modeTelat) displayDb = displayDb.filter(x => hitungSelisih(x.target, x.actual));
+        
+        displayDb.forEach((d) => {
+            const row = tbody.insertRow();
+            const telat = hitungSelisih(d.target, d.actual);
+            row.className = telat ? 'row-late' : 'row-ontime';
+            row.innerHTML = `<td>${d.shift}</td><td style="text-align:left;">${d.name}</td><td>${d.target}</td><td>${d.actual}</td><td>${telat ? 'TELAT '+telat : 'TEPAT'}</td><td><button class="btn-del-pin" onclick="hapusSatu('${d.name}')">✕</button></td>`;
+        });
 
-    function resetHarian() {
-        if (confirm("Hapus semua data absen?")) {
-            localStorage.removeItem('tvtoto_db');
-            refreshTable();
-        }
-    }
+        const dl = document.getElementById('staffs');
+        dl.innerHTML = "";
+        const sudah = db.map(x=>x.name);
+        NAMES.filter(n => !sudah.includes(n)).forEach(n => {
+            const o = document.createElement('option'); o.value = n; dl.appendChild(o);
+        });
+        renderChat();
+    }
 
-    function downloadCSV() {
-        const data = JSON.parse(localStorage.getItem('tvtoto_db') || "[]");
-        let csv = "Shift,Nama,Target,Aktual,Status\n";
-        data.forEach(x => {
-            csv += `${x.shift},${x.name},${x.target},${x.actual},${x.status}\n`;
-        });
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.setAttribute('href', url);
-        a.setAttribute('download', 'Absen_TVTOTO.csv');
-        a.click();
-    }
+    function filterTelat() {
+        modeTelat = !modeTelat;
+        const btn = document.getElementById('btnF');
+        btn.classList.toggle('active');
+        btn.innerText = modeTelat ? "LIHAT SEMUA" : "CEK TELAT";
+        render();
+    }
 
-    setInterval(updateTime, 1000);
-    window.onload = refreshTable;
+    function exportData() {
+        const db = JSON.parse(localStorage.getItem('tv_v18') || "[]");
+        if (db.length === 0) return alert("Tidak ada data!");
+        let csv = "SHIFT,NAMA,TARGET,AKTUAL,STATUS\n";
+        db.forEach(x => {
+            const t = hitungSelisih(x.target, x.actual);
+            csv += `${x.shift},${x.name},${x.target},${x.actual},${t?'TELAT '+t:'TEPAT'}\n`;
+        });
+        const blob = new Blob([csv], {type: 'text/csv'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `ABSEN_TVTOTO_${new Date().toLocaleDateString()}.csv`;
+        a.click();
+    }
+
+    function renderChat() {
+        const box = document.getElementById('chatWrap');
+        const c = JSON.parse(localStorage.getItem('tv_chat_v18') || "[]");
+        box.innerHTML = c.map(m => `<div class="chat-bubble"><span class="bubble-name">ADMIN</span><br><span style="font-size:0.85rem;">${m.text}</span></div>`).join('');
+        box.scrollTop = box.scrollHeight;
+    }
+
+    document.getElementById('chatIn').addEventListener('keypress', (e) => { 
+        if(e.key === 'Enter' && e.target.value.trim()) {
+            const pesan = e.target.value.trim();
+            let c = JSON.parse(localStorage.getItem('tv_chat_v18') || "[]");
+            c.push({ text: pesan });
+            localStorage.setItem('tv_chat_v18', JSON.stringify(c));
+            
+            // Perbaikan: Paksa AI membaca kalimat utuh
+            speakAI(pesan); 
+            
+            e.target.value = ""; 
+            renderChat();
+        }
+    });
+
+    function hapusChat() { if(confirm("Hapus log?")) { localStorage.removeItem('tv_chat_v18'); renderChat(); } }
+    function updateClock() {
+        const now = new Date();
+        document.getElementById('clockDisplay').innerText = now.toTimeString().split(' ')[0];
+        document.getElementById('pDate').innerText = now.toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'}).toUpperCase();
+        document.getElementById('pDay').innerText = now.toLocaleDateString('id-ID', {weekday:'long'}).toUpperCase();
+    }
+    setInterval(updateClock, 1000);
+    window.onload = () => { 
+        // Pancing daftar suara agar siap
+        window.speechSynthesis.getVoices();
+        updateClock(); 
+        render(); 
+    };
 </script>
 </body>
 </html>
