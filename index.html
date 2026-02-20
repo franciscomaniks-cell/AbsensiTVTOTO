@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TVTOTO Absensi System v18.9 PRO</title>
+    <title>Sistem Absensi Kehadiran TVTOTO</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -12,89 +12,57 @@
             --sidebar-width: 240px;
         }
         * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s ease; }
-        body { margin: 0; padding: 0; background: #000 url('background.jpg') no-repeat center center fixed; background-size: cover; height: 100vh; overflow: hidden; color: #fff; }
+        body { margin: 0; padding: 0; background: #000 url('background.jpg') no-repeat center center fixed; background-size: cover; height: 100vh; overflow: hidden; color: #fff; display: flex; }
 
-        /* --- SIDEBAR STYLING --- */
+        /* --- SIDEBAR --- */
         #sidebar {
-            position: fixed; left: 0; top: 0; bottom: 0; width: var(--sidebar-width);
-            background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px);
-            border-right: 1px solid var(--border-glass); padding: 20px 15px;
-            display: flex; flex-direction: column; z-index: 2000;
+            width: var(--sidebar-width); background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(10px);
+            border-right: 1px solid var(--border-glass); padding: 20px 15px; display: flex; flex-direction: column;
         }
-        .sidebar-logo { width: 80px; margin-bottom: 30px; align-self: center; border-radius: 10px; }
         .menu-label { font-size: 0.65rem; font-weight: 800; color: var(--accent); letter-spacing: 1.5px; margin: 15px 0 10px 10px; text-transform: uppercase; }
-        .menu-item {
-            display: flex; align-items: center; padding: 12px 15px; margin-bottom: 5px;
-            border-radius: 10px; cursor: pointer; color: #ccc; text-decoration: none; font-size: 0.85rem; font-weight: 600;
-        }
-        .menu-item:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
+        .menu-item { display: flex; align-items: center; padding: 12px 15px; margin-bottom: 5px; border-radius: 10px; cursor: pointer; color: #ccc; font-size: 0.85rem; font-weight: 600; }
         .menu-item.active { background: var(--primary); color: #fff; border-left: 4px solid var(--accent); }
-        .menu-item i { margin-right: 12px; font-size: 1.1rem; width: 20px; text-align: center; }
 
-        /* --- AUTH LAYER --- */
-        #authContainer { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); display: flex; justify-content: center; align-items: center; z-index: 10000; }
-        .auth-card { background: #4a4a4a; padding: 35px; border-radius: 20px; width: 380px; text-align: center; border: 1px solid #5d5d5d; }
-        .input-group { background: #5d5d5d; border: 1px solid #777; border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; padding: 0 15px; }
-        .input-group input { background: transparent; border: none; color: #fff; flex: 1; height: 45px; outline: none; }
-        .btn-action { width: 100%; background: #d4a017; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 800; cursor: pointer; }
-
-        /* --- MAIN APP CONTENT --- */
-        #mainApp { margin-left: var(--sidebar-width); height: 100vh; padding: 20px; display: none; overflow-y: auto; }
+        /* --- MAIN CONTENT --- */
+        #mainApp { flex: 1; padding: 20px; overflow-y: auto; display: none; }
+        .main-grid { display: grid; grid-template-columns: 1fr 350px; gap: 20px; height: 100%; }
         
-        .main-grid { display: grid; grid-template-columns: 1fr 350px; gap: 20px; height: calc(100vh - 40px); }
-        .absensi-section { background: var(--glass); border-radius: 20px; padding: 20px; border: 1px solid var(--border-glass); display: flex; flex-direction: column; }
-        
-        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
-        .stat-card { padding: 15px; border-radius: 12px; text-align: center; background: rgba(0,0,0,0.4); border-bottom: 3px solid #fff; }
-        .stat-card h4 { margin: 0; font-size: 0.7rem; text-transform: uppercase; opacity: 0.8; }
-        .stat-card p { margin: 5px 0 0; font-family: 'Orbitron'; font-size: 1.4rem; font-weight: 700; }
-
+        /* Judul diperbaharui ke Absensi Kehadiran */
         .header-bar { display: flex; border: 1px solid #fff; border-radius: 10px; overflow: hidden; margin-bottom: 20px; }
         .date-box { background: var(--accent); color: #000; padding: 10px 20px; text-align: center; min-width: 140px; font-weight: 800; }
         .title-box { background: linear-gradient(90deg, #000, var(--primary)); flex: 1; display: flex; align-items: center; justify-content: center; font-family: 'Orbitron'; font-size: 1.5rem; letter-spacing: 3px; }
 
-        .tool-bar { display: grid; grid-template-columns: 150px 1fr 150px auto auto auto; gap: 8px; margin-bottom: 15px; }
-        .digital-clock { background: #000; color: #00ff88; border: 1px solid #00ff88; font-family: 'Orbitron'; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-weight: bold; }
-        
-        .table-wrap { background: #fff; border-radius: 10px; flex: 1; overflow-y: auto; color: #000; }
-        table { width: 100%; border-collapse: collapse; }
-        th { background: var(--primary); color: #fff; padding: 12px; position: sticky; top: 0; font-size: 0.75rem; }
-        td { padding: 10px; text-align: center; border-bottom: 1px solid #eee; font-weight: bold; font-size: 0.85rem; }
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
+        .stat-card { padding: 15px; border-radius: 12px; text-align: center; background: rgba(0,0,0,0.4); border-bottom: 3px solid #fff; }
 
+        .tool-bar { display: grid; grid-template-columns: 150px 1fr 120px auto auto auto; gap: 8px; margin-bottom: 15px; }
+        .table-wrap { background: #fff; border-radius: 10px; color: #000; overflow-y: auto; max-height: calc(100vh - 350px); }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: var(--primary); color: #fff; padding: 12px; position: sticky; top: 0; }
+        td { padding: 10px; text-align: center; border-bottom: 1px solid #eee; font-weight: bold; }
+
+        /* --- VOICE LOGS --- */
         .sidebar-chat { background: var(--glass); border-radius: 20px; border: 1px solid var(--border-glass); display: flex; flex-direction: column; overflow: hidden; }
-        #chatWrap { flex: 1; overflow-y: auto; padding: 15px; }
+        #chatWrap { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .chat-msg { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; font-size: 0.85rem; border-left: 3px solid var(--accent); }
+        .chat-msg b { color: var(--accent); display: block; margin-bottom: 4px; }
     </style>
 </head>
 <body>
 
-<div id="authContainer">
-    <div id="loginBox" class="auth-card">
-        <h2 style="font-family:'Orbitron'; color:var(--accent);">TVTOTO AUTH</h2>
-        <div class="input-group"><input type="text" id="userIn" placeholder="Username"></div>
-        <div class="input-group"><input type="password" id="passIn" placeholder="Password"></div>
-        <button class="btn-action" onclick="handleLogin()">MASUK SISTEM</button>
-    </div>
-</div>
-
-<div id="sidebar" style="display:none;">
-    <img src="logo.png" class="sidebar-logo" onerror="this.src='https://via.placeholder.com/80';">
-    
+<div id="sidebar">
+    <div style="text-align:center; margin-bottom:20px;"><h2 style="font-family:'Orbitron'; color:var(--accent);">TVTOTO</h2></div>
     <div class="menu-label">Menu Utama</div>
-    <div class="menu-item active" onclick="showPage('dashboard')"><span>📊</span> Dashboard Shift</div>
-    <div class="menu-item" onclick="alert('Fitur Acak Jobdesk')"><span>🎲</span> Acak Jobdesk</div>
-
+    <div class="menu-item"><span>📊</span> Dashboard Shift</div>
+    <div class="menu-item"><span>🎲</span> Acak Jobdesk</div>
     <div class="menu-label">Absensi</div>
-    <div class="menu-item" onclick="showPage('dashboard')"><span>🕒</span> Absensi Kehadiran</div>
-    <div class="menu-item" onclick="alert('Fitur Absensi LINE')"><span>📱</span> Absensi LINE</div>
-
-    <div class="menu-label">Sistem</div>
-    <div class="menu-item" onclick="switchAuth('lupa')"><span>⚙️</span> Reset Password</div>
-    <div class="menu-item" onclick="handleLogout()" style="color:var(--danger);"><span>🚪</span> Logout</div>
+    <div class="menu-item active"><span>🕒</span> Absensi Kehadiran</div>
+    <div class="menu-item"><span>📱</span> Absensi LINE</div>
 </div>
 
-<div id="mainApp">
+<div id="mainApp" style="display:block;">
     <div class="main-grid">
-        <div class="absensi-section">
+        <div class="content-left">
             <div class="stat-grid">
                 <div class="stat-card" style="color:var(--success); border-color:var(--success)"><h4>Tepat Waktu</h4><p id="sOn">0</p></div>
                 <div class="stat-card" style="color:var(--danger); border-color:var(--danger)"><h4>Terlambat</h4><p id="sLate">0</p></div>
@@ -103,22 +71,21 @@
 
             <div class="header-bar">
                 <div class="date-box"><div id="pDay" style="font-size:0.7rem;">HARI</div><div id="pDate">TANGGAL</div></div>
-                <div class="title-box">ABSEN TVTOTO</div>
+                <div class="title-box">ABSENSI KEHADIRAN</div>
             </div>
 
             <div class="tool-bar">
-                <select id="sShift" style="padding:10px; border-radius:8px;">
+                <select id="sShift" style="padding:10px; border-radius:8px; cursor:pointer;">
                     <option value="PAGI">PAGI (07:45)</option>
                     <option value="SHIFT G">SHIFT G (09:45)</option>
                     <option value="SORE">SORE (15:45)</option>
                     <option value="MALAM">MALAM (21:45)</option>
                 </select>
-                <input type="text" id="iName" placeholder="Ketik Nama Staff..." list="staffs" style="padding:10px; border-radius:8px; border:none;">
-                <datalist id="staffs"></datalist>
-                <div id="clockDisplay" class="digital-clock">00:00:00</div>
+                <input type="text" id="iName" placeholder="Ketik Nama Staff..." style="padding:10px; border-radius:8px; border:none;">
+                <div id="clock" style="background:#000; color:var(--success); border-radius:8px; display:flex; align-items:center; justify-content:center; font-family:'Orbitron'; font-weight:bold; border:1px solid var(--success);">00:00:00</div>
                 <button onclick="tambahAbsen()" style="background:var(--primary); color:white; border:none; padding:0 15px; border-radius:8px; cursor:pointer; font-weight:bold;">ABSEN</button>
-                <button onclick="exportData()" style="background:var(--success); color:black; border:none; padding:0 15px; border-radius:8px; cursor:pointer; font-weight:bold;">CSV</button>
-                <button onclick="resetHarian()" style="background:var(--danger); color:white; border:none; padding:0 15px; border-radius:8px; cursor:pointer; font-weight:bold;">RESET</button>
+                <button onclick="exportCSV()" style="background:var(--success); color:black; border:none; padding:0 15px; border-radius:8px; cursor:pointer; font-weight:bold;">CSV</button>
+                <button onclick="resetData()" style="background:var(--danger); color:white; border:none; padding:0 15px; border-radius:8px; cursor:pointer; font-weight:bold;">RESET</button>
             </div>
 
             <div class="table-wrap">
@@ -130,81 +97,87 @@
         </div>
 
         <div class="sidebar-chat">
-            <div style="padding:15px; background:rgba(255,255,255,0.1); font-weight:bold; font-family:'Orbitron'; font-size:0.8rem;">VOICE LOGS</div>
+            <div style="padding:15px; background:rgba(255,255,255,0.1); font-weight:bold; font-family:'Orbitron'; font-size:0.8rem; letter-spacing:1px;">VOICE LOGS</div>
             <div id="chatWrap"></div>
-            <input type="text" id="chatIn" placeholder="Pesan Suara Admin..." style="margin:15px; padding:12px; border-radius:8px; border:none; background:rgba(255,255,255,0.1); color:white;">
+            <input type="text" id="chatIn" onkeypress="handleChat(event)" placeholder="Ketik pesan lalu Enter..." style="margin:15px; padding:12px; border-radius:8px; border:none; background:rgba(255,255,255,0.1); color:white; outline:none; border:1px solid var(--border-glass);">
         </div>
     </div>
 </div>
 
 <script>
-    const ADMIN_PIN = "741852963";
-    const NAMES = ["MARKUS FEBRIAN PAMUNGKAS ATJE", "PUTRI CAHAYA", "RADO DINATA", "SELWEN AL KHAIRI", "GIERDAV ALDEN AZUTOS DUMAT", "S PRIYA DARSIN", "DONY KRIS SANDI", "ALIKA SALSABILAH", "MUHAMMAD HABIB", "RIZKY AULIA", "NOVITA SARI", "ZULMADIL REYDINATA", "INDA AFRITYA", "AMANDA REZKY TANJUNG", "SAWALUDDIN HASIBUAN", "RISKA ARNITA PUTRI", "DIAN THERESA SIMAMORA", "JONATHAN QUEEN", "HENDRA", "SENDI REVIAN", "SYUKUR KURNIAWAN", "OGI CANDRA SAPUTRA", "IRVAN GANESHA", "RAHMA TINA", "JOSIA ROMANDA GINTING", "MUHAMMAD BAKRON MAULANA", "JIMMY", "CINDY NURUL AMALIA HASIBUAN", "DEVA NANDA", "MUHAMMAD JUHARI", "FANNY FADILLA", "WIRA ARIA SAPUTRA", "JANNIFER MENTARI SINGKOH", "AGUSSALIM FAJAR", "SASITHAREN", "JUWAN", "FRENDYCO", "KHOIRUL AMRI", "AL BETO", "APRI YOGO JOHANDA SEMBIRING", "ANDI", "FRANS WILLIAM ISKANDAR TAMBUNAN", "INDRA", "WILSON LEO WU", "ECHA ADELIA", "AHLUN IQBAL", "INDRA KURNIAWAN", "MARIO CHRISTOPHER SUNARWAN", "NADYA TASYA", "LUSI", "YOGI ARDIANSYAH", "SANJELIA PUTRI", "ARUN RAJZ", "KHAIRUL AZHAR", "BOBI ARFANDI", "HARIS MULIA MANURUNG", "ANDRA FAUZI", "ADITYA RIWANA", "JOHANDA JAYUSMAN", "SABAR MORANDO FRANCISCO MANIK", "RAJA EDWARD BANGUN", "DENNIS GOLDSTEIN", "DWIKI RAMDANI", "ABDUL TARIGAN", "RAHMAT HIDAYAT"];
     const TARGETS = { "PAGI": "07:45:00", "SHIFT G": "09:45:00", "SORE": "15:45:00", "MALAM": "21:45:00" };
 
-    function handleLogin() {
-        const u = document.getElementById('userIn').value;
-        const p = document.getElementById('passIn').value;
-        if(u === "admin" && p === ADMIN_PIN) {
-            localStorage.setItem('isLoggedIn', 'true');
-            location.reload();
-        } else { alert("Login Salah!"); }
-    }
-
-    function handleLogout() {
-        localStorage.removeItem('isLoggedIn');
-        location.reload();
+    // 2. Fungsi Kirim Chat
+    function handleChat(e) {
+        if(e.key === 'Enter') {
+            const val = e.target.value;
+            if(!val) return;
+            const wrap = document.getElementById('chatWrap');
+            const msg = document.createElement('div');
+            msg.className = 'chat-msg';
+            msg.innerHTML = `<b>ADMIN</b> ${val}`;
+            wrap.appendChild(msg);
+            wrap.scrollTop = wrap.scrollHeight;
+            e.target.value = "";
+        }
     }
 
     function updateClock() {
         const now = new Date();
-        document.getElementById('clockDisplay').innerText = now.toTimeString().split(' ')[0];
+        document.getElementById('clock').innerText = now.toTimeString().split(' ')[0];
         document.getElementById('pDate').innerText = now.toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'}).toUpperCase();
         document.getElementById('pDay').innerText = now.toLocaleDateString('id-ID', {weekday:'long'}).toUpperCase();
     }
 
     function render() {
-        let db = JSON.parse(localStorage.getItem('tv_data') || "[]");
+        let db = JSON.parse(localStorage.getItem('absen_db') || "[]");
         const tbody = document.querySelector('#tblMain tbody');
         tbody.innerHTML = "";
-        let lateCount = 0;
-        db.reverse().forEach(x => {
+        let late = 0;
+        
+        // Render dari data terbaru di atas
+        [...db].reverse().forEach(x => {
             const isLate = x.actual > x.target;
-            if(isLate) lateCount++;
-            tbody.innerHTML += `<tr style="background:${isLate?'#ffebeb':''}"><td>${x.shift}</td><td>${x.name}</td><td>${x.target}</td><td>${x.actual}</td><td>${isLate?'TELAT':'TEPAT'}</td></tr>`;
+            if(isLate) late++;
+            tbody.innerHTML += `<tr style="background:${isLate?'#fff0f0':''}"><td>${x.shift}</td><td>${x.name}</td><td>${x.target}</td><td>${x.actual}</td><td style="color:${isLate? 'red':'green'}">${isLate?'TELAT':'TEPAT'}</td></tr>`;
         });
-        document.getElementById('sOn').innerText = db.length - lateCount;
-        document.getElementById('sLate').innerText = lateCount;
+
+        document.getElementById('sOn').innerText = db.length - late;
+        document.getElementById('sLate').innerText = late;
         document.getElementById('sAbs').innerText = 65 - db.length;
-        document.getElementById('staffs').innerHTML = NAMES.map(n => `<option value="${n}">`).join('');
     }
 
     function tambahAbsen() {
-        const name = document.getElementById('iName').value.toUpperCase();
+        const name = document.getElementById('iName').value.trim().toUpperCase();
         const shift = document.getElementById('sShift').value;
-        const time = document.getElementById('clockDisplay').innerText;
-        if(!NAMES.includes(name)) return alert("Nama salah!");
-        let db = JSON.parse(localStorage.getItem('tv_data') || "[]");
-        db.push({shift, name, target:TARGETS[shift], actual:time});
-        localStorage.setItem('tv_data', JSON.stringify(db));
+        const time = document.getElementById('clock').innerText;
+        
+        if(!name) return alert("Masukkan Nama!");
+
+        let db = JSON.parse(localStorage.getItem('absen_db') || "[]");
+
+        // 4. Perbaikan Nama Double: Cek apakah nama sudah absen di shift yang sama
+        const sudahAda = db.find(x => x.name === name && x.shift === shift);
+        if(sudahAda) {
+            alert("Staff ini sudah melakukan absen untuk " + shift);
+            return;
+        }
+
+        db.push({ name, shift, target: TARGETS[shift], actual: time });
+        localStorage.setItem('absen_db', JSON.stringify(db));
+        document.getElementById('iName').value = "";
         render();
     }
 
-    function resetHarian() {
-        if(confirm("Reset semua data hari ini?")) {
-            localStorage.removeItem('tv_data');
+    function resetData() {
+        if(confirm("Hapus semua data absen hari ini?")) {
+            localStorage.removeItem('absen_db');
             render();
         }
     }
 
-    window.onload = () => {
-        if(localStorage.getItem('isLoggedIn') === 'true') {
-            document.getElementById('authContainer').style.display = 'none';
-            document.getElementById('sidebar').style.display = 'flex';
-            document.getElementById('mainApp').style.display = 'block';
-        }
-        setInterval(updateClock, 1000); render();
-    };
+    setInterval(updateClock, 1000);
+    window.onload = render;
 </script>
 </body>
 </html>
