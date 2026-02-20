@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TVTOTO Management System v22.0</title>
+    <title>TVTOTO System v24.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -13,86 +13,117 @@
         * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; transition: 0.3s; }
         body { margin: 0; background: #000 url('background.jpg') no-repeat center center fixed; background-size: cover; height: 100vh; overflow: hidden; color: #fff; display: flex; }
 
+        /* --- AUTH SYSTEM (KEMBALI) --- */
+        #authLayer { position: fixed; inset: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(15px); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+        .auth-card { background: #1a1a1a; padding: 40px; border-radius: 25px; width: 380px; border: 1px solid #333; text-align: center; }
+        .auth-input { width: 100%; background: #2a2a2a; border: 1px solid #444; padding: 15px; border-radius: 12px; color: #fff; margin-bottom: 15px; outline: none; }
+        .btn-auth { width: 100%; background: var(--accent); border: none; padding: 15px; border-radius: 12px; color: #fff; font-weight: 800; cursor: pointer; }
+        .auth-link { color: var(--accent); cursor: pointer; font-size: 12px; text-decoration: underline; margin-top: 10px; display: inline-block; }
+
         /* --- SIDEBAR --- */
-        #sidebar { width: 280px; background: var(--sidebar-bg); border-right: 1px solid #222; display: none; flex-direction: column; padding: 25px 20px; z-index: 100; }
-        .logo-text { font-family: 'Orbitron'; font-weight: 900; font-size: 24px; color: var(--accent); margin-bottom: 40px; text-align: center; letter-spacing: 2px; }
+        #sidebar { width: 260px; background: var(--sidebar-bg); border-right: 1px solid #222; display: none; flex-direction: column; padding: 20px; }
         .menu-label { font-size: 10px; color: #444; font-weight: 800; letter-spacing: 2px; margin: 20px 0 10px; text-transform: uppercase; }
-        .menu-item { display: flex; align-items: center; padding: 12px 15px; border-radius: 10px; cursor: pointer; color: #888; font-size: 14px; margin-bottom: 5px; }
-        .menu-item:hover, .menu-item.active { background: rgba(139, 0, 0, 0.2); color: var(--accent); }
-        .menu-item.active { border-left: 4px solid var(--accent); font-weight: bold; }
+        .menu-item { display: flex; align-items: center; padding: 12px 15px; border-radius: 10px; cursor: pointer; color: #888; font-size: 13px; margin-bottom: 5px; }
+        .menu-item.active { background: rgba(139, 0, 0, 0.2); color: var(--accent); border-left: 4px solid var(--accent); }
 
-        /* --- LAYOUTS --- */
-        .page-content { flex: 1; display: none; padding: 30px; overflow-y: auto; }
-        #authLayer { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+        /* --- PAGE CONTENT --- */
+        .page-content { flex: 1; display: none; padding: 25px; overflow-y: auto; }
         
-        /* --- ACAK JOBDESK STYLES (Sesuai Gambar) --- */
-        .jobdesk-header { border-bottom: 1px solid #333; margin-bottom: 20px; padding-bottom: 10px; }
-        .jobdesk-header h1 { font-family: 'Orbitron'; font-size: 24px; color: var(--accent); margin: 0; }
-        .btn-group { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-        .btn-job { background: rgba(255,255,255,0.05); border: 1px solid #444; color: #fff; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 12px; }
-        .btn-job.active-btn { background: #1a4a40; border-color: var(--success); }
+        /* --- ABSENSI VIEW (Pindahan dari SS) --- */
+        .top-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
+        .stat-box { background: rgba(0,0,0,0.7); border: 2px solid #333; border-radius: 12px; padding: 15px; position: relative; }
+        .stat-box.tepat { border-color: var(--success); }
+        .stat-box.telat { border-color: var(--danger); }
+        .stat-box.belum { border-color: var(--warning); }
+        .stat-val { font-family: 'Orbitron'; font-size: 28px; font-weight: 900; }
+
+        .absen-header-bar { background: var(--primary); padding: 12px 25px; border-radius: 10px 10px 0 0; font-family: 'Orbitron'; font-weight: 900; letter-spacing: 3px; }
+        .absen-control { background: #fff; padding: 15px; display: flex; gap: 10px; align-items: center; }
+        .absen-control select, .absen-control input { padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-weight: bold; }
         
-        .grid-jobdesk { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .panel-box { background: rgba(20, 5, 5, 0.8); border: 1px solid #300; border-radius: 10px; padding: 20px; }
-        .panel-title { font-size: 12px; font-weight: 800; color: #844; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
-        textarea { width: 100%; background: #000; border: 1px solid #333; color: #aaa; padding: 10px; border-radius: 5px; height: 150px; font-size: 13px; resize: none; }
+        .btn-absen { background: #000; color: #fff; padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; font-weight: 800; }
+        .btn-csv { background: var(--success); color: #000; padding: 12px 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: 800; }
+        .btn-reset { background: var(--danger); color: #fff; padding: 12px 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: 800; }
 
-        /* --- ABSENSI TABLE --- */
-        .table-wrap { background: #fff; border-radius: 10px; overflow: hidden; margin-top: 20px; }
-        table { width: 100%; border-collapse: collapse; color: #000; }
-        th { background: var(--primary); color: #fff; padding: 15px; font-size: 12px; }
-        td { padding: 12px; text-align: center; border-bottom: 1px solid #eee; font-weight: bold; }
-
-        .stat-card { background: var(--card-bg); padding: 20px; border-radius: 15px; border-left: 5px solid var(--accent); }
+        table { width: 100%; border-collapse: collapse; background: #fff; color: #000; }
+        th { background: #3e4491; color: #fff; padding: 12px; font-size: 11px; }
+        td { padding: 12px; text-align: center; border-bottom: 1px solid #eee; font-weight: 700; }
     </style>
 </head>
 <body>
 
 <div id="authLayer">
-    <div style="background:#1a1a1a; padding:40px; border-radius:20px; width:350px; text-align:center;">
-        <h2 style="font-family:'Orbitron'; color:var(--accent);">LOGIN</h2>
-        <input type="text" id="uIn" placeholder="Username" style="width:100%; padding:12px; margin-bottom:10px; background:#222; border:1px solid #444; color:#fff;">
-        <input type="password" id="pIn" placeholder="Password" style="width:100%; padding:12px; margin-bottom:20px; background:#222; border:1px solid #444; color:#fff;">
-        <button onclick="doLogin()" style="width:100%; padding:12px; background:var(--accent); border:none; color:#fff; font-weight:bold; cursor:pointer;">MASUK</button>
+    <div id="loginBox" class="auth-card">
+        <h2 style="font-family:'Orbitron'; color:var(--accent);">LOGIN SYSTEM</h2>
+        <input type="text" id="uIn" class="auth-input" placeholder="Username">
+        <input type="password" id="pIn" class="auth-input" placeholder="Password">
+        <button class="btn-auth" onclick="doLogin()">MASUK</button>
+        <div style="margin-top:15px;">
+            <span class="auth-link" onclick="switchAuth('reg')">Daftar Admin</span> | 
+            <span class="auth-link" onclick="switchAuth('lupa')">Lupa Password?</span>
+        </div>
+        <div style="margin-top:20px; font-family:'Orbitron'; font-size:11px; color:#555;">IP: 103.20.83.166 <span style="color:var(--success)">●</span></div>
+    </div>
+
+    <div id="regBox" class="auth-card" style="display:none;">
+        <h2 style="font-family:'Orbitron';">DAFTAR ADMIN</h2>
+        <input type="text" id="newU" class="auth-input" placeholder="Username Baru">
+        <input type="password" id="newP" class="auth-input" placeholder="Password Baru">
+        <button class="btn-auth" onclick="doReg()">BUAT AKUN</button>
+        <span class="auth-link" onclick="switchAuth('login')">Kembali</span>
+    </div>
+
+    <div id="lupaBox" class="auth-card" style="display:none;">
+        <h2 style="font-family:'Orbitron';">HINT PASSWORD</h2>
+        <input type="text" id="lupaU" class="auth-input" placeholder="Masukkan Username">
+        <button class="btn-auth" onclick="alert('Password admin default: 741852963')">CEK HINT</button>
+        <span class="auth-link" onclick="switchAuth('login')">Kembali</span>
     </div>
 </div>
 
 <div id="sidebar">
-    <div class="logo-text">TVTOTO</div>
+    <div style="font-family:'Orbitron'; font-weight:900; color:var(--accent); font-size:22px; margin-bottom:30px; text-align:center;">TVTOTO</div>
     <div class="menu-label">MENU UTAMA</div>
-    <div class="menu-item active" onclick="showPage('dashboard')"><i>◆</i> Dashboard</div>
+    <div class="menu-item" onclick="showPage('dash')"><i>◆</i> Dashboard</div>
     <div class="menu-item" onclick="showPage('acak')"><i>🎲</i> Acak Jobdesk</div>
-    <div class="menu-item"><i>👑</i> Setting Operator</div>
-    <div class="menu-item"><i>⏱</i> Manajemen Shift</div>
+    <div class="menu-item" onclick="showPage('setOp')"><i>👑</i> Setting Operator</div>
     
     <div class="menu-label">ABSENSI</div>
-    <div class="menu-item" onclick="showPage('dashboard')"><i>🕒</i> Absensi Staff</div>
+    <div class="menu-item active" onclick="showPage('absenPage')"><i>🕒</i> Absensi Staff</div>
     
-    <div style="margin-top:auto; padding:15px; background:#111; border-radius:10px; font-size:10px; color:var(--success);">
-        ● Realtime Sync Aktif
+    <div class="menu-label">PENGATURAN</div>
+    <div class="menu-item" style="color:var(--danger);" onclick="doLogout()"><i>✕</i> Logout Sistem</div>
+
+    <div style="margin-top:auto; background:rgba(0,255,136,0.1); padding:10px; border-radius:10px; font-size:9px; color:var(--success);">
+        ● FIREBASE REALTIME SYNC
     </div>
 </div>
 
-<div id="dashboard" class="page-content">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <div style="background:var(--accent); padding:10px 20px; border-radius:8px; color:#000; font-weight:bold;" id="dateDisplay"></div>
-        <div id="clockBox" style="font-family:'Orbitron'; font-size:24px; color:var(--success);">00:00:00</div>
+<div id="absenPage" class="page-content" style="display:block;">
+    <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
+        <div style="background:var(--accent); color:#000; padding:10px 15px; border-radius:8px; font-weight:900;" id="dateDisplay">20 FEB 2026</div>
+        <div id="clockBox" style="font-family:'Orbitron'; font-size:22px; color:var(--success);">00:00:00</div>
     </div>
 
-    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:15px; margin-bottom:20px;">
-        <div class="stat-card">Tepat Waktu <br> <span id="sOn" style="font-size:24px; font-family:'Orbitron'; color:var(--success);">0</span></div>
-        <div class="stat-card">Terlambat <br> <span id="sLate" style="font-size:24px; font-family:'Orbitron'; color:var(--danger);">0</span></div>
-        <div class="stat-card">Belum Absen <br> <span id="sAbs" style="font-size:24px; font-family:'Orbitron'; color:var(--warning);">65</span></div>
+    <div class="top-stats">
+        <div class="stat-box tepat"><div style="font-size:11px; color:var(--success)">Tepat Waktu</div><div class="stat-val" id="sOn">0</div></div>
+        <div class="stat-box telat"><div style="font-size:11px; color:var(--danger)">Terlambat</div><div class="stat-val" id="sLate">0</div></div>
+        <div class="stat-box belum"><div style="font-size:11px; color:var(--warning)">Belum Absen</div><div class="stat-val" id="sAbs">65</div></div>
     </div>
 
-    <div style="background:var(--primary); padding:15px; border-radius:10px 10px 0 0; font-family:'Orbitron'; letter-spacing:3px;">ABSEN TVTOTO</div>
-    <div style="background:rgba(255,255,255,0.05); padding:15px; display:flex; gap:10px;">
-        <select id="sShift" style="padding:10px;"><option>PAGI (07:45)</option><option>SHIFT G (09:45)</option></select>
-        <input type="text" id="iName" placeholder="Nama Staff..." list="staffList" style="flex:1; padding:10px;">
-        <datalist id="staffList"></datalist>
-        <button onclick="submitAbsen()" style="padding:10px 25px; background:#000; border:1px solid #fff; color:#fff; cursor:pointer;">ABSEN</button>
+    <div class="absen-header-bar">ABSEN TVTOTO</div>
+    <div class="absen-control">
+        <select id="sShift">
+            <option value="PAGI (07:45)">PAGI (07:45)</option>
+            <option value="SHIFT G (09:45)">SHIFT G (09:45)</option>
+        </select>
+        <input type="text" id="iName" placeholder="Ketik Nama Staff..." list="staffList" style="flex:1;">
+        <button class="btn-absen" onclick="submitAbsen()">ABSEN</button>
+        <button class="btn-csv" onclick="exportExcel()">CSV</button>
+        <button class="btn-reset" onclick="resetHarian()">RESET HARIAN</button>
     </div>
-    <div class="table-wrap">
+    
+    <div style="background:#fff; border-radius:0 0 10px 10px; overflow:hidden;">
         <table>
             <thead><tr><th>SHIFT</th><th>NAMA STAFF</th><th>TARGET</th><th>AKTUAL</th><th>STATUS</th></tr></thead>
             <tbody id="tblBody"></tbody>
@@ -100,97 +131,93 @@
     </div>
 </div>
 
-<div id="acak" class="page-content">
-    <div class="jobdesk-header">
-        <h1>ACAK JOBDESK</h1>
-        <p style="font-size:10px; color:#666;">DISTRIBUSI OTOMATIS - OPERATOR TETAP, KASIR DIACAK DARI POOL</p>
-    </div>
+<div id="dash" class="page-content"><h2>Dashboard Utama</h2><p>Selamat datang di pusat kendali TVTOTO.</p></div>
+<div id="acak" class="page-content"><h2>Acak Jobdesk</h2><p>Gunakan menu ini untuk pembagian tugas.</p></div>
+<div id="setOp" class="page-content"><h2>Setting Operator</h2><p>Atur operator tetap di sini.</p></div>
 
-    <div class="panel-box" style="margin-bottom:20px;">
-        <div class="panel-title">🟡 SISTEM ACAK JOBDESK</div>
-        <div class="btn-group">
-            <button class="btn-job">SEMUA</button>
-            <button class="btn-job">🌅 PAGI</button>
-            <button class="btn-job">🌥 SORE</button>
-            <button class="btn-job">🌙 MALAM</button>
-            <button class="btn-job active-btn" onclick="prosesAcak()">🎲 ACAK JOBDESK</button>
-            <button class="btn-job">📄 COPY</button>
-            <button class="btn-job">🗑 CLEAR</button>
-        </div>
-    </div>
-
-    <div class="grid-jobdesk">
-        <div class="panel-box">
-            <div class="panel-title">💼 POOL JOBDESK</div>
-            <textarea id="poolInput">SCATTER&#10;WD DANA&#10;WD MANDIRI, BNI&#10;DEPO BCA</textarea>
-            <div style="margin-top:10px;">
-                <button class="btn-job">📄 CONTOH</button>
-                <button class="btn-job" style="background:var(--accent); color:#000;">💾 SIMPAN</button>
-            </div>
-        </div>
-        <div class="panel-box">
-            <div class="panel-title">👑 OPERATOR PER SHIFT</div>
-            <div id="operatorResult" style="text-align:center; padding-top:40px; color:#444;">
-                <span style="font-size:30px;">👑</span><br>BELUM ADA OPERATOR
-            </div>
-        </div>
-    </div>
-
-    <div class="panel-box" style="margin-top:20px;">
-        <div class="panel-title">📊 HASIL DISTRIBUSI</div>
-        <div id="hasilAcak" style="font-size:12px; color:#aaa;">Belum ada data acak. Silahkan tekan tombol Acak Jobdesk.</div>
-    </div>
-</div>
+<datalist id="staffList"></datalist>
 
 <script>
     const STAFF_DATA = ["MARKUS FEBRIAN PAMUNGKAS ATJE", "PUTRI CAHAYA", "RADO DINATA", "SELWEN AL KHAIRI", "GIERDAV ALDEN AZUTOS DUMAT", "S PRIYA DARSIN", "DONY KRIS SANDI", "ALIKA SALSABILAH", "MUHAMMAD HABIB", "RIZKY AULIA", "NOVITA SARI", "ZULMADIL REYDINATA", "INDA AFRITYA", "AMANDA REZKY TANJUNG", "SAWALUDDIN HASIBUAN", "RISKA ARNITA PUTRI", "DIAN THERESA SIMAMORA", "JONATHAN QUEEN", "HENDRA", "SENDI REVIAN", "SYUKUR KURNIAWAN", "OGI CANDRA SAPUTRA", "IRVAN GANESHA", "RAHMA TINA", "JOSIA ROMANDA GINTING", "MUHAMMAD BAKRON MAULANA", "JIMMY", "CINDY NURUL AMALIA HASIBUAN", "DEVA NANDA", "MUHAMMAD JUHARI", "FANNY FADILLA", "WIRA ARIA SAPUTRA", "JANNIFER MENTARI SINGKOH", "AGUSSALIM FAJAR", "SASITHAREN", "JUWAN", "FRENDYCO", "KHOIRUL AMRI", "AL BETO", "APRI YOGO JOHANDA SEMBIRING", "ANDI", "FRANS WILLIAM ISKANDAR TAMBUNAN", "INDRA", "WILSON LEO WU", "ECHA ADELIA", "AHLUN IQBAL", "INDRA KURNIAWAN", "MARIO CHRISTOPHER SUNARWAN", "NADYA TASYA", "LUSI", "YOGI ARDIANSYAH", "SANJELIA PUTRI", "ARUN RAJZ", "KHAIRUL AZHAR", "BOBI ARFANDI", "HARIS MULIA MANURUNG", "ANDRA FAUZI", "ADITYA RIWANA", "JOHANDA JAYUSMAN", "SABAR MORANDO FRANCISCO MANIK", "RAJA EDWARD BANGUN", "DENNIS GOLDSTEIN", "DWIKI RAMDANI", "ABDUL TARIGAN", "RAHMAT HIDAYAT"];
+
+    // --- AUTH LOGIC ---
+    function switchAuth(m) {
+        document.getElementById('loginBox').style.display = m==='login'?'block':'none';
+        document.getElementById('regBox').style.display = m==='reg'?'block':'none';
+        document.getElementById('lupaBox').style.display = m==='lupa'?'block':'none';
+    }
 
     function doLogin() {
         if(document.getElementById('uIn').value === 'admin' && document.getElementById('pIn').value === '741852963') {
             localStorage.setItem('isLogged', 'true');
             location.reload();
-        } else { alert("Salah!"); }
+        } else { alert("Login Gagal!"); }
     }
 
-    function showPage(pageId) {
+    function doLogout() {
+        if(confirm("Keluar dari sistem?")) {
+            localStorage.removeItem('isLogged');
+            location.reload();
+        }
+    }
+
+    // --- NAVIGATION ---
+    function showPage(id) {
         document.querySelectorAll('.page-content').forEach(p => p.style.display = 'none');
         document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
-        document.getElementById(pageId).style.display = 'block';
+        document.getElementById(id).style.display = 'block';
         event.currentTarget.classList.add('active');
     }
 
+    // --- ABSENSI CORE ---
     function submitAbsen() {
         const name = document.getElementById('iName').value.toUpperCase();
-        if(!STAFF_DATA.includes(name)) return alert("Nama tidak ada!");
-        let abs = JSON.parse(localStorage.getItem('absensi') || "[]");
-        abs.push({name, shift: document.getElementById('sShift').value, time: document.getElementById('clockBox').innerText});
-        localStorage.setItem('absensi', JSON.stringify(abs));
+        if(!STAFF_DATA.includes(name)) return alert("Nama tidak terdaftar!");
+        
+        let abs = JSON.parse(localStorage.getItem('tv_absensi') || "[]");
+        if(abs.find(x => x.name === name)) return alert("Sudah Absen!");
+
+        abs.push({
+            shift: document.getElementById('sShift').value,
+            name: name,
+            target: "07:45:00",
+            aktual: document.getElementById('clockBox').innerText,
+            status: "TERCATAT"
+        });
+        localStorage.setItem('tv_absensi', JSON.stringify(abs));
         renderAbsen();
+        document.getElementById('iName').value = "";
     }
 
     function renderAbsen() {
-        const abs = JSON.parse(localStorage.getItem('absensi') || "[]");
-        document.getElementById('tblBody').innerHTML = abs.reverse().map(a => `<tr><td>${a.shift}</td><td>${a.name}</td><td>07:45</td><td>${a.time}</td><td>TERCATAT</td></tr>`).join('');
+        const abs = JSON.parse(localStorage.getItem('tv_absensi') || "[]");
+        document.getElementById('tblBody').innerHTML = abs.reverse().map(a => `
+            <tr><td>${a.shift}</td><td>${a.name}</td><td>${a.target}</td><td>${a.aktual}</td><td style="color:blue">TERCATAT</td></tr>
+        `).join('');
         document.getElementById('sOn').innerText = abs.length;
         document.getElementById('sAbs').innerText = 65 - abs.length;
         document.getElementById('staffList').innerHTML = STAFF_DATA.map(s => `<option value="${s}">`).join('');
     }
 
-    function prosesAcak() {
-        const pools = document.getElementById('poolInput').value.split('\n').filter(x => x.trim() !== "");
-        if(pools.length === 0) return alert("Isi pool jobdesk!");
-        
-        let shuffled = [...STAFF_DATA].sort(() => 0.5 - Math.random());
-        let hasil = shuffled.slice(0, pools.length).map((name, i) => `<div>${name} ➔ <b>${pools[i]}</b></div>`).join('');
-        document.getElementById('hasilAcak').innerHTML = hasil;
-        document.getElementById('operatorResult').innerHTML = `<b style="color:var(--accent)">${shuffled[0]}</b><br>OPERATOR TETAP`;
+    function resetHarian() {
+        if(confirm("Hapus semua riwayat absen hari ini?")) {
+            localStorage.removeItem('tv_absensi');
+            renderAbsen();
+        }
+    }
+
+    function exportExcel() {
+        let abs = JSON.parse(localStorage.getItem('tv_absensi') || "[]");
+        let csv = "SHIFT,NAMA,TARGET,AKTUAL,STATUS\n" + abs.map(a => `${a.shift},${a.name},${a.target},${a.aktual},TERCATAT`).join('\n');
+        let blob = new Blob([csv], {type:'text/csv'});
+        let url = URL.createObjectURL(blob);
+        let a = document.createElement('a'); a.href = url; a.download = 'Absensi_TVTOTO.csv'; a.click();
     }
 
     window.onload = () => {
         if(localStorage.getItem('isLogged')) {
             document.getElementById('authLayer').style.display = 'none';
             document.getElementById('sidebar').style.display = 'flex';
-            document.getElementById('dashboard').style.display = 'block';
             setInterval(() => {
                 const now = new Date();
                 document.getElementById('clockBox').innerText = now.toTimeString().split(' ')[0];
