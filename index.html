@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TVTOTO Absensi System v18.9 PRO - UPDATED</title>
+    <title>TVTOTO Absensi System v19.0 PRO</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -19,11 +19,9 @@
         .input-group { background: #5d5d5d; border: 1px solid #777; border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; padding: 0 15px; }
         .input-group span { margin-right: 10px; }
         .input-group input { background: transparent; border: none; color: #fff; flex: 1; height: 45px; outline: none; }
-        .btn-action { width: 100%; background: #d4a017; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 1rem; }
+        .btn-action { width: 100%; background: #d4a017; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 1rem; margin-bottom: 10px; }
         .auth-footer { margin-top: 15px; font-size: 0.75rem; color: #ccc; }
         .auth-link { color: #d4a017; cursor: pointer; text-decoration: underline; font-weight: bold; }
-        .ip-indicator { margin-top: 20px; font-size: 0.8rem; color: #ccc; font-family: 'Orbitron'; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .dot { height: 8px; width: 8px; background: #00ff88; border-radius: 50%; box-shadow: 0 0 8px #00ff88; }
 
         /* --- MAIN APP STYLING --- */
         #mainApp { width: 100%; height: 100%; padding: 20px; display: none; position: relative; }
@@ -56,6 +54,7 @@
         .sidebar-chat { background: var(--glass); border-radius: 25px; border: 1px solid var(--border-glass); display: flex; flex-direction: column; overflow: hidden; }
         #chatWrap { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
         .chat-bubble { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px; border-left: 3px solid var(--accent); font-size: 0.85rem; }
+        .btn-clear-chat { background: transparent; color: #ff4d4d; border: none; cursor: pointer; font-size: 0.7rem; font-weight: bold; text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -68,9 +67,8 @@
         <button class="btn-action" onclick="handleLogin()">➜ Masuk</button>
         <div class="auth-footer">
             Belum punya akun? <span class="auth-link" onclick="switchAuth('daftar')">Daftar</span><br>
-            <span class="auth-link" onclick="switchAuth('lupa')">Lupa Password?</span>
+            Lupa atau ingin <span class="auth-link" onclick="switchAuth('reset')">Reset Password?</span>
         </div>
-        <div class="ip-indicator">103.20.83.166 <span class="dot"></span></div>
     </div>
 
     <div id="daftarBox" class="auth-card" style="display: none;">
@@ -81,10 +79,12 @@
         <div class="auth-footer">Kembali ke <span class="auth-link" onclick="switchAuth('login')">Login</span></div>
     </div>
 
-    <div id="lupaBox" class="auth-card" style="display: none;">
-        <h3 style="font-family:'Orbitron';">HINT PASSWORD</h3>
-        <div class="input-group"><input type="text" id="lupaUser" placeholder="Masukkan Username"></div>
-        <button class="btn-action" onclick="handleLupa()">Cek Hint</button>
+    <div id="resetBox" class="auth-card" style="display: none;">
+        <h3 style="font-family:'Orbitron'; color:var(--warning);">RESET PASSWORD</h3>
+        <p style="font-size: 0.7rem; color: #ccc; margin-bottom: 15px;">Masukkan Username dan Password Baru Anda.</p>
+        <div class="input-group"><input type="text" id="resetUser" placeholder="Username Anda"></div>
+        <div class="input-group"><input type="password" id="resetPassNew" placeholder="Password Baru"></div>
+        <button class="btn-action" style="background:var(--warning); color:#000;" onclick="handleResetPass()">Update Password</button>
         <div class="auth-footer">Kembali ke <span class="auth-link" onclick="switchAuth('login')">Login</span></div>
     </div>
 </div>
@@ -130,7 +130,10 @@
         </div>
 
         <div class="sidebar-chat">
-            <div style="padding:15px; background:rgba(255,255,255,0.1); font-weight:bold; font-family:'Orbitron'; font-size:0.8rem;">VOICE LOGS</div>
+            <div style="padding:15px; background:rgba(255,255,255,0.1); font-weight:bold; font-family:'Orbitron'; font-size:0.8rem; display:flex; justify-content:space-between; align-items:center;">
+                VOICE LOGS 
+                <button class="btn-clear-chat" onclick="clearChat()">HAPUS LOG</button>
+            </div>
             <div id="chatWrap"></div>
             <input type="text" id="chatIn" placeholder="Pesan Suara Admin..." style="margin:15px; padding:12px; border-radius:8px; border:none; background:rgba(255,255,255,0.1); color:white;">
         </div>
@@ -138,7 +141,6 @@
 </div>
 
 <script>
-    const ADMIN_PIN = "741852963";
     const NAMES = ["MARKUS FEBRIAN PAMUNGKAS ATJE", "PUTRI CAHAYA", "RADO DINATA", "SELWEN AL KHAIRI", "GIERDAV ALDEN AZUTOS DUMAT", "S PRIYA DARSIN", "DONY KRIS SANDI", "ALIKA SALSABILAH", "MUHAMMAD HABIB", "RIZKY AULIA", "NOVITA SARI", "ZULMADIL REYDINATA", "INDA AFRITYA", "AMANDA REZKY TANJUNG", "SAWALUDDIN HASIBUAN", "RISKA ARNITA PUTRI", "DIAN THERESA SIMAMORA", "JONATHAN QUEEN", "HENDRA", "SENDI REVIAN", "SYUKUR KURNIAWAN", "OGI CANDRA SAPUTRA", "IRVAN GANESHA", "RAHMA TINA", "JOSIA ROMANDA GINTING", "MUHAMMAD BAKRON MAULANA", "JIMMY", "CINDY NURUL AMALIA HASIBUAN", "DEVA NANDA", "MUHAMMAD JUHARI", "FANNY FADILLA", "WIRA ARIA SAPUTRA", "JANNIFER MENTARI SINGKOH", "AGUSSALIM FAJAR", "SASITHAREN", "JUWAN", "FRENDYCO", "KHOIRUL AMRI", "AL BETO", "APRI YOGO JOHANDA SEMBIRING", "ANDI", "FRANS WILLIAM ISKANDAR TAMBUNAN", "INDRA", "WILSON LEO WU", "ECHA ADELIA", "AHLUN IQBAL", "INDRA KURNIAWAN", "MARIO CHRISTOPHER SUNARWAN", "NADYA TASYA", "LUSI", "YOGI ARDIANSYAH", "SANJELIA PUTRI", "ARUN RAJZ", "KHAIRUL AZHAR", "BOBI ARFANDI", "HARIS MULIA MANURUNG", "ANDRA FAUZI", "ADITYA RIWANA", "JOHANDA JAYUSMAN", "SABAR MORANDO FRANCISCO MANIK", "RAJA EDWARD BANGUN", "DENNIS GOLDSTEIN", "DWIKI RAMDANI", "ABDUL TARIGAN", "RAHMAT HIDAYAT"];
     const TARGETS = { "PAGI": "07:45:00", "SHIFT G": "09:45:00", "SORE": "15:45:00", "MALAM": "21:45:00" };
 
@@ -146,51 +148,83 @@
     function switchAuth(t) {
         document.getElementById('loginBox').style.display = t==='login'?'block':'none';
         document.getElementById('daftarBox').style.display = t==='daftar'?'block':'none';
-        document.getElementById('lupaBox').style.display = t==='lupa'?'block':'none';
+        document.getElementById('resetBox').style.display = t==='reset'?'block':'none';
     }
 
     function handleLogin() {
         const u = document.getElementById('userIn').value.trim();
         const p = document.getElementById('passIn').value.trim();
-        let users = JSON.parse(localStorage.getItem('tv_users')) || [{user:"admin", pass:ADMIN_PIN}];
+        let users = JSON.parse(localStorage.getItem('tv_users')) || [{user:"admin", pass:"741852963"}];
+        
         if(users.find(x => x.user === u && x.pass === p)) {
             localStorage.setItem('isLoggedIn', 'true');
             location.reload();
-        } else { alert("Login Gagal! Cek Username dan Password."); }
+        } else { alert("Login Gagal! Akun tidak ditemukan."); }
     }
 
     function handleDaftar() {
         const u = document.getElementById('newUsers').value.trim();
         const p = document.getElementById('newPass').value.trim();
-        if(!u || !p) return alert("Harap isi semua kolom!");
-        let users = JSON.parse(localStorage.getItem('tv_users')) || [{user:"admin", pass:ADMIN_PIN}];
-        if(users.some(x => x.user === u)) return alert("Username sudah digunakan!");
+        if(!u || !p) return alert("Isi semua data!");
+        let users = JSON.parse(localStorage.getItem('tv_users')) || [{user:"admin", pass:"741852963"}];
+        if(users.some(x => x.user === u)) return alert("Username sudah ada!");
+        
         users.push({user:u, pass:p});
         localStorage.setItem('tv_users', JSON.stringify(users));
-        alert("Berhasil Daftar! Silahkan Login."); switchAuth('login');
+        alert("Pendaftaran Berhasil!"); switchAuth('login');
     }
 
-    function handleLupa() {
-        const u = document.getElementById('lupaUser').value.trim();
-        let users = JSON.parse(localStorage.getItem('tv_users')) || [{user:"admin", pass:ADMIN_PIN}];
-        const found = users.find(x => x.user === u);
-        if(found) alert("Hint: Password Anda adalah '" + found.pass + "'");
-        else alert("Username tidak ditemukan!");
+    function handleResetPass() {
+        const u = document.getElementById('resetUser').value.trim();
+        const pNew = document.getElementById('resetPassNew').value.trim();
+        if(!u || !pNew) return alert("Isi Username dan Password Baru!");
+        
+        let users = JSON.parse(localStorage.getItem('tv_users')) || [{user:"admin", pass:"741852963"}];
+        const idx = users.findIndex(x => x.user === u);
+        
+        if(idx !== -1) {
+            users[idx].pass = pNew;
+            localStorage.setItem('tv_users', JSON.stringify(users));
+            alert("Password Berhasil Diperbarui!");
+            switchAuth('login');
+        } else {
+            alert("Username tidak ditemukan!");
+        }
     }
 
     function handleLogout() {
-        if(confirm("Apakah Anda yakin ingin keluar sistem?")) { 
-            localStorage.removeItem('isLoggedIn'); 
-            location.reload(); 
+        if(confirm("Keluar dari sistem?")) {
+            localStorage.removeItem('isLoggedIn');
+            location.reload();
         }
+    }
+
+    // --- CHAT LOGIC ---
+    function clearChat() {
+        if(confirm("Hapus semua log pesan?")) {
+            document.getElementById('chatWrap').innerHTML = "";
+            localStorage.removeItem('tv_chat_logs');
+        }
+    }
+
+    function saveChat(msg) {
+        let logs = JSON.parse(localStorage.getItem('tv_chat_logs') || "[]");
+        logs.push(msg);
+        localStorage.setItem('tv_chat_logs', JSON.stringify(logs));
+    }
+
+    function renderChat() {
+        let logs = JSON.parse(localStorage.getItem('tv_chat_logs') || "[]");
+        const wrap = document.getElementById('chatWrap');
+        wrap.innerHTML = logs.map(m => `<div class="chat-bubble"><b>ADMIN:</b> ${m}</div>`).join('');
+        wrap.scrollTop = wrap.scrollHeight;
     }
 
     // --- ABSENSI LOGIC ---
     function speakAI(t) {
         window.speechSynthesis.cancel();
         let ut = new SpeechSynthesisUtterance(t.toLowerCase());
-        ut.lang = 'id-ID'; 
-        ut.rate = 0.9;
+        ut.lang = 'id-ID'; ut.rate = 0.9;
         window.speechSynthesis.speak(ut);
     }
 
@@ -207,23 +241,21 @@
         const shift = document.getElementById('sShift').value;
         const time = document.getElementById('clockDisplay').innerText;
         
-        if(!NAMES.includes(name)) return alert("Nama Staff Tidak Terdaftar!");
-        
+        if(!NAMES.includes(name)) return alert("Staff tidak terdaftar!");
         let db = JSON.parse(localStorage.getItem('tv_data') || "[]");
-        if(db.some(x => x.name === name)) return alert("Staff Sudah Melakukan Absensi!");
+        if(db.some(x => x.name === name)) return alert("Sudah absen!");
         
         const telat = hitungTelat(TARGETS[shift], time);
+        const voiceMsg = telat ? `${name} terlambat ${telat}` : `${name} berhasil absen`;
         
-        if(telat) {
-            speakAI(`Perhatian ${name}, anda terlambat ${telat}`);
-        } else {
-            speakAI(`Selamat datang ${name}, absensi berhasil`);
-        }
-
+        speakAI(voiceMsg);
+        saveChat(voiceMsg);
+        
         db.push({shift, name, target:TARGETS[shift], actual:time});
         localStorage.setItem('tv_data', JSON.stringify(db));
         document.getElementById('iName').value = ""; 
         render();
+        renderChat();
     }
 
     function render() {
@@ -232,30 +264,23 @@
         tbody.innerHTML = "";
         let lateCount = 0;
         
-        // Render data terbaru di paling atas
         [...db].reverse().forEach(x => {
             const t = hitungTelat(x.target, x.actual);
             if(t) lateCount++;
             tbody.innerHTML += `
                 <tr class="${t?'row-late':'row-ontime'}">
-                    <td>${x.shift}</td>
-                    <td>${x.name}</td>
-                    <td>${x.target}</td>
-                    <td>${x.actual}</td>
-                    <td>${t ? 'TELAT ' + t : 'TEPAT'}</td>
+                    <td>${x.shift}</td><td>${x.name}</td><td>${x.target}</td><td>${x.actual}</td><td>${t ? 'TELAT ' + t : 'TEPAT'}</td>
                 </tr>`;
         });
 
         document.getElementById('sOn').innerText = db.length - lateCount;
         document.getElementById('sLate').innerText = lateCount;
         document.getElementById('sAbs').innerText = NAMES.length - db.length;
-        
-        const dl = document.getElementById('staffs');
-        dl.innerHTML = NAMES.map(n => `<option value="${n}">`).join('');
+        document.getElementById('staffs').innerHTML = NAMES.map(n => `<option value="${n}">`).join('');
     }
 
     function resetHarian() {
-        if(confirm("PERINGATAN: Hapus semua riwayat absen hari ini?")) {
+        if(confirm("Reset semua data hari ini?")) {
             localStorage.removeItem('tv_data');
             render();
         }
@@ -263,8 +288,8 @@
 
     function exportData() {
         let db = JSON.parse(localStorage.getItem('tv_data') || "[]");
-        if(db.length === 0) return alert("Tidak ada data untuk diekspor!");
-        let csv = "SHIFT,NAMA STAFF,TARGET MASUK,AKTUAL MASUK,STATUS\n" + 
+        if(db.length === 0) return alert("Data kosong!");
+        let csv = "SHIFT,NAMA STAFF,TARGET,AKTUAL,STATUS\n" + 
             db.map(x => {
                 const t = hitungTelat(x.target, x.actual);
                 return `${x.shift},${x.name},${x.target},${x.actual},${t?'TELAT '+t:'TEPAT'}`;
@@ -272,8 +297,7 @@
         const blob = new Blob([csv], {type:'text/csv'});
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = `Absen_TVTOTO_${new Date().toLocaleDateString()}.csv`; 
-        a.click();
+        a.download = `Absen_TVTOTO.csv`; a.click();
     }
 
     function updateClock() {
@@ -287,10 +311,10 @@
         if(e.key === 'Enter') {
             const msg = e.target.value;
             if(!msg) return;
-            document.getElementById('chatWrap').innerHTML += `<div class="chat-bubble"><b>ADMIN:</b> ${msg}</div>`;
-            speakAI(msg); 
+            saveChat(msg);
+            speakAI(msg);
+            renderChat();
             e.target.value = "";
-            document.getElementById('chatWrap').scrollTop = document.getElementById('chatWrap').scrollHeight;
         }
     });
 
@@ -298,6 +322,7 @@
         if(localStorage.getItem('isLoggedIn') === 'true') {
             document.getElementById('authContainer').style.display = 'none';
             document.getElementById('mainApp').style.display = 'block';
+            renderChat();
         }
         setInterval(updateClock, 1000); 
         render();
