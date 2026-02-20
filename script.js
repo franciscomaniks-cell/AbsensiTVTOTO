@@ -3,22 +3,28 @@ const NAMES = ["MARKUS FEBRIAN PAMUNGKAS ATJE", "PUTRI CAHAYA", "RADO DINATA", "
 const TARGETS = { "PAGI": "07:45:00", "SHIFT G": "09:45:00", "SHIFT G2": "11:45:00", "SORE": "15:45:00", "MALAM": "21:45:00" };
 let modeTelat = false;
 
-// FUNGSI LOGIN
+// LOGIN & SESSION
 function cekLogin() {
-    const user = document.getElementById('adminUser').value;
-    const pass = document.getElementById('adminPass').value;
-
+    const user = document.getElementById('adminUser').value.trim();
+    const pass = document.getElementById('adminPass').value.trim();
     if(user.toLowerCase() === "admin" && pass === ADMIN_PIN) {
+        localStorage.setItem('tv_auth', 'true');
         document.getElementById('loginPage').style.display = 'none';
         document.getElementById('mainApp').style.display = 'block';
-        speakAI("Login berhasil. Selamat bertugas admin.");
+        speakAI("Login sukses. Selamat bekerja.");
     } else {
         alert("Username atau Password Salah!");
-        speakAI("Akses ditolak.");
     }
 }
 
-// FUNGSI SUARA
+function logout() {
+    if(confirm("Keluar dari sistem?")) {
+        localStorage.removeItem('tv_auth');
+        location.reload();
+    }
+}
+
+// LOGIKA ABSENSI
 function speakAI(text) {
     const synth = window.speechSynthesis;
     synth.cancel(); 
@@ -26,8 +32,7 @@ function speakAI(text) {
     const voices = synth.getVoices();
     const idVoice = voices.find(v => v.lang.includes('id-ID'));
     if (idVoice) utter.voice = idVoice;
-    utter.lang = 'id-ID';
-    utter.rate = 1.0;
+    utter.lang = 'id-ID'; utter.rate = 1.0;
     synth.speak(utter);
 }
 
@@ -40,8 +45,7 @@ function hitungSelisih(target, aktual) {
     if (diff <= 0) return null;
     const h = Math.floor(diff/3600);
     const m = Math.floor((diff%3600)/60);
-    const s = diff%60;
-    return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:00`;
 }
 
 function tambahAbsen() {
@@ -73,14 +77,14 @@ function hapusSatu(nama) {
         db = db.filter(x => x.name !== nama);
         localStorage.setItem('tv_v18', JSON.stringify(db));
         render();
-    } else { alert("PIN Salah!"); }
+    }
 }
 
 function resetData() {
     if(prompt("PIN ADMIN:") === ADMIN_PIN) {
         localStorage.removeItem('tv_v18');
         render();
-    } else { alert("PIN Salah!"); }
+    }
 }
 
 function render() {
@@ -123,7 +127,7 @@ function filterTelat() {
 
 function exportData() {
     const db = JSON.parse(localStorage.getItem('tv_v18') || "[]");
-    if (db.length === 0) return alert("Tidak ada data!");
+    if (db.length === 0) return;
     let csv = "SHIFT,NAMA,TARGET,AKTUAL,STATUS\n";
     db.forEach(x => {
         const t = hitungSelisih(x.target, x.actual);
@@ -132,14 +136,14 @@ function exportData() {
     const blob = new Blob([csv], {type: 'text/csv'});
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = `ABSEN_TVTOTO_${new Date().toLocaleDateString()}.csv`;
+    a.download = `ABSEN_${new Date().toLocaleDateString()}.csv`;
     a.click();
 }
 
 function renderChat() {
     const box = document.getElementById('chatWrap');
     const c = JSON.parse(localStorage.getItem('tv_chat_v18') || "[]");
-    box.innerHTML = c.map(m => `<div class="chat-bubble"><span class="bubble-name">ADMIN</span><br><span style="font-size:0.85rem;">${m.text}</span></div>`).join('');
+    box.innerHTML = c.map(m => `<div class="chat-bubble"><span class="bubble-name">ADMIN</span><br><span>${m.text}</span></div>`).join('');
     box.scrollTop = box.scrollHeight;
 }
 
@@ -149,9 +153,7 @@ document.getElementById('chatIn').addEventListener('keypress', (e) => {
         let c = JSON.parse(localStorage.getItem('tv_chat_v18') || "[]");
         c.push({ text: pesan });
         localStorage.setItem('tv_chat_v18', JSON.stringify(c));
-        speakAI(pesan); 
-        e.target.value = ""; 
-        renderChat();
+        speakAI(pesan); e.target.value = ""; renderChat();
     }
 });
 
@@ -166,7 +168,9 @@ function updateClock() {
 
 setInterval(updateClock, 1000);
 window.onload = () => { 
-    window.speechSynthesis.getVoices();
-    updateClock(); 
-    render(); 
+    updateClock(); render(); 
+    if(localStorage.getItem('tv_auth') === 'true') {
+        document.getElementById('loginPage').style.display = 'none';
+        document.getElementById('mainApp').style.display = 'block';
+    }
 };
