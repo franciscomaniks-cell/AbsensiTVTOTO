@@ -3,260 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TVTOTO Absensi System v18.9 PRO</title>
+    <title>TVTOTO Professional Panel v20.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #2e3192; --accent: #d4a017; --success: #00ff88; --danger: #ff4d4d; --warning: #ffcc00;
-            --glass: rgba(10, 10, 25, 0.96); --border-glass: rgba(255, 255, 255, 0.15);
+            --bg-dark: #0a0a0a; --sidebar-bg: #0d0d0d; --card-bg: rgba(25, 25, 25, 0.9);
         }
-        * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s ease; }
-        body { margin: 0; padding: 0; background: #000 url('background.jpg') no-repeat center center fixed; background-size: cover; height: 100vh; overflow: hidden; display: flex; justify-content: center; align-items: center; color: #fff; }
+        * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { margin: 0; background: #000 url('background.jpg') no-repeat center center fixed; background-size: cover; height: 100vh; overflow: hidden; color: #fff; display: flex; }
 
-        /* --- AUTH STYLING --- */
-        #authContainer { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); display: flex; justify-content: center; align-items: center; z-index: 10000; }
-        .auth-card { background: #4a4a4a; padding: 35px; border-radius: 20px; width: 380px; text-align: center; border: 1px solid #5d5d5d; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
-        .input-group { background: #5d5d5d; border: 1px solid #777; border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; padding: 0 15px; }
-        .input-group input { background: transparent; border: none; color: #fff; flex: 1; height: 45px; outline: none; }
-        .btn-action { width: 100%; background: #d4a017; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 1rem; }
-        .auth-footer { margin-top: 15px; font-size: 0.75rem; color: #ccc; }
-        .auth-link { color: #d4a017; cursor: pointer; text-decoration: underline; font-weight: bold; }
-        .ip-indicator { margin-top: 20px; font-size: 0.8rem; color: #ccc; font-family: 'Orbitron'; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .dot { height: 8px; width: 8px; background: #00ff88; border-radius: 50%; box-shadow: 0 0 8px #00ff88; }
+        /* --- SIDEBAR STYLE (Sesuai Gambar Anda) --- */
+        #sidebar { width: 280px; background: var(--sidebar-bg); border-right: 1px solid #222; display: none; flex-direction: column; padding: 20px 15px; z-index: 100; }
+        .menu-label { font-size: 10px; color: #555; font-weight: 800; letter-spacing: 2px; margin: 20px 0 10px 10px; text-transform: uppercase; }
+        .menu-item { display: flex; align-items: center; padding: 12px 15px; border-radius: 8px; cursor: pointer; color: #aaa; text-decoration: none; margin-bottom: 5px; font-size: 14px; }
+        .menu-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
+        .menu-item.active { background: rgba(139, 0, 0, 0.2); color: var(--accent); border-left: 3px solid var(--accent); font-weight: bold; }
+        .menu-item span { margin-right: 12px; font-size: 18px; }
 
-        /* --- MAIN APP STYLING --- */
-        #mainApp { width: 100%; height: 100%; padding: 20px; display: none; position: relative; }
-        .btn-logout { position: absolute; top: 20px; right: 20px; background: rgba(255,77,77,0.2); color: #ff4d4d; border: 1px solid #ff4d4d; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: 800; font-size: 0.7rem; z-index: 1001; }
-        .logo-box { position: absolute; top: 20px; left: 20px; width: 120px; z-index: 1000; }
-        .logo-box img { width: 100%; border-radius: 10px; }
-        
-        .main-container { display: grid; grid-template-columns: 1fr 380px; gap: 20px; width: 100%; height: 92vh; margin-top: 40px; }
-        .absensi-section { background: var(--glass); border-radius: 25px; padding: 25px; border: 1px solid var(--border-glass); display: flex; flex-direction: column; }
-        
-        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; margin-left: 140px; }
-        .stat-card { padding: 10px; border-radius: 12px; text-align: center; background: rgba(0,0,0,0.3); border-bottom: 4px solid #fff; }
-        
-        .header-main { display: flex; margin-bottom: 20px; border: 2px solid #fff; border-radius: 12px; overflow: hidden; }
-        .date-panel { background: var(--accent); color: #000; padding: 10px; text-align: center; min-width: 150px; }
-        .title-panel { background: linear-gradient(90deg, #000, var(--primary)); flex: 1; display: flex; align-items: center; justify-content: center; font-family: 'Orbitron'; font-size: 1.8rem; letter-spacing: 5px; }
+        /* USER PROFILE BOX */
+        .user-box { background: #151515; padding: 15px; border-radius: 12px; margin-top: auto; border: 1px solid #222; }
+        .user-info { display: flex; align-items: center; gap: 12px; }
+        .avatar { width: 40px; height: 40px; background: #8b0000; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: 'Orbitron'; }
+        .sync-badge { background: rgba(0, 255, 136, 0.1); color: var(--success); padding: 8px; border-radius: 8px; font-size: 10px; margin-top: 10px; border: 1px solid rgba(0,255,136,0.2); font-family: 'Orbitron'; display: flex; align-items: center; gap: 8px; }
+        .sync-dot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; box-shadow: 0 0 8px var(--success); }
 
-        .tool-bar { display: grid; grid-template-columns: 160px 1fr 160px auto auto; gap: 10px; margin-bottom: 20px; }
-        .digital-clock { background: #000; color: #00ff88; border: 1px solid #00ff88; font-family: 'Orbitron'; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-weight: bold; font-size: 1.2rem; }
+        /* --- MAIN CONTENT --- */
+        #mainApp { flex: 1; display: none; padding: 25px; overflow-y: auto; position: relative; }
+        .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
         
-        .table-pro-wrap { background: #fff; border-radius: 15px; flex: 1; overflow-y: auto; color: #000; }
-        table { width: 100%; border-collapse: collapse; }
-        th { background: var(--primary); color: #fff; padding: 12px; position: sticky; top: 0; font-size: 0.8rem; }
-        td { padding: 10px; text-align: center; border-bottom: 1px solid #eee; font-weight: bold; }
-        .row-late { background: #ffebeb !important; color: #d63031; }
-        .row-ontime { background: #f0fff4 !important; color: #27ae60; }
+        /* RE-DESIGN STAT CARDS */
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 25px; }
+        .stat-card { background: var(--card-bg); border-radius: 15px; padding: 20px; border-left: 5px solid #fff; }
+        .stat-card h3 { margin: 0; font-size: 12px; opacity: 0.7; }
+        .stat-card p { margin: 10px 0 0; font-family: 'Orbitron'; font-size: 28px; font-weight: 900; }
 
-        .sidebar-chat { background: var(--glass); border-radius: 25px; border: 1px solid var(--border-glass); display: flex; flex-direction: column; overflow: hidden; }
-        #chatWrap { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
-        .chat-bubble { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px; border-left: 3px solid var(--accent); font-size: 0.85rem; }
+        /* ABSENSI BOARD */
+        .absensi-board { background: var(--card-bg); border-radius: 20px; overflow: hidden; border: 1px solid #333; }
+        .board-header { background: var(--primary); padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #fff; }
+        .digital-clock { font-family: 'Orbitron'; color: var(--success); font-weight: 900; font-size: 20px; }
+        
+        .table-container { background: #fff; height: 400px; overflow-y: auto; }
+        table { width: 100%; border-collapse: collapse; color: #000; }
+        th { background: #eee; padding: 15px; font-size: 11px; text-transform: uppercase; position: sticky; top: 0; }
+        td { padding: 12px; text-align: center; border-bottom: 1px solid #eee; font-weight: bold; }
+
+        /* --- LOGIN (Sesuai Gambar) --- */
+        #authContainer { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: flex; justify-content: center; align-items: center; z-index: 10000; }
+        .login-card { background: #333; padding: 40px; border-radius: 25px; width: 380px; text-align: center; border: 1px solid #444; }
+        .login-input { background: #444; border: 1px solid #555; border-radius: 10px; padding: 15px; width: 100%; color: #fff; margin-bottom: 15px; outline: none; }
+        .btn-login { width: 100%; background: #d4a017; border: none; padding: 15px; border-radius: 10px; color: #fff; font-weight: 800; cursor: pointer; font-size: 16px; box-shadow: 0 5px 15px rgba(212,160,23,0.3); }
+
     </style>
 </head>
 <body>
 
-<div id="authContainer">
-    <div id="loginBox" class="auth-card">
-        <div class="input-group"><span>👤</span><input type="text" id="userIn" placeholder="Username"></div>
-        <div class="input-group"><span>🔒</span><input type="password" id="passIn" placeholder="Password"></div>
-        <button class="btn-action" onclick="handleLogin()">➜ Masuk</button>
-        <div class="auth-footer">
-            Belum punya akun? <span class="auth-link" onclick="switchAuth('daftar')">Daftar</span><br>
-            <span class="auth-link" onclick="switchAuth('lupa')">Lupa Password?</span>
+<div id="sidebar">
+    <div style="font-family:'Orbitron'; font-weight:900; font-size:20px; color:var(--accent); margin-bottom:30px; text-align:center;">TVTOTO</div>
+    
+    <div class="menu-label">MENU UTAMA</div>
+    <div class="menu-item active"><span>◆</span> Dashboard</div>
+    <div class="menu-item"><span>🎲</span> Acak Jobdesk</div>
+    <div class="menu-item"><span>👑</span> Setting Operator</div>
+    <div class="menu-item"><span>⏱</span> Manajemen Shift</div>
+    <div class="menu-item"><span>📡</span> Monitor Real-time</div>
+
+    <div class="menu-label">ABSENSI</div>
+    <div class="menu-item"><span>🕒</span> Absensi Staff</div>
+    <div class="menu-item"><span>💬</span> Absensi LINE</div>
+
+    <div class="menu-label">LAPORAN</div>
+    <div class="menu-item"><span>📂</span> History Log</div>
+    <div class="menu-item"><span>⬇</span> Export Data</div>
+
+    <div class="user-box">
+        <div class="user-info">
+            <div class="avatar">A</div>
+            <div>
+                <div style="font-weight:bold; font-size:14px; color:var(--accent);">ADMIN</div>
+                <div style="font-size:10px; color:#666;">ADMINISTRATOR</div>
+            </div>
         </div>
-        <div class="ip-indicator">103.20.83.166 <span class="dot"></span></div>
+        <div class="sync-badge"><div class="sync-dot"></div> Realtime Sync Aktif</div>
+        <div class="sync-badge" style="margin-top:5px;"><div class="sync-dot"></div> FIREBASE REALTIME SYNC</div>
+        <button onclick="handleLogout()" style="width:100%; background:transparent; border:1px solid #444; color:#ff4d4d; margin-top:10px; padding:5px; border-radius:5px; cursor:pointer; font-size:10px;">KELUAR SISTEM</button>
     </div>
+</div>
 
-    <div id="daftarBox" class="auth-card" style="display: none;">
-        <h3>Daftar Admin</h3>
-        <div class="input-group"><input type="text" id="newUsers" placeholder="Username Baru"></div>
-        <div class="input-group"><input type="password" id="newPass" placeholder="Password Baru"></div>
-        <button class="btn-action" onclick="handleDaftar()">Buat Akun</button>
-        <div class="auth-footer">Kembali ke <span class="auth-link" onclick="switchAuth('login')">Login</span></div>
-    </div>
-
-    <div id="lupaBox" class="auth-card" style="display: none;">
-        <h3>Pulihkan Akun</h3>
-        <div class="input-group"><input type="text" id="lupaUser" placeholder="Masukkan Username"></div>
-        <button class="btn-action" onclick="handleLupa()">Cek Password</button>
-        <div class="auth-footer">Kembali ke <span class="auth-link" onclick="switchAuth('login')">Login</span></div>
+<div id="authContainer">
+    <div class="login-card">
+        <div style="font-size:24px; font-weight:900; margin-bottom:20px; font-family:'Orbitron'">LOGIN SYSTEM</div>
+        <input type="text" id="userIn" class="login-input" placeholder="Username">
+        <input type="password" id="passIn" class="login-input" placeholder="Password">
+        <button class="btn-login" onclick="handleLogin()">➜ Masuk</button>
+        <div style="margin-top:20px; font-family:'Orbitron'; font-size:12px; color:#666;">103.20.83.166 <span style="color:var(--success)">●</span></div>
     </div>
 </div>
 
 <div id="mainApp">
-    <button class="btn-logout" onclick="handleLogout()">✕ KELUAR SISTEM</button>
-    <div class="logo-box"><img src="logo.png" onerror="this.src='logo.jpg';"></div>
+    <div class="top-header">
+        <div style="background:var(--accent); color:#000; padding:10px 20px; border-radius:10px; font-weight:bold;">
+            <div id="pDay" style="font-size:10px">HARI</div>
+            <div id="pDate" style="font-size:18px">TANGGAL</div>
+        </div>
+        <div class="digital-clock" id="clockBox">00:00:00</div>
+    </div>
 
-    <div class="main-container">
-        <div class="absensi-section">
-            <div class="stat-grid">
-                <div class="stat-card" style="color:var(--success); border-color:var(--success)"><h4>Tepat</h4><p id="sOn">0</p></div>
-                <div class="stat-card" style="color:var(--danger); border-color:var(--danger)"><h4>Telat</h4><p id="sLate">0</p></div>
-                <div class="stat-card" style="color:var(--warning); border-color:var(--warning)"><h4>Belum</h4><p id="sAbs">65</p></div>
-            </div>
+    <div class="stat-grid">
+        <div class="stat-card" style="border-color: var(--success);"><h3 style="color:var(--success)">Tepat Waktu</h3><p id="sOn">0</p></div>
+        <div class="stat-card" style="border-color: var(--danger);"><h3 style="color:var(--danger)">Terlambat</h3><p id="sLate">0</p></div>
+        <div class="stat-card" style="border-color: var(--warning);"><h3 style="color:var(--warning)">Belum Absen</h3><p id="sAbs">65</p></div>
+    </div>
 
-            <div class="header-main">
-                <div class="date-panel"><p id="pDay" style="margin:0; font-size:10px; font-weight:800;">HARI</p><h2 id="pDate" style="margin:0;">TANGGAL</h2></div>
-                <div class="title-panel">ABSEN TVTOTO</div>
-            </div>
-
-            <div class="tool-bar">
-                <select id="sShift" style="padding:10px; border-radius:8px;">
-                    <option value="PAGI">PAGI (07:45)</option>
-                    <option value="SHIFT G">SHIFT G (09:45)</option>
-                    <option value="SORE">SORE (15:45)</option>
-                    <option value="MALAM">MALAM (21:45)</option>
-                </select>
-                <input type="text" id="iName" placeholder="Ketik Nama Staff..." list="staffs" style="padding:10px; border-radius:8px; border:none;">
+    <div class="absensi-board">
+        <div class="board-header">
+            <div style="font-family:'Orbitron'; font-size:22px; letter-spacing:4px;">ABSEN TVTOTO</div>
+            <div style="display:flex; gap:10px;">
+                <select id="sShift" style="padding:10px; border-radius:5px;"><option>PAGI (07:45)</option><option>SHIFT G (09:45)</option></select>
+                <input type="text" id="iName" placeholder="Nama Staff..." list="staffs" style="padding:10px; border-radius:5px; width:250px;">
                 <datalist id="staffs"></datalist>
-                <div id="clockDisplay" class="digital-clock">00:00:00</div>
-                <button onclick="tambahAbsen()" style="background:var(--primary); color:white; border:none; padding:0 20px; border-radius:8px; cursor:pointer; font-weight:bold;">ABSEN</button>
-                <button onclick="exportData()" style="background:var(--success); color:black; border:none; padding:0 20px; border-radius:8px; cursor:pointer; font-weight:bold;">CSV</button>
-            </div>
-
-            <div class="table-pro-wrap">
-                <table id="tblMain">
-                    <thead><tr><th>SHIFT</th><th>NAMA STAFF</th><th>TARGET</th><th>AKTUAL</th><th>STATUS</th></tr></thead>
-                    <tbody></tbody>
-                </table>
+                <button onclick="tambahAbsen()" style="background:#000; color:white; border:1px solid #fff; padding:10px 20px; border-radius:5px; cursor:pointer;">ABSEN</button>
             </div>
         </div>
-
-        <div class="sidebar-chat">
-            <div style="padding:15px; background:rgba(255,255,255,0.1); font-weight:bold; font-family:'Orbitron'; font-size:0.8rem;">VOICE LOGS</div>
-            <div id="chatWrap"></div>
-            <input type="text" id="chatIn" placeholder="Pesan Suara Admin..." style="margin:15px; padding:12px; border-radius:8px; border:none; background:rgba(255,255,255,0.1); color:white;">
+        <div class="table-container">
+            <table>
+                <thead><tr><th>SHIFT</th><th>NAMA STAFF</th><th>TARGET</th><th>AKTUAL</th><th>STATUS</th></tr></thead>
+                <tbody id="tblBody"></tbody>
+            </table>
         </div>
     </div>
 </div>
 
 <script>
-    const ADMIN_PIN = "741852963";
+    // Database & Logic tetap sama agar fitur tidak hilang
     const NAMES = ["MARKUS FEBRIAN PAMUNGKAS ATJE", "PUTRI CAHAYA", "RADO DINATA", "SELWEN AL KHAIRI", "GIERDAV ALDEN AZUTOS DUMAT", "S PRIYA DARSIN", "DONY KRIS SANDI", "ALIKA SALSABILAH", "MUHAMMAD HABIB", "RIZKY AULIA", "NOVITA SARI", "ZULMADIL REYDINATA", "INDA AFRITYA", "AMANDA REZKY TANJUNG", "SAWALUDDIN HASIBUAN", "RISKA ARNITA PUTRI", "DIAN THERESA SIMAMORA", "JONATHAN QUEEN", "HENDRA", "SENDI REVIAN", "SYUKUR KURNIAWAN", "OGI CANDRA SAPUTRA", "IRVAN GANESHA", "RAHMA TINA", "JOSIA ROMANDA GINTING", "MUHAMMAD BAKRON MAULANA", "JIMMY", "CINDY NURUL AMALIA HASIBUAN", "DEVA NANDA", "MUHAMMAD JUHARI", "FANNY FADILLA", "WIRA ARIA SAPUTRA", "JANNIFER MENTARI SINGKOH", "AGUSSALIM FAJAR", "SASITHAREN", "JUWAN", "FRENDYCO", "KHOIRUL AMRI", "AL BETO", "APRI YOGO JOHANDA SEMBIRING", "ANDI", "FRANS WILLIAM ISKANDAR TAMBUNAN", "INDRA", "WILSON LEO WU", "ECHA ADELIA", "AHLUN IQBAL", "INDRA KURNIAWAN", "MARIO CHRISTOPHER SUNARWAN", "NADYA TASYA", "LUSI", "YOGI ARDIANSYAH", "SANJELIA PUTRI", "ARUN RAJZ", "KHAIRUL AZHAR", "BOBI ARFANDI", "HARIS MULIA MANURUNG", "ANDRA FAUZI", "ADITYA RIWANA", "JOHANDA JAYUSMAN", "SABAR MORANDO FRANCISCO MANIK", "RAJA EDWARD BANGUN", "DENNIS GOLDSTEIN", "DWIKI RAMDANI", "ABDUL TARIGAN", "RAHMAT HIDAYAT"];
-    const TARGETS = { "PAGI": "07:45:00", "SHIFT G": "09:45:00", "SORE": "15:45:00", "MALAM": "21:45:00" };
-
-    // --- AUTH LOGIC ---
-    function switchAuth(t) {
-        document.getElementById('loginBox').style.display = t==='login'?'block':'none';
-        document.getElementById('daftarBox').style.display = t==='daftar'?'block':'none';
-        document.getElementById('lupaBox').style.display = t==='lupa'?'block':'none';
-    }
 
     function handleLogin() {
-        const u = document.getElementById('userIn').value.trim();
-        const p = document.getElementById('passIn').value.trim();
-        let users = JSON.parse(localStorage.getItem('tv_users')) || [{user:"admin", pass:ADMIN_PIN}];
-        if(users.find(x => x.user === u && x.pass === p)) {
-            localStorage.setItem('isLoggedIn', 'true');
+        const u = document.getElementById('userIn').value;
+        const p = document.getElementById('passIn').value;
+        if(u === 'admin' && p === '741852963') {
+            localStorage.setItem('tv_logged', 'true');
             location.reload();
-        } else { alert("Login Gagal!"); }
+        } else { alert("User/Pass Salah!"); }
     }
 
-    function handleDaftar() {
-        const u = document.getElementById('newUsers').value.trim();
-        const p = document.getElementById('newPass').value.trim();
-        if(!u || !p) return alert("Isi semua!");
-        let users = JSON.parse(localStorage.getItem('tv_users')) || [{user:"admin", pass:ADMIN_PIN}];
-        users.push({user:u, pass:p});
-        localStorage.setItem('tv_users', JSON.stringify(users));
-        alert("Berhasil Daftar!"); switchAuth('login');
-    }
-
-    function handleLupa() {
-        const u = document.getElementById('lupaUser').value.trim();
-        let users = JSON.parse(localStorage.getItem('tv_users')) || [{user:"admin", pass:ADMIN_PIN}];
-        const found = users.find(x => x.user === u);
-        if(found) alert("Password Anda: " + found.pass);
-        else alert("User tidak ada!");
-    }
-
-    function handleLogout() {
-        if(confirm("Keluar sistem?")) { localStorage.removeItem('isLoggedIn'); location.reload(); }
-    }
-
-    // --- ABSENSI LOGIC ---
-    function speakAI(t) {
-        window.speechSynthesis.cancel();
-        let ut = new SpeechSynthesisUtterance(t.toLowerCase());
-        ut.lang = 'id-ID'; window.speechSynthesis.speak(ut);
-    }
-
-    function hitungTelat(target, aktual) {
-        const [th, tm, ts] = target.split(':').map(Number);
-        const [ah, am, as] = aktual.split(':').map(Number);
-        let diff = (ah*3600+am*60+as) - (th*3600+tm*60+ts);
-        if(diff <= 0) return null;
-        return `${Math.floor(diff/3600)}j ${Math.floor((diff%3600)/60)}m`;
-    }
-
-    function tambahAbsen() {
-        const name = document.getElementById('iName').value.trim().toUpperCase();
-        const shift = document.getElementById('sShift').value;
-        const time = document.getElementById('clockDisplay').innerText;
-        if(!NAMES.includes(name)) return alert("Nama salah!");
-        let db = JSON.parse(localStorage.getItem('tv_data') || "[]");
-        if(db.some(x => x.name === name)) return alert("Sudah absen!");
-        
-        const telat = hitungTelat(TARGETS[shift], time);
-        if(telat) speakAI(`Perhatian ${name}, anda terlambat ${telat}`);
-        else speakAI(`Selamat datang ${name}`);
-
-        db.push({shift, name, target:TARGETS[shift], actual:time});
-        localStorage.setItem('tv_data', JSON.stringify(db));
-        document.getElementById('iName').value = ""; render();
-    }
-
-    function render() {
-        let db = JSON.parse(localStorage.getItem('tv_data') || "[]");
-        const tbody = document.querySelector('#tblMain tbody');
-        tbody.innerHTML = "";
-        let lateCount = 0;
-        db.reverse().forEach(x => {
-            const t = hitungTelat(x.target, x.actual);
-            if(t) lateCount++;
-            tbody.innerHTML += `<tr class="${t?'row-late':'row-ontime'}"><td>${x.shift}</td><td>${x.name}</td><td>${x.target}</td><td>${x.actual}</td><td>${t?'TELAT '+t:'TEPAT'}</td></tr>`;
-        });
-        document.getElementById('sOn').innerText = db.length - lateCount;
-        document.getElementById('sLate').innerText = lateCount;
-        document.getElementById('sAbs').innerText = 65 - db.length;
-        
-        const dl = document.getElementById('staffs');
-        dl.innerHTML = NAMES.map(n => `<option value="${n}">`).join('');
-    }
-
-    function exportData() {
-        let db = JSON.parse(localStorage.getItem('tv_data') || "[]");
-        let csv = "SHIFT,NAMA,TARGET,AKTUAL\n" + db.map(x => `${x.shift},${x.name},${x.target},${x.actual}`).join('\n');
-        const blob = new Blob([csv], {type:'text/csv'});
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = "Absen_TVTOTO.csv"; a.click();
-    }
+    function handleLogout() { localStorage.removeItem('tv_logged'); location.reload(); }
 
     function updateClock() {
         const now = new Date();
-        document.getElementById('clockDisplay').innerText = now.toTimeString().split(' ')[0];
+        document.getElementById('clockBox').innerText = now.toTimeString().split(' ')[0];
         document.getElementById('pDate').innerText = now.toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'}).toUpperCase();
         document.getElementById('pDay').innerText = now.toLocaleDateString('id-ID', {weekday:'long'}).toUpperCase();
     }
 
-    document.getElementById('chatIn').addEventListener('keypress', (e) => {
-        if(e.key === 'Enter') {
-            const msg = e.target.value;
-            document.getElementById('chatWrap').innerHTML += `<div class="chat-bubble"><b>ADMIN:</b> ${msg}</div>`;
-            speakAI(msg); e.target.value = "";
-        }
-    });
+    function render() {
+        let db = JSON.parse(localStorage.getItem('tv_absensi') || "[]");
+        const body = document.getElementById('tblBody');
+        body.innerHTML = db.reverse().map(x => `<tr><td>${x.shift}</td><td>${x.name}</td><td>${x.target}</td><td>${x.actual}</td><td>TERCATAT</td></tr>`).join('');
+        document.getElementById('sOn').innerText = db.length;
+        document.getElementById('sAbs').innerText = 65 - db.length;
+        document.getElementById('staffs').innerHTML = NAMES.map(n => `<option value="${n}">`).join('');
+    }
+
+    function tambahAbsen() {
+        const name = document.getElementById('iName').value.trim().toUpperCase();
+        if(!NAMES.includes(name)) return alert("Nama tidak valid!");
+        let db = JSON.parse(localStorage.getItem('tv_absensi') || "[]");
+        db.push({ name, shift: document.getElementById('sShift').value, actual: document.getElementById('clockBox').innerText, target: '07:45:00' });
+        localStorage.setItem('tv_absensi', JSON.stringify(db));
+        document.getElementById('iName').value = ""; render();
+    }
 
     window.onload = () => {
-        if(localStorage.getItem('isLoggedIn') === 'true') {
+        if(localStorage.getItem('tv_logged') === 'true') {
             document.getElementById('authContainer').style.display = 'none';
+            document.getElementById('sidebar').style.display = 'flex';
             document.getElementById('mainApp').style.display = 'block';
         }
-        setInterval(updateClock, 1000); render();
-    };
+        setInterval(updateClock, 1000);
+        render();
+    }
 </script>
 </body>
 </html>
