@@ -3,220 +3,254 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TVTOTO Absensi System v19.0</title>
+    <title>TVTOTO Absensi System v18.7 | FULL PERMANENT</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #2e3192; --accent: #d4a017; --success: #00ff88; --danger: #ff4d4d; --warning: #ffcc00;
-            --glass: rgba(15, 15, 30, 0.9); --border-glass: rgba(255, 255, 255, 0.1);
+            --primary: #2e3192; --accent: #ffff00; --success: #00ff88; --danger: #ff4d4d; --warning: #ffcc00;
+            --glass: rgba(10, 10, 25, 0.96); --border-glass: rgba(255, 255, 255, 0.15);
+            --gold: #d4af37;
         }
-        * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-        
-        body { 
-            margin: 0; padding: 0; 
-            background: #000 url('background.jpg') no-repeat center center fixed; 
-            background-size: cover; height: 100vh; overflow: hidden; color: #fff;
+        * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s ease; }
+        body { margin: 0; padding: 15px; color: #fff; height: 100vh; background: #000 url('background.jpg') no-repeat center center fixed; background-size: cover; display: flex; justify-content: center; overflow: hidden; position: relative; }
+
+        /* LOGIN OVERLAY */
+        #loginOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); backdrop-filter: blur(20px);
+            display: flex; justify-content: center; align-items: center; z-index: 9999;
+        }
+        .login-card {
+            background: #222; padding: 40px; border-radius: 20px;
+            width: 380px; border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 20px 50px rgba(0,0,0,1); text-align: center;
+        }
+        .login-card input {
+            width: 100%; height: 50px; margin-bottom: 15px; background: #333; 
+            border: 1px solid #444; color: white; padding: 0 15px; border-radius: 8px; font-size: 1rem;
+        }
+        .btn-masuk {
+            width: 100%; height: 50px; background: var(--gold); color: #fff;
+            border: none; border-radius: 8px; font-weight: 800; cursor: pointer;
+            font-size: 1.1rem; text-transform: uppercase;
         }
 
-        /* --- AUTH LAYER --- */
-        #authContainer { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); display: flex; justify-content: center; align-items: center; z-index: 10000; }
-        .auth-card { background: #333; padding: 30px; border-radius: 20px; width: 350px; text-align: center; border: 1px solid #444; }
-        .input-group { background: #444; border: 1px solid #555; border-radius: 8px; margin-bottom: 10px; display: flex; padding: 0 15px; }
-        .input-group input { background: transparent; border: none; color: #fff; flex: 1; height: 45px; outline: none; }
-        .btn-action { width: 100%; background: #d4a017; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 800; cursor: pointer; }
+        /* DASHBOARD COMPONENTS */
+        .logo-box { position: absolute; top: 20px; left: 20px; z-index: 1000; width: 120px; }
+        .logo-box img { width: 100%; border-radius: 10px; }
+        .main-container { display: grid; grid-template-columns: 1fr 380px; gap: 20px; width: 100%; max-width: 1800px; height: 95vh; padding-top: 10px; }
         
-        /* --- DASHBOARD LAYER --- */
-        #mainApp { display: none; padding: 20px; height: 100vh; position: relative; }
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; margin-left: 140px; }
+        .stat-card { padding: 12px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); }
+        .stat-card h4 { margin: 0; font-size: 0.65rem; text-transform: uppercase; opacity: 0.7; }
+        .stat-card p { margin: 5px 0 0; font-size: 1.8rem; font-family: 'Orbitron'; font-weight: 900; }
+        .stat-ontime { border-bottom: 4px solid var(--success); color: var(--success); }
+        .stat-late { border-bottom: 4px solid var(--danger); color: var(--danger); }
+        .stat-absent { border-bottom: 4px solid var(--warning); color: var(--warning); }
+
+        .absensi-section { background: var(--glass); backdrop-filter: blur(30px); border-radius: 25px; padding: 25px; border: 1px solid var(--border-glass); display: flex; flex-direction: column; }
+        .header-main { display: flex; margin-bottom: 20px; border: 2px solid #fff; border-radius: 12px; overflow: hidden; }
+        .date-panel { background: var(--accent); color: #000; padding: 10px 20px; text-align: center; min-width: 160px; }
+        .title-panel { background: linear-gradient(90deg, #000, var(--primary)); flex-grow: 1; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-family: 'Orbitron'; font-weight: 900; letter-spacing: 8px; }
+
+        .tool-bar { display: grid; grid-template-columns: 160px 1fr 160px auto auto auto auto; gap: 10px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; margin-bottom: 20px; align-items: center; }
+        .digital-clock { background: #000; color: #00ff88; border: 1px solid #00ff88; text-align: center; font-family: 'Orbitron'; font-size: 1.2rem; height: 50px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
         
-        .logo-box { position: absolute; top: 15px; left: 15px; width: 60px; height: 60px; background: #8b0000; border-radius: 10px; display: flex; align-items: center; justify-content: center; border: 2px solid #ff0000; box-shadow: 0 0 15px rgba(255,0,0,0.5); }
-        .logo-box img { width: 80%; }
-
-        .btn-logout { position: absolute; top: 15px; right: 15px; background: rgba(255,0,0,0.3); color: #ff4d4d; border: 1px solid #ff4d4d; padding: 5px 12px; border-radius: 5px; font-size: 10px; cursor: pointer; font-weight: bold; }
-
-        /* STATS */
-        .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-left: 80px; margin-bottom: 15px; }
-        .stat-card { background: var(--glass); border: 1px solid var(--border-glass); border-radius: 10px; padding: 10px; text-align: center; }
-        .stat-card h4 { margin: 0; font-size: 12px; }
-        .stat-card p { margin: 5px 0 0; font-family: 'Orbitron'; font-size: 20px; font-weight: bold; }
-
-        /* MAIN BOARD */
-        .board-container { display: grid; grid-template-columns: 1fr 300px; gap: 20px; height: 75vh; }
-        .table-area { background: var(--glass); border-radius: 15px; border: 1px solid var(--border-glass); display: flex; flex-direction: column; overflow: hidden; }
+        input, select { height: 50px; border-radius: 8px; border: none; padding: 0 12px; font-weight: 700; background: #fff; color: #000; }
+        .btn { height: 50px; padding: 0 15px; border-radius: 8px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 0.75rem; }
         
-        .header-strip { background: var(--primary); padding: 10px; display: flex; align-items: center; gap: 20px; border-bottom: 2px solid #fff; }
-        .date-box { background: #d4a017; color: #000; padding: 5px 15px; border-radius: 5px; text-align: center; line-height: 1; }
-        .title-text { flex: 1; text-align: center; font-family: 'Orbitron'; font-size: 24px; letter-spacing: 5px; font-weight: 900; }
-
-        .control-bar { padding: 15px; display: flex; gap: 10px; background: rgba(0,0,0,0.5); }
-        .control-bar input, .control-bar select { background: #fff; border: none; padding: 10px; border-radius: 5px; font-weight: bold; }
-        .clock-box { background: #000; color: #00ff88; border: 1px solid #00ff88; padding: 0 15px; display: flex; align-items: center; font-family: 'Orbitron'; border-radius: 5px; font-weight: bold; }
-
-        /* TABLE */
-        .table-wrap { flex: 1; overflow-y: auto; background: #fff; color: #000; }
-        table { width: 100%; border-collapse: collapse; }
-        th { background: var(--primary); color: #fff; padding: 10px; font-size: 11px; position: sticky; top: 0; }
-        td { padding: 10px; border-bottom: 1px dotted #ccc; text-align: center; font-weight: bold; font-size: 13px; }
-
-        /* SIDEBAR VOICE */
-        .sidebar { background: var(--glass); border-radius: 15px; border: 1px solid var(--border-glass); display: flex; flex-direction: column; }
-        .sidebar-head { padding: 10px; font-size: 11px; font-family: 'Orbitron'; border-bottom: 1px solid #333; }
-        #chatWrap { flex: 1; padding: 10px; overflow-y: auto; font-size: 12px; }
-        .chat-msg { background: rgba(255,255,255,0.05); padding: 8px; border-radius: 5px; margin-bottom: 8px; border-left: 3px solid var(--accent); }
-        .chat-msg b { color: var(--accent); }
-        #chatIn { background: rgba(0,0,0,0.5); border: 1px solid #444; color: #fff; padding: 10px; margin: 10px; border-radius: 5px; outline: none; }
-
-        .ip-info { text-align: center; font-size: 11px; font-family: 'Orbitron'; color: #aaa; margin-top: 10px; }
-        .dot-green { color: #00ff88; }
+        .table-pro-wrap { background: #fff; border-radius: 15px; overflow: hidden; flex-grow: 1; display: flex; flex-direction: column; }
+        .table-scroll { overflow-y: auto; flex-grow: 1; }
+        table { width: 100%; border-collapse: collapse; color: #111; }
+        th { background: var(--primary); color: #fff; padding: 15px; position: sticky; top: 0; font-size: 0.7rem; }
+        td { padding: 12px; text-align: center; border-bottom: 1px solid #eee; font-weight: 700; }
+        .row-late { background: #fff0f0 !important; color: #d63031 !important; }
+        .row-ontime { background: #f0fff4 !important; color: #27ae60 !important; }
+        
+        .sidebar-chat { background: var(--glass); border-radius: 25px; border: 1px solid var(--border-glass); display: flex; flex-direction: column; overflow: hidden; }
+        .chat-header { padding: 15px; background: rgba(255,255,255,0.05); border-bottom: 1px solid var(--border-glass); display: flex; justify-content: space-between; align-items: center; }
+        .chat-messages { flex-grow: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .chat-bubble { background: rgba(255,255,255,0.08); padding: 10px; border-radius: 10px; border-left: 3px solid var(--accent); }
     </style>
 </head>
 <body>
 
-<div id="authContainer">
-    <div id="loginBox" class="auth-card">
-        <div class="input-group"><input type="text" id="userIn" placeholder="Username"></div>
-        <div class="input-group"><input type="password" id="passIn" placeholder="Password"></div>
-        <button class="btn-action" onclick="handleLogin()">➜ Masuk</button>
-        <div style="margin-top:15px; font-size:11px;">
-            <span style="color:#aaa">Belum punya akun?</span> <a href="#" style="color:var(--accent)" onclick="switchAuth('daftar')">Daftar</a> | 
-            <a href="#" style="color:var(--accent)" onclick="switchAuth('lupa')">Lupa?</a>
-        </div>
-        <div class="ip-info">103.20.83.166 <span class="dot-green">●</span></div>
-    </div>
-
-    <div id="daftarBox" class="auth-card" style="display:none">
-        <h3>DAFTAR ADMIN</h3>
-        <div class="input-group"><input type="text" id="newU" placeholder="Username"></div>
-        <div class="input-group"><input type="password" id="newP" placeholder="Password"></div>
-        <button class="btn-action" onclick="handleDaftar()">BUAT AKUN</button>
-        <button class="btn-action" style="background:#666; margin-top:5px;" onclick="switchAuth('login')">BATAL</button>
-    </div>
-
-    <div id="lupaBox" class="auth-card" style="display:none">
-        <h3>CEK PASSWORD</h3>
-        <div class="input-group"><input type="text" id="lupaU" placeholder="Username"></div>
-        <button class="btn-action" onclick="handleLupa()">TAMPILKAN</button>
-        <button class="btn-action" style="background:#666; margin-top:5px;" onclick="switchAuth('login')">KEMBALI</button>
+<div id="loginOverlay">
+    <div class="login-card">
+        <div style="margin-bottom: 25px;"><img src="logo.png" style="width: 100px; border-radius:10px;" onerror="this.src='logo.jpg';"></div>
+        <input type="text" id="userIn" placeholder="Username">
+        <input type="password" id="passIn" placeholder="Password">
+        <button class="btn-masuk" onclick="cekLogin()">➜ Masuk</button>
+        <div style="color:#666; margin-top:15px; font-size:0.8rem;">103.20.83.166 <span style="color:#00ff88;">●</span></div>
     </div>
 </div>
 
-<div id="mainApp">
-    <div class="logo-box">
-        <img src="logo.png" onerror="this.src='https://via.placeholder.com/50/8b0000/ffffff?text=TV'">
-    </div>
-    <button class="btn-logout" onclick="handleLogout()">KELUAR SISTEM</button>
+<div class="logo-box"><img src="logo.png" onerror="this.src='logo.jpg';"></div>
 
-    <div class="stat-row">
-        <div class="stat-card" style="border-bottom: 3px solid var(--success);"><h4 style="color:var(--success)">Tepat</h4><p id="sOn" style="color:var(--success)">0</p></div>
-        <div class="stat-card" style="border-bottom: 3px solid var(--danger);"><h4 style="color:var(--danger)">Telat</h4><p id="sLate" style="color:var(--danger)">0</p></div>
-        <div class="stat-card" style="border-bottom: 3px solid var(--warning);"><h4 style="color:var(--warning)">Belum</h4><p id="sAbs" style="color:var(--warning)">65</p></div>
-    </div>
+<div class="main-container">
+    <div class="absensi-section">
+        <div class="stat-grid">
+            <div class="stat-card stat-ontime"><h4>Tepat Waktu</h4><p id="sOn">0</p></div>
+            <div class="stat-card stat-late"><h4>Terlambat</h4><p id="sLate">0</p></div>
+            <div class="stat-card stat-absent"><h4>Belum Absen</h4><p id="sAbs">0</p></div>
+        </div>
 
-    <div class="board-container">
-        <div class="table-area">
-            <div class="header-strip">
-                <div class="date-box">
-                    <div id="pDay" style="font-size:8px; font-weight:bold;">JUMAT</div>
-                    <div id="pDate" style="font-size:12px; font-weight:bold;">20 FEB 2026</div>
-                </div>
-                <div class="title-text">ABSEN TVTOTO</div>
-            </div>
-            
-            <div class="control-bar">
-                <select id="sShift">
-                    <option value="PAGI">PAGI (07:45)</option>
-                    <option value="SHIFT G">SHIFT G (09:45)</option>
-                </select>
-                <input type="text" id="iName" placeholder="Ketik Nama Staff..." list="staffs" style="flex:1">
-                <datalist id="staffs"></datalist>
-                <div id="clockBox" class="clock-box">00:00:00</div>
-                <button onclick="tambahAbsen()" style="background:var(--primary); color:#fff; border:none; padding:0 15px; border-radius:5px; cursor:pointer; font-weight:bold;">ABSEN</button>
-                <button onclick="exportCSV()" style="background:var(--success); color:#000; border:none; padding:0 15px; border-radius:5px; cursor:pointer; font-weight:bold;">CSV</button>
-            </div>
+        <div class="header-main">
+            <div class="date-panel"><p id="pDay" style="margin:0; font-size:0.6rem; font-weight:800;">HARI</p><h2 id="pDate" style="margin:0;">TANGGAL</h2></div>
+            <div class="title-panel">ABSEN TVTOTO</div>
+        </div>
 
-            <div class="table-wrap">
-                <table>
-                    <thead><tr><th>SHIFT</th><th>NAMA STAFF</th><th>TARGET</th><th>AKTUAL</th><th>STATUS</th></tr></thead>
-                    <tbody id="tblBody"></tbody>
+        <div class="tool-bar">
+            <select id="sShift">
+                <option value="PAGI">PAGI (07:45)</option>
+                <option value="SHIFT G">SHIFT G (09:45)</option>
+                <option value="SHIFT G2">SHIFT G2 (11:45)</option>
+                <option value="SORE">SORE (15:45)</option>
+                <option value="MALAM">MALAM (21:45)</option>
+            </select>
+            <input type="text" id="iName" placeholder="Nama Staff..." list="staffs">
+            <datalist id="staffs"></datalist>
+            <div id="clockDisplay" class="digital-clock">00:00:00</div>
+            <button class="btn" style="background:#007bff; color:#fff;" onclick="tambahAbsen()">ABSEN</button>
+            <button class="btn" style="background:var(--accent); color:#000;" onclick="filterTelat()" id="btnF">CEK TELAT</button>
+            <button class="btn" style="background:var(--danger); color:#fff;" onclick="logout()">LOGOUT</button>
+        </div>
+
+        <div class="table-pro-wrap">
+            <div class="table-scroll">
+                <table id="tblMain">
+                    <thead><tr><th>SHIFT</th><th>NAMA STAFF</th><th>TARGET</th><th>AKTUAL</th><th>STATUS</th><th width="40"></th></tr></thead>
+                    <tbody></tbody>
                 </table>
             </div>
         </div>
+    </div>
 
-        <div class="sidebar">
-            <div class="sidebar-head">VOICE LOGS</div>
-            <div id="chatWrap"></div>
-            <input type="text" id="chatIn" placeholder="Pesan Suara Admin...">
-        </div>
+    <div class="sidebar-chat">
+        <div class="chat-header"><strong>VOICE LOGS</strong><button onclick="hapusChat()" style="color:red; background:none; border:none; cursor:pointer;">Clear</button></div>
+        <div id="chatWrap" class="chat-messages"></div>
+        <div style="padding:15px; background:rgba(0,0,0,0.3);"><input type="text" id="chatIn" placeholder="Ketik pesan..." style="width:100%; height:40px; background:rgba(255,255,255,0.1); color:#fff; border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:0 10px;"></div>
     </div>
 </div>
 
 <script>
-    // DATA STAFF LENGKAP (65 Nama)
+    const AUTH = { user: "admin_tvtoto", pass: "toto123" };
+    const ADMIN_PIN = "741852963";
+    const TARGETS = { "PAGI": "07:45:00", "SHIFT G": "09:45:00", "SHIFT G2": "11:45:00", "SORE": "15:45:00", "MALAM": "21:45:00" };
     const NAMES = ["MARKUS FEBRIAN PAMUNGKAS ATJE", "PUTRI CAHAYA", "RADO DINATA", "SELWEN AL KHAIRI", "GIERDAV ALDEN AZUTOS DUMAT", "S PRIYA DARSIN", "DONY KRIS SANDI", "ALIKA SALSABILAH", "MUHAMMAD HABIB", "RIZKY AULIA", "NOVITA SARI", "ZULMADIL REYDINATA", "INDA AFRITYA", "AMANDA REZKY TANJUNG", "SAWALUDDIN HASIBUAN", "RISKA ARNITA PUTRI", "DIAN THERESA SIMAMORA", "JONATHAN QUEEN", "HENDRA", "SENDI REVIAN", "SYUKUR KURNIAWAN", "OGI CANDRA SAPUTRA", "IRVAN GANESHA", "RAHMA TINA", "JOSIA ROMANDA GINTING", "MUHAMMAD BAKRON MAULANA", "JIMMY", "CINDY NURUL AMALIA HASIBUAN", "DEVA NANDA", "MUHAMMAD JUHARI", "FANNY FADILLA", "WIRA ARIA SAPUTRA", "JANNIFER MENTARI SINGKOH", "AGUSSALIM FAJAR", "SASITHAREN", "JUWAN", "FRENDYCO", "KHOIRUL AMRI", "AL BETO", "APRI YOGO JOHANDA SEMBIRING", "ANDI", "FRANS WILLIAM ISKANDAR TAMBUNAN", "INDRA", "WILSON LEO WU", "ECHA ADELIA", "AHLUN IQBAL", "INDRA KURNIAWAN", "MARIO CHRISTOPHER SUNARWAN", "NADYA TASYA", "LUSI", "YOGI ARDIANSYAH", "SANJELIA PUTRI", "ARUN RAJZ", "KHAIRUL AZHAR", "BOBI ARFANDI", "HARIS MULIA MANURUNG", "ANDRA FAUZI", "ADITYA RIWANA", "JOHANDA JAYUSMAN", "SABAR MORANDO FRANCISCO MANIK", "RAJA EDWARD BANGUN", "DENNIS GOLDSTEIN", "DWIKI RAMDANI", "ABDUL TARIGAN", "RAHMAT HIDAYAT"];
     
-    // AUTH
-    function handleLogin() {
-        const u = document.getElementById('userIn').value;
-        const p = document.getElementById('passIn').value;
-        let users = JSON.parse(localStorage.getItem('tv_users')) || [{u:"admin", p:"741852963"}];
-        if(users.find(x => x.u === u && x.p === p)) {
-            localStorage.setItem('tv_logged', 'true');
-            location.reload();
-        } else { alert("Salah!"); }
+    let modeTelat = false;
+
+    // LOGIN LOGIC
+    function cekLogin() {
+        if(document.getElementById('userIn').value === AUTH.user && document.getElementById('passIn').value === AUTH.pass) {
+            localStorage.setItem('tv_isLoggedIn', 'true');
+            document.getElementById('loginOverlay').style.display = 'none';
+            speakAI("Login Berhasil.");
+        } else { alert("Kredensial Salah!"); }
     }
 
-    function switchAuth(t) {
-        document.getElementById('loginBox').style.display = t==='login'?'block':'none';
-        document.getElementById('daftarBox').style.display = t==='daftar'?'block':'none';
-        document.getElementById('lupaBox').style.display = t==='lupa'?'block':'none';
+    function logout() {
+        localStorage.removeItem('tv_isLoggedIn');
+        location.reload();
     }
 
-    function handleLogout() { localStorage.removeItem('tv_logged'); location.reload(); }
+    // VOICES & TIME LOGIC
+    function speakAI(t) {
+        const s = window.speechSynthesis; s.cancel();
+        const u = new SpeechSynthesisUtterance(t.toLowerCase());
+        u.lang = 'id-ID'; s.speak(u);
+    }
 
-    // TIME
+    function hitungSelisih(target, aktual) {
+        const [th, tm, ts] = target.split(':').map(Number);
+        const [ah, am, as] = aktual.split(':').map(Number);
+        const tSec = th*3600 + tm*60 + ts;
+        const aSec = ah*3600 + am*60 + as;
+        if (aSec <= tSec) return null;
+        const diff = aSec - tSec;
+        return `${String(Math.floor(diff/3600)).padStart(2,'0')}:${String(Math.floor((diff%3600)/60)).padStart(2,'0')}:${String(diff%60).padStart(2,'0')}`;
+    }
+
+    // MAIN ACTIONS
+    function tambahAbsen() {
+        const input = document.getElementById('iName');
+        const name = input.value.trim().toUpperCase();
+        const shift = document.getElementById('sShift').value;
+        const time = document.getElementById('clockDisplay').innerText;
+        
+        if(!NAMES.includes(name)) return alert("Nama tidak terdaftar!");
+        let db = JSON.parse(localStorage.getItem('tv_v18') || "[]");
+        if(db.some(x => x.name === name)) return alert("Sudah absen!");
+
+        const telat = hitungSelisih(TARGETS[shift], time);
+        if(telat) {
+            const [h, m] = telat.split(':').map(Number);
+            speakAI(`Perhatian ${name}, anda terlambat ${h} jam ${m} menit.`);
+        } else { speakAI(`Selamat datang ${name}.`); }
+
+        db.push({ shift, name, target: TARGETS[shift], actual: time });
+        localStorage.setItem('tv_v18', JSON.stringify(db));
+        input.value = ""; render();
+    }
+
+    function render() {
+        let db = JSON.parse(localStorage.getItem('tv_v18') || "[]");
+        const tbody = document.querySelector('#tblMain tbody');
+        tbody.innerHTML = "";
+        
+        let onTime = 0, late = 0;
+        db.forEach(d => { if(hitungSelisih(d.target, d.actual)) late++; else onTime++; });
+        
+        document.getElementById('sOn').innerText = onTime;
+        document.getElementById('sLate').innerText = late;
+        document.getElementById('sAbs').innerText = NAMES.length - db.length;
+
+        let displayDb = [...db].reverse();
+        if(modeTelat) displayDb = displayDb.filter(x => hitungSelisih(x.target, x.actual));
+
+        displayDb.forEach(d => {
+            const telat = hitungSelisih(d.target, d.actual);
+            const row = tbody.insertRow();
+            row.className = telat ? 'row-late' : 'row-ontime';
+            row.innerHTML = `<td>${d.shift}</td><td style="text-align:left;">${d.name}</td><td>${d.target}</td><td>${d.actual}</td><td>${telat ? 'TELAT '+telat : 'TEPAT'}</td><td><button onclick="hapusSatu('${d.name}')" style="cursor:pointer; border:none; background:none; color:#999;">✕</button></td>`;
+        });
+        
+        const dl = document.getElementById('staffs');
+        dl.innerHTML = "";
+        const sudah = db.map(x=>x.name);
+        NAMES.filter(n => !sudah.includes(n)).forEach(n => {
+            const o = document.createElement('option'); o.value = n; dl.appendChild(o);
+        });
+    }
+
+    function hapusSatu(n) {
+        if(prompt("PIN ADMIN:") === ADMIN_PIN) {
+            let db = JSON.parse(localStorage.getItem('tv_v18') || "[]").filter(x => x.name !== n);
+            localStorage.setItem('tv_v18', JSON.stringify(db));
+            render();
+        }
+    }
+
+    function filterTelat() {
+        modeTelat = !modeTelat;
+        document.getElementById('btnF').innerText = modeTelat ? "LIHAT SEMUA" : "CEK TELAT";
+        render();
+    }
+
+    // CLOCK & INIT
     function updateClock() {
         const now = new Date();
-        document.getElementById('clockBox').innerText = now.toTimeString().split(' ')[0];
+        document.getElementById('clockDisplay').innerText = now.toTimeString().split(' ')[0];
         document.getElementById('pDate').innerText = now.toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'}).toUpperCase();
         document.getElementById('pDay').innerText = now.toLocaleDateString('id-ID', {weekday:'long'}).toUpperCase();
     }
 
-    // ABSENSI
-    function tambahAbsen() {
-        const name = document.getElementById('iName').value.trim().toUpperCase();
-        if(!NAMES.includes(name)) return alert("Nama tidak terdaftar!");
-        
-        let db = JSON.parse(localStorage.getItem('tv_absensi') || "[]");
-        if(db.find(x => x.name === name)) return alert("Sudah absen!");
-
-        const shift = document.getElementById('sShift').value;
-        const time = document.getElementById('clockBox').innerText;
-        db.push({ name, shift, actual: time, target: shift === 'PAGI' ? '07:45:00' : '09:45:00' });
-        localStorage.setItem('tv_absensi', JSON.stringify(db));
-        
-        document.getElementById('iName').value = "";
-        render();
-    }
-
-    function render() {
-        let db = JSON.parse(localStorage.getItem('tv_absensi') || "[]");
-        const body = document.getElementById('tblBody');
-        body.innerHTML = "";
-        db.reverse().forEach(x => {
-            body.innerHTML += `<tr><td>${x.shift}</td><td>${x.name}</td><td>${x.target}</td><td>${x.actual}</td><td>TERCATAT</td></tr>`;
-        });
-        document.getElementById('sOn').innerText = db.length;
-        document.getElementById('sAbs').innerText = 65 - db.length;
-        document.getElementById('staffs').innerHTML = NAMES.map(n => `<option value="${n}">`).join('');
-    }
-
     window.onload = () => {
-        if(localStorage.getItem('tv_logged') === 'true') {
-            document.getElementById('authContainer').style.display = 'none';
-            document.getElementById('mainApp').style.display = 'block';
-        }
+        if(localStorage.getItem('tv_isLoggedIn') === 'true') document.getElementById('loginOverlay').style.display = 'none';
         setInterval(updateClock, 1000);
         render();
-    }
+    };
 </script>
 </body>
 </html>
