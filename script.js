@@ -1,156 +1,163 @@
-// --- KONFIGURASI ---
-const ADMIN_PIN = "741852963";
-const NAMES = ["MARKUS FEBRIAN", "PUTRI CAHAYA", "RADO DINATA", "SELWEN AL KHAIRI", "GIERDAV ALDEN", "S PRIYA DARSIN", "DONY KRIS SANDI", "ALIKA SALSABILAH", "MUHAMMAD HABIB", "RIZKY AULIA", "NOVITA SARI", "ZULMADIL REYDINATA", "INDA AFRITYA", "AMANDA REZKY TANJUNG", "SAWALUDDIN HASIBUAN", "RISKA ARNITA PUTRI", "DIAN THERESA", "JONATHAN QUEEN", "HENDRA", "SENDI REVIAN", "SYUKUR KURNIAWAN", "OGI CANDRA", "IRVAN GANESHA", "RAHMA TINA", "JOSIA ROMANDA", "MUHAMMAD BAKRON", "JIMMY", "CINDY NURUL", "DEVA NANDA", "MUHAMMAD JUHARI", "FANNY FADILLA", "WIRA ARIA", "JANNIFER MENTARI", "AGUSSALIM FAJAR", "SASITHAREN", "JUWAN", "FRENDYCO", "KHOIRUL AMRI", "AL BETO", "APRI YOGO", "ANDI", "FRANS WILLIAM", "INDRA", "WILSON LEO WU", "ECHA ADELIA", "AHLUN IQBAL", "INDRA KURNIAWAN", "MARIO CHRISTOPHER", "NADYA TASYA", "LUSI", "YOGI ARDIANSYAH", "SANJELIA PUTRI", "ARUN RAJZ", "KHAIRUL AZHAR", "BOBI ARFANDI", "HARIS MULIA", "ANDRA FAUZI", "ADITYA RIWANA", "JOHANDA JAYUSMAN", "SABAR MORANDO", "RAJA EDWARD", "DENNIS GOLDSTEIN", "DWIKI RAMDANI", "ABDUL TARIGAN", "RAHMAT HIDAYAT"];
+// --- CONFIG DATA ---
+const NAMES = ["RADO DINATA", "IRVAN GANESHA", "JOSIA ROMANDA GINTING", "MUHAMMAD BAKRON", "JANNIFER MENTARI", "CINDY NURUL", "SENDI REVIAN", "SYUKUR KURNIAWAN", "HARYATI DEWI"];
 const TARGETS = { "PAGI": "07:45:00", "SHIFT G": "09:45:00", "SHIFT G2": "11:45:00", "SORE": "15:45:00", "MALAM": "21:45:00" };
 
-// --- AUTO LOGIN CHECK (CEPAT) ---
-if (localStorage.getItem('tv_isLoggedIn') === 'true') {
-    document.documentElement.style.setProperty('--display-auth', 'none');
-    window.addEventListener('DOMContentLoaded', () => {
-        const overlay = document.getElementById('authOverlay');
-        if(overlay) overlay.style.display = 'none';
-    });
-}
-
-// --- SIDEBAR LOGIC ---
-function toggleNav() {
-    const sb = document.getElementById("mySidebar");
-    const mc = document.getElementById("mainContent");
-    const btn = document.getElementById("openBtn");
+// --- NAVIGATION SYSTEM ---
+function showPage(pageId) {
+    document.querySelectorAll('.page-container').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
     
-    if (sb.classList.contains("closed")) {
-        sb.classList.remove("closed");
-        mc.classList.remove("wide");
-        btn.style.display = "none";
-    } else {
-        sb.classList.add("closed");
-        mc.classList.add("wide");
-        btn.style.display = "block";
-    }
+    document.getElementById('page-' + pageId).classList.add('active');
+    document.getElementById('nav-' + pageId).classList.add('active');
+    
+    if(pageId === 'absensi') renderAbsensi();
 }
 
-// --- AUTH FUNCTIONS ---
-let authMode = 'LOGIN';
+// --- AUTH SYSTEM ---
 function handleAuth() {
-    const user = document.getElementById('uUser').value.trim();
-    const pass = document.getElementById('uPass').value.trim();
-    let accounts = JSON.parse(localStorage.getItem('tv_accounts') || '{"admin":"admin123"}');
-
-    if(authMode === 'LOGIN') {
-        if(accounts[user] && accounts[user] === pass) {
-            localStorage.setItem('tv_isLoggedIn', 'true');
-            location.reload();
-        } else { alert("Akses Ditolak!"); }
-    } else if(authMode === 'REGISTER') {
-        accounts[user] = pass;
-        localStorage.setItem('tv_accounts', JSON.stringify(accounts));
-        alert("Terdaftar! Silakan Login.");
-        location.reload();
+    const u = document.getElementById('uUser').value;
+    const p = document.getElementById('uPass').value;
+    if(u === "admin" && p === "admin123") {
+        localStorage.setItem('tv_logged', 'true');
+        document.getElementById('authOverlay').style.display = 'none';
+        speakAI("Akses diterima, selamat datang di sistem Power.");
+    } else {
+        alert("Username/Password Salah!");
     }
 }
 
 function logout() {
-    if(confirm("Logout?")) {
-        localStorage.removeItem('tv_isLoggedIn');
-        location.reload();
-    }
+    localStorage.removeItem('tv_logged');
+    location.reload();
 }
 
 // --- ABSENSI LOGIC ---
+function speakAI(msg) {
+    const utter = new SpeechSynthesisUtterance(msg.toLowerCase());
+    utter.lang = 'id-ID';
+    window.speechSynthesis.speak(utter);
+}
+
 function updateClock() {
     const now = new Date();
-    const clock = document.getElementById('clockDisplay');
-    const pDate = document.getElementById('pDate');
-    const pDay = document.getElementById('pDay');
+    const timeStr = now.toTimeString().split(' ')[0];
+    const dateStr = now.toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'}).toUpperCase();
+    const dayStr = now.toLocaleDateString('id-ID', {weekday:'long'}).toUpperCase();
     
-    if(clock) clock.innerText = now.toTimeString().split(' ')[0];
-    if(pDate) pDate.innerText = now.toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'}).toUpperCase();
-    if(pDay) pDay.innerText = now.toLocaleDateString('id-ID', {weekday:'long'}).toUpperCase();
-
-    // Untuk halaman jobdesk
-    const jdDate = document.getElementById('jobDateDisplay');
-    if(jdDate) jdDate.innerText = "LAPORAN TUGAS - " + now.toLocaleDateString('id-ID', {day:'2-digit', month:'long', year:'numeric'});
-}
-
-function speakAI(text) {
-    const synth = window.speechSynthesis;
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = 'id-ID';
-    synth.speak(utter);
-}
-
-function hitungSelisih(target, aktual) {
-    const t = target.split(':').map(Number);
-    const a = aktual.split(':').map(Number);
-    const diff = (a[0]*3600 + a[1]*60 + a[2]) - (t[0]*3600 + t[1]*60 + t[2]);
-    if (diff <= 0) return null;
-    return `${Math.floor(diff/3600)}j ${Math.floor((diff%3600)/60)}m`;
+    if(document.getElementById('clockDisplay')) document.getElementById('clockDisplay').innerText = timeStr;
+    if(document.getElementById('pDate')) document.getElementById('pDate').innerText = dateStr;
+    if(document.getElementById('pDay')) document.getElementById('pDay').innerText = dayStr;
+    if(document.getElementById('tableDateText')) document.getElementById('tableDateText').innerText = dateStr;
 }
 
 function tambahAbsen() {
-    const name = document.getElementById('iName').value.trim().toUpperCase();
+    const name = document.getElementById('iName').value.toUpperCase();
     const shift = document.getElementById('sShift').value;
     const time = document.getElementById('clockDisplay').innerText;
-    
-    if(!NAMES.includes(name)) return alert("Nama Tidak Terdaftar!");
-    
-    let db = JSON.parse(localStorage.getItem('tv_v18') || "[]");
-    if(db.some(x => x.name === name)) return alert("Sudah Absen!");
 
-    const late = hitungSelisih(TARGETS[shift], time);
-    speakAI(late ? `Perhatian ${name}, terlambat ${late}` : `Selamat bekerja ${name}`);
+    if(!NAMES.includes(name)) return alert("Nama tidak terdaftar!");
+    let db = JSON.parse(localStorage.getItem('tv_absensi_v1') || "[]");
+    if(db.some(x => x.name === name)) return alert("Sudah absen!");
 
-    db.push({ shift, name, target: TARGETS[shift], actual: time });
-    localStorage.setItem('tv_v18', JSON.stringify(db));
+    db.push({ name, shift, actual: time, target: TARGETS[shift] });
+    localStorage.setItem('tv_absensi_v1', JSON.stringify(db));
+    speakAI(`Absen berhasil, selamat bertugas ${name}`);
     document.getElementById('iName').value = "";
-    render();
+    renderAbsensi();
 }
 
-function render() {
+function renderAbsensi() {
+    let db = JSON.parse(localStorage.getItem('tv_absensi_v1') || "[]");
     const tbody = document.querySelector('#tblMain tbody');
     if(!tbody) return;
-    
-    let db = JSON.parse(localStorage.getItem('tv_v18') || "[]");
     tbody.innerHTML = "";
-    
-    let onTime = 0, lateCount = 0;
-    db.forEach(d => {
-        const isLate = hitungSelisih(d.target, d.actual);
-        if(isLate) lateCount++; else onTime++;
-        
+
+    let late = 0;
+    db.reverse().forEach(x => {
         const row = tbody.insertRow();
-        row.style.background = isLate ? "#fff0f0" : "#f0fff4";
-        row.innerHTML = `<td>${d.shift}</td><td>${d.name}</td><td>${d.target}</td><td>${d.actual}</td>
-        <td style="color:${isLate?'red':'green'}">${isLate ? 'TELAT '+isLate : 'TEPAT'}</td>
-        <td><button onclick="hapusAbsen('${d.name}')" style="border:none; background:none; cursor:pointer;">✕</button></td>`;
+        row.innerHTML = `<td>${x.shift}</td><td>${x.name}</td><td>${x.target}</td><td>${x.actual}</td><td>OK</td><td>✕</td>`;
     });
 
-    document.getElementById('sOn').innerText = onTime;
-    document.getElementById('sLate').innerText = lateCount;
+    document.getElementById('sOn').innerText = db.length;
     document.getElementById('sAbs').innerText = NAMES.length - db.length;
 }
 
-function hapusAbsen(name) {
-    if(prompt("PIN ADMIN:") === ADMIN_PIN) {
-        let db = JSON.parse(localStorage.getItem('tv_v18') || "[]");
-        localStorage.setItem('tv_v18', JSON.stringify(db.filter(x => x.name !== name)));
-        render();
-    }
+// --- JOBDESK LOGIC ---
+let dbHistory = JSON.parse(localStorage.getItem("tvtoto_history")) || [];
+
+function generateJobdesk() {
+    const shift = document.getElementById("shiftSelect").value;
+    document.getElementById("shiftDisplayText").innerText = "SHIFT " + shift;
+
+    const staffArr = document.getElementById("staffInput").value.split("\n").filter(t => t.trim() !== "");
+    const jobArr = document.getElementById("jobInput").value.split("\n").filter(t => t.trim() !== "");
+
+    if (staffArr.length < 1) return alert("Masukkan nama staff!");
+
+    const results = [];
+    results.push({ name: staffArr[0], job: "OPERATOR" });
+
+    const otherStaff = staffArr.slice(1);
+    let shuffledJobs = [...jobArr].sort(() => Math.random() - 0.5);
+
+    otherStaff.forEach((name, i) => {
+        results.push({ name: name, job: shuffledJobs[i] || "OFF / CADANGAN" });
+    });
+
+    renderJobTable(results);
+    saveJobHistory(results, shift);
 }
 
-function resetData() {
-    if(prompt("PIN KONFIRMASI:") === ADMIN_PIN) {
-        localStorage.removeItem('tv_v18');
-        render();
-    }
+function renderJobTable(data) {
+    const tbody = document.getElementById("resultBody");
+    tbody.innerHTML = data.map((item, i) => {
+        const isOp = item.job === "OPERATOR";
+        return `<tr class="${isOp ? 'operator-lock' : ''}"><td>${item.name.toUpperCase()}</td><td>${item.job.toUpperCase()}</td></tr>`;
+    }).join("");
 }
 
-// Init
+function saveJobHistory(data, shift) {
+    const entry = { id: Date.now(), shift, assignments: data, time: new Date().toLocaleTimeString() };
+    dbHistory.unshift(entry);
+    if(dbHistory.length > 5) dbHistory.pop();
+    localStorage.setItem("tvtoto_history", JSON.stringify(dbHistory));
+    renderJobHistory();
+}
+
+function renderJobHistory() {
+    const list = document.getElementById("historyList");
+    list.innerHTML = dbHistory.map(h => `
+        <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:8px; margin-bottom:5px; font-size:0.7rem;">
+            <b>${h.shift}</b> - ${h.time}
+        </div>
+    `).join("");
+}
+
+async function copyToClipboard() {
+    const canvas = await html2canvas(document.getElementById("captureArea"));
+    canvas.toBlob(blob => {
+        navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+        alert("Gambar tersalin!");
+    });
+}
+
+function downloadImage() {
+    html2canvas(document.getElementById("captureArea")).then(canvas => {
+        const link = document.createElement("a");
+        link.download = `Jobdesk-POWER.png`;
+        link.href = canvas.toDataURL();
+        link.click();
+    });
+}
+
+// --- INIT ---
 setInterval(updateClock, 1000);
 window.onload = () => {
+    if(localStorage.getItem('tv_logged') === 'true') {
+        document.getElementById('authOverlay').style.display = 'none';
+    }
     updateClock();
-    render();
-    // Render datalist
-    const dl = document.getElementById('staffs');
-    if(dl) NAMES.forEach(n => dl.innerHTML += `<option value="${n}">`);
+    renderAbsensi();
+    renderJobHistory();
+    document.getElementById('staffs').innerHTML = NAMES.map(n => `<option value="${n}">`).join('');
 };
