@@ -38,3 +38,453 @@
     <script src="script.js"></script>
 </body>
 </html>
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: #020617;
+        color: #f8fafc;
+        margin: 0;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1100px;
+        margin: auto;
+      }
+
+      .brand-header {
+        background: linear-gradient(135deg, #22c55e 0%, #15803d 100%);
+        color: black;
+        padding: 30px;
+        border-radius: 20px;
+        text-align: center;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 30px rgba(34, 197, 94, 0.2);
+      }
+
+      .brand-header h1 {
+        margin: 0;
+        font-size: 32px;
+        font-weight: 900;
+        letter-spacing: 1px;
+      }
+
+      .date-badge {
+        background: rgba(0, 0, 0, 0.8);
+        color: #22c55e;
+        padding: 8px 20px;
+        border-radius: 50px;
+        font-size: 16px;
+        margin-top: 15px;
+        display: inline-block;
+        font-weight: bold;
+      }
+
+      /* Responsive Grid */
+      .main-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin-bottom: 20px;
+      }
+
+      .card {
+        background: #1e293b;
+        padding: 20px;
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      label {
+        display: block;
+        margin-bottom: 12px;
+        font-size: 13px;
+        color: #94a3b8;
+        text-transform: uppercase;
+        font-weight: bold;
+      }
+
+      textarea,
+      select {
+        width: 100%;
+        background: #0f172a;
+        border: 1px solid #334155;
+        color: #e2e8f0;
+        border-radius: 10px;
+        padding: 12px;
+        font-size: 14px;
+        box-sizing: border-box;
+      }
+
+      textarea {
+        height: 140px;
+        resize: none;
+      }
+
+      .btn-group {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+        margin-bottom: 30px;
+      }
+
+      button {
+        padding: 15px;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.3s;
+        text-transform: uppercase;
+      }
+
+      .btn-acak {
+        background: #f8fafc;
+        color: #0f172a;
+      }
+      .btn-copy {
+        background: var(--accent);
+        color: white;
+      }
+      .btn-png {
+        background: var(--primary);
+        color: black;
+      }
+      .btn-reset {
+        background: var(--danger);
+        color: white;
+        padding: 8px 15px;
+        font-size: 12px;
+      }
+
+      button:hover {
+        transform: translateY(-3px);
+        filter: brightness(1.1);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      #captureArea {
+        background: white;
+        padding: 35px;
+        border-radius: 15px;
+        color: #1e293b;
+      }
+
+      .table-header {
+        text-align: center;
+        border-bottom: 3px solid var(--primary);
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+      }
+
+      .result-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .result-table th {
+        background: #f8fafc;
+        padding: 15px;
+        border: 1px solid #e2e8f0;
+        color: #64748b;
+        font-size: 13px;
+      }
+
+      .result-table td {
+        padding: 15px;
+        border: 1px solid #e2e8f0;
+        text-align: center;
+        font-size: 16px;
+      }
+
+      .row-pink {
+        background-color: var(--pink-soft);
+      }
+      .operator-lock {
+        background: #dcfce7 !important;
+        color: #166534;
+        font-weight: 800;
+        border: 2px solid #22c55e !important;
+      }
+
+      .history-section {
+        margin-top: 40px;
+        background: #1e293b;
+        padding: 25px;
+        border-radius: 20px;
+      }
+
+      .history-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .history-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 15px;
+      }
+
+      .history-item {
+        background: #0f172a;
+        padding: 15px;
+        border-radius: 12px;
+        border: 1px solid #334155;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="brand-header">
+        <h1>JOBDESK STAFF TVTOTO</h1>
+        <div class="date-badge" id="displayDate">Loading Date...</div>
+      </div>
+
+      <div class="card" style="margin-bottom: 20px">
+        <label>🕒 Pilih Shift Kerja</label>
+        <select id="shiftSelect">
+          <option value="PAGI">Shift PAGI</option>
+          <option value="SORE">Shift SORE</option>
+          <option value="MALAM">Shift MALAM</option>
+        </select>
+      </div>
+
+      <div class="main-grid">
+        <div class="card">
+          <label>👥 Daftar Staff (Baris 1 = Operator)</label>
+          <textarea id="staffInput">
+RADO DINATA
+IRVAN GANESHA
+JOSIA ROMANDA GINTING
+MUHAMMAD BAKRON
+JANNIFER MENTARI
+CINDY NURUL
+SENDI REVIAN
+SYUKUR KURNIAWAN
+HARYATI DEWI</textarea
+          >
+        </div>
+        <div class="card">
+          <label>💼 Daftar Jobdesk</label>
+          <textarea id="jobInput">
+DEPO BRI, BNI
+DEPO MANUAL, OGL
+DEPO DANA, SCATTER
+WD BCA, BRI
+WD MANDIRI, BNI
+SCATER
+WD DANA
+WD MANUAL, SEABANK</textarea
+          >
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn-acak" onclick="generateJobdesk()">
+          🎲 Acak & Simpan
+        </button>
+        <button class="btn-copy" onclick="copyToClipboard()">
+          📋 Copy Gambar
+        </button>
+        <button class="btn-png" onclick="downloadImage()">📸 Simpan PNG</button>
+      </div>
+
+      <div id="captureArea">
+        <div class="table-header">
+          <h2 style="margin: 0; font-size: 22px; color: #0f172a">
+            LAPORAN PEMBAGIAN TUGAS
+          </h2>
+          <div
+            id="shiftDisplayText"
+            style="
+              font-size: 20px;
+              font-weight: 900;
+              color: #15803d;
+              margin-top: 5px;
+            "
+          >
+            SHIFT PAGI
+          </div>
+          <div
+            id="tableDateText"
+            style="
+              margin-top: 5px;
+              font-weight: bold;
+              color: #166534;
+              font-size: 16px;
+            "
+          ></div>
+        </div>
+        <table class="result-table">
+          <thead>
+            <tr>
+              <th width="50%">NAMA PERSONEL</th>
+              <th width="50%">TUGAS OPERASIONAL</th>
+            </tr>
+          </thead>
+          <tbody id="resultBody"></tbody>
+        </table>
+      </div>
+
+      <div class="history-section">
+        <div class="history-header">
+          <h3 style="margin: 0">🕒 Riwayat Penugasan (Lokal)</h3>
+          <button class="btn-reset" onclick="clearHistory()">
+            🗑️ Hapus Semua
+          </button>
+        </div>
+        <div id="historyList" class="history-list"></div>
+      </div>
+    </div>
+
+    <script>
+      const options = { day: "numeric", month: "long", year: "numeric" };
+      const dateNow = new Date().toLocaleDateString("id-ID", options);
+      document.getElementById("displayDate").innerText = dateNow;
+      document.getElementById("tableDateText").innerText = dateNow;
+
+      let dbHistory = JSON.parse(localStorage.getItem("tvtoto_history")) || [];
+
+      function generateJobdesk() {
+        const shift = document.getElementById("shiftSelect").value;
+        document.getElementById("shiftDisplayText").innerText =
+          "SHIFT " + shift;
+
+        const staffArr = document
+          .getElementById("staffInput")
+          .value.split("\n")
+          .filter((t) => t.trim() !== "");
+        const jobArr = document
+          .getElementById("jobInput")
+          .value.split("\n")
+          .filter((t) => t.trim() !== "");
+
+        if (staffArr.length < 1) return alert("Minimal masukkan 1 nama staff!");
+
+        const operatorName = staffArr[0];
+        const otherStaff = staffArr.slice(1);
+        let shuffledJobs = [...jobArr].sort(() => Math.random() - 0.5);
+
+        const results = [];
+        results.push({ name: operatorName, job: "OPERATOR" });
+
+        otherStaff.forEach((name, i) => {
+          results.push({
+            name: name,
+            job: shuffledJobs[i] || "OFF / CADANGAN",
+          });
+        });
+
+        renderTable(results);
+        saveToLocalStorage(results, shift);
+      }
+
+      function renderTable(data) {
+        const tbody = document.getElementById("resultBody");
+        tbody.innerHTML = "";
+        data.forEach((item, i) => {
+          const isOp = item.job === "OPERATOR";
+          const rowClass = isOp
+            ? "operator-lock"
+            : i % 2 === 0
+            ? "row-pink"
+            : "";
+          tbody.innerHTML += `<tr class="${rowClass}"><td>${item.name.toUpperCase()}</td><td>${item.job.toUpperCase()}</td></tr>`;
+        });
+      }
+
+      function saveToLocalStorage(data, shift) {
+        const entry = {
+          id: Date.now(),
+          date: dateNow,
+          time: new Date().toLocaleTimeString("id-ID"),
+          shift: shift,
+          assignments: data,
+        };
+        dbHistory.unshift(entry);
+        if (dbHistory.length > 15) dbHistory.pop();
+        localStorage.setItem("tvtoto_history", JSON.stringify(dbHistory));
+        renderHistory();
+      }
+
+      function renderHistory() {
+        const container = document.getElementById("historyList");
+        if (dbHistory.length === 0) {
+          container.innerHTML =
+            "<p style='color:#64748b'>Belum ada riwayat.</p>";
+          return;
+        }
+        container.innerHTML = dbHistory
+          .map(
+            (item) => `
+            <div class="history-item" onclick="loadHistoryItem(${item.id})">
+                <div class="history-info">
+                    <b style="color:var(--primary)">${item.shift} - Op: ${item.assignments[0].name}</b><br>
+                    <small style="color:#94a3b8">${item.date} - ${item.time}</small>
+                </div>
+                <div style="color:var(--primary)">➔</div>
+            </div>`
+          )
+          .join("");
+      }
+
+      function loadHistoryItem(id) {
+        const item = dbHistory.find((h) => h.id === id);
+        if (item) {
+          document.getElementById("shiftDisplayText").innerText =
+            "SHIFT " + item.shift;
+          document.getElementById("tableDateText").innerText = item.date;
+          renderTable(item.assignments);
+          window.scrollTo({
+            top: document.getElementById("captureArea").offsetTop - 50,
+            behavior: "smooth",
+          });
+        }
+      }
+
+      function clearHistory() {
+        if (
+          confirm(
+            "Apakah Anda yakin ingin menghapus semua riwayat penugasan? Tindakan ini tidak bisa dibatalkan."
+          )
+        ) {
+          dbHistory = [];
+          localStorage.removeItem("tvtoto_history");
+          renderHistory();
+        }
+      }
+
+      async function copyToClipboard() {
+        const area = document.getElementById("captureArea");
+        const canvas = await html2canvas(area, { scale: 2 });
+        canvas.toBlob((blob) => {
+          const item = new ClipboardItem({ "image/png": blob });
+          navigator.clipboard.write([item]);
+          alert("✅ Berhasil Copy Gambar ke Clipboard!");
+        });
+      }
+
+      function downloadImage() {
+        html2canvas(document.getElementById("captureArea"), { scale: 2 }).then(
+          (canvas) => {
+            const link = document.createElement("a");
+            link.download = `Jobdesk-${
+              document.getElementById("shiftSelect").value
+            }-${dateNow}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+          }
+        );
+      }
+
+      renderHistory();
+      generateJobdesk();
+    </script>
+  </body>
+</html>
