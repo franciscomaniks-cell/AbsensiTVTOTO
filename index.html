@@ -3,55 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TVTOTO | Absensi System</title>
+    <title>TVTOTO Absensi System v18.7 | SECURE EDITION</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="mySidebar" class="sidebar">
-        <div class="sidebar-header">
-            <span class="brand-text">POWER</span>
-            <button class="toggle-btn-inner" onclick="toggleNav()">☰</button>
+<div id="authOverlay">
+    <div class="auth-card">
+        <h2 id="authTitle">LOGIN</h2>
+        <div id="authFields">
+            <input type="text" id="uUser" placeholder="Username">
+            <input type="password" id="uPass" placeholder="Password">
+            <input type="password" id="uConfirm" placeholder="Konfirmasi Password" style="display:none;">
         </div>
-        <div class="menu-items">
-            <a href="index.html" class="active"><span class="icon">🏠</span> Dashboard Absensi</a>
-            <a href="jobdesk.html"><span class="icon">📝</span> Atur Jobdesk</a>
-            <hr style="border: 0.5px solid rgba(255,255,255,0.1); margin: 10px 0;">
-            <a href="#" onclick="logout()"><span class="icon">🚪</span> Logout</a>
+        <button class="btn-auth" id="mainAuthBtn" onclick="handleAuth()">MASUK</button>
+        <div class="auth-links">
+            <p id="toggleText">Belum punya akun? <span onclick="showRegister()">Daftar</span></p>
+            <p id="forgotLink"><span onclick="showForgot()">Lupa Password?</span></p>
         </div>
+        <div class="ip-indicator">103.20.83.166 <span class="dot-online">●</span></div>
     </div>
+</div>
 
-    <button id="openBtn" class="open-sidebar-btn" onclick="toggleNav()">☰</button>
+<div class="logo-box"><img src="logo.png" onerror="this.src='logo.jpg';"></div>
 
-    <div id="authOverlay">
-        <div class="auth-card">
-            <h2 id="authTitle">LOGIN SYSTEM</h2>
-            <div id="authFields">
-                <input type="text" id="uUser" placeholder="Username">
-                <input type="password" id="uPass" placeholder="Password">
-                <input type="password" id="uConfirm" placeholder="Konfirmasi Password" style="display:none;">
-            </div>
-            <button class="btn-auth" id="mainAuthBtn" onclick="handleAuth()">MASUK</button>
-            <div class="auth-links">
-                <p id="toggleText">Belum punya akun? <span onclick="showRegister()">Daftar</span></p>
-                <p id="forgotLink"><span onclick="showForgot()">Lupa Password?</span></p>
-            </div>
-        </div>
-    </div>
+<div class="sidebar">
+    <div class="sidebar-header">MENU</div>
+    <a href="javascript:void(0)" class="nav-link active" id="nav-absensi" onclick="showPage('absensi')">DASHBOARD ABSENSI</a>
+    <a href="javascript:void(0)" class="nav-link" id="nav-jobdesk" onclick="showPage('jobdesk')">ATUR JOBDESK</a>
+    <div style="flex-grow:1"></div>
+    <button class="btn-logout-sidebar" onclick="logout()">LOGOUT</button>
+</div>
 
-    <div class="main-container" id="mainContent">
+<div class="main-container">
+    
+    <div id="page-absensi" class="page-content active">
         <div class="absensi-section">
             <div class="stat-grid">
                 <div class="stat-card stat-ontime"><h4>Tepat Waktu</h4><p id="sOn">0</p></div>
                 <div class="stat-card stat-late"><h4>Terlambat</h4><p id="sLate">0</p></div>
-                <div class="stat-card stat-absent"><h4>Belum Absen</h4><p id="sAbs">0</p></div>
+                <div class="stat-card stat-absent"><h4>Belum Absen</h4><p id="sAbs">65</p></div>
             </div>
 
             <div class="header-main">
                 <div class="date-panel">
                     <p id="pDay">SENIN</p>
-                    <h2 id="pDate">LOADING...</h2>
+                    <h2 id="pDate">26 JAN 2026</h2>
                 </div>
                 <div class="title-panel">ABSEN TVTOTO</div>
             </div>
@@ -93,10 +91,7 @@
         </div>
 
         <div class="sidebar-chat">
-            <div class="chat-header">
-                <strong>SYSTEM VOICE LOGS</strong>
-                <button onclick="hapusChat()" class="btn-clear-chat">Clear</button>
-            </div>
+            <div class="chat-header"><strong>VOICE LOGS</strong></div>
             <div class="chat-messages" id="chatWrap"></div>
             <div class="chat-footer">
                 <input type="text" id="chatIn" placeholder="Pesan admin...">
@@ -104,6 +99,16 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <div id="page-jobdesk" class="page-content">
+        <div class="absensi-section">
+            <h1 style="color: var(--accent); font-family: Orbitron;">ATUR JOBDESK STAFF</h1>
+            <hr style="border: 0.5px solid rgba(255,255,255,0.1); width: 100%;">
+            <p>Halaman ini sekarang aktif dan tidak akan menghalangi Dashboard Absensi.</p>
+            </div>
+    </div>
+
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
