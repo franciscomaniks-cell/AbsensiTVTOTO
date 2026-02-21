@@ -16,6 +16,7 @@ function handleAuth() {
 
     if(authMode === 'LOGIN') {
         if(accounts[user] && accounts[user] === pass) {
+            // SIMPAN STATUS LOGIN
             localStorage.setItem('tv_isLoggedIn', 'true');
             document.getElementById('authOverlay').style.display = 'none';
             speakAI("Akses diterima. Selamat datang.");
@@ -65,6 +66,7 @@ function showForgot() {
     document.getElementById('toggleText').innerHTML = '<span onclick="showLogin()">Kembali ke Login</span>';
 }
 
+// FUNGSI LOGOUT DENGAN KONFIRMASI
 function logout() {
     if(confirm("Apakah anda ingin logout?")) {
         localStorage.removeItem('tv_isLoggedIn');
@@ -139,6 +141,7 @@ function resetData() {
 function render() {
     let db = JSON.parse(localStorage.getItem('tv_v18') || "[]");
     const tbody = document.querySelector('#tblMain tbody');
+    if(!tbody) return;
     tbody.innerHTML = "";
     
     let onTime = 0, late = 0;
@@ -191,60 +194,85 @@ function exportData() {
 
 function renderChat() {
     const box = document.getElementById('chatWrap');
+    if(!box) return;
     const c = JSON.parse(localStorage.getItem('tv_chat_v18') || "[]");
     box.innerHTML = c.map(m => `<div class="chat-bubble"><span class="bubble-name">ADMIN</span><br><span style="font-size:0.85rem;">${m.text}</span></div>`).join('');
     box.scrollTop = box.scrollHeight;
 }
 
-document.getElementById('chatIn').addEventListener('keypress', (e) => { 
-    if(e.key === 'Enter' && e.target.value.trim()) {
-        const pesan = e.target.value.trim();
-        let c = JSON.parse(localStorage.getItem('tv_chat_v18') || "[]");
-        c.push({ text: pesan });
-        localStorage.setItem('tv_chat_v18', JSON.stringify(c));
-        speakAI(pesan); 
-        e.target.value = ""; 
-        renderChat();
-    }
-});
+const chatInput = document.getElementById('chatIn');
+if(chatInput) {
+    chatInput.addEventListener('keypress', (e) => { 
+        if(e.key === 'Enter' && e.target.value.trim()) {
+            const pesan = e.target.value.trim();
+            let c = JSON.parse(localStorage.getItem('tv_chat_v18') || "[]");
+            c.push({ text: pesan });
+            localStorage.setItem('tv_chat_v18', JSON.stringify(c));
+            speakAI(pesan); 
+            e.target.value = ""; 
+            renderChat();
+        }
+    });
+}
 
 function hapusChat() { if(confirm("Hapus log suara?")) { localStorage.removeItem('tv_chat_v18'); renderChat(); } }
 
 function updateClock() {
     const now = new Date();
-    document.getElementById('clockDisplay').innerText = now.toTimeString().split(' ')[0];
-    document.getElementById('pDate').innerText = now.toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'}).toUpperCase();
-    document.getElementById('pDay').innerText = now.toLocaleDateString('id-ID', {weekday:'long'}).toUpperCase();
+    const clock = document.getElementById('clockDisplay');
+    const pDate = document.getElementById('pDate');
+    const pDay = document.getElementById('pDay');
+    
+    if(clock) clock.innerText = now.toTimeString().split(' ')[0];
+    if(pDate) pDate.innerText = now.toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'}).toUpperCase();
+    if(pDay) pDay.innerText = now.toLocaleDateString('id-ID', {weekday:'long'}).toUpperCase();
 }
 
-// --- FUNGSI TOGGLE SIDEBAR ---
+// --- SIDEBAR & AUTO-LOGIN ---
+function checkLoginStatus() {
+    const status = localStorage.getItem("tv_isLoggedIn");
+    const overlay = document.getElementById("authOverlay");
+    if (status === "true" && overlay) {
+        overlay.style.display = "none";
+    }
+}
+
 function toggleNav() {
     const sidebar = document.getElementById("mySidebar");
     const mainContent = document.getElementById("mainContent");
     const openBtn = document.getElementById("openBtn");
 
+    if (!sidebar) return;
+
     if (sidebar.style.width === "0px" || sidebar.classList.contains("closed")) {
-        // Buka Sidebar
         sidebar.style.width = "250px";
         sidebar.classList.remove("closed");
-        mainContent.classList.remove("wide");
-        openBtn.style.display = "none";
+        if(mainContent) mainContent.classList.remove("wide");
+        if(openBtn) openBtn.style.display = "none";
     } else {
-        // Tutup Sidebar
         sidebar.style.width = "0px";
         sidebar.classList.add("closed");
-        mainContent.classList.add("wide");
-        openBtn.style.display = "block";
+        if(mainContent) mainContent.classList.add("wide");
+        if(openBtn) openBtn.style.display = "block";
     }
 }
 
-// Inisialisasi tampilan awal
+// INISIALISASI AKHIR
 window.addEventListener('load', () => {
-    // Pastikan sidebar terbuka di awal pada desktop
-    if (window.innerWidth > 768) {
-        document.getElementById("mySidebar").style.width = "250px";
+    checkLoginStatus();
+    setInterval(updateClock, 1000);
+    render();
+    
+    const sidebar = document.getElementById("mySidebar");
+    const openBtn = document.getElementById("openBtn");
+    
+    if (window.innerWidth > 1024) {
+        if(sidebar) sidebar.style.width = "250px";
     } else {
-        document.getElementById("mySidebar").style.width = "0px";
-        document.getElementById("openBtn").style.display = "block";
+        if(sidebar) {
+            sidebar.style.width = "0px";
+            sidebar.classList.add("closed");
+        }
+        if(openBtn) openBtn.style.display = "block";
     }
 });
