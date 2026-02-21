@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TVTOTO - Dashboard Absensi</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <title>TVTOTO Absensi Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -25,70 +25,64 @@
         </div>
     </div>
 
-    <div class="dashboard-wrapper">
+    <div class="app-layout">
         <aside class="sidebar">
-            <div class="sidebar-top">
-                <div class="dashboard-tag">DASHBOARD</div>
-                <button class="menu-toggle">☰</button>
+            <div class="sidebar-header">
+                <div class="dash-label">DASHBOARD</div>
+                <div class="menu-icon">☰</div>
             </div>
-            <nav class="nav-menu">
-                <div class="nav-item active" onclick="location.href='index.html'">
-                    🏠 Home / Absensi
-                </div>
-                <div class="nav-item" onclick="location.href='jobdesk.html'">
-                    📝 Atur Jobdesk
-                </div>
-                <div class="nav-item logout" onclick="logout()">
-                    🚪 Logout
-                </div>
+            <nav class="side-nav">
+                <div class="nav-item active" onclick="location.href='index.html'">🏠 Home / Absensi</div>
+                <div class="nav-item" onclick="location.href='jobdesk.html'">📝 Atur Jobdesk</div>
+                <div class="nav-item logout-link" onclick="logout()">🚪 Logout</div>
             </nav>
         </aside>
 
-        <main class="main-content">
-            <div class="content-grid">
-                <div class="absensi-section">
-                    <div class="top-stats">
-                        <div class="logo-container-new">
-                            <div class="brand-logo">TV<span>TOTO</span></div>
-                        </div>
-                        <div class="stat-box ontime">TEPAT WAKTU<br><span id="sOn">0</span></div>
-                        <div class="stat-box late">TERLAMBAT<br><span id="sLate">0</span></div>
-                        <div class="stat-box missing">BELUM ABSEN<br><span id="sAbs">65</span></div>
+        <main class="main-screen">
+            <div class="content-container">
+                <div class="top-row">
+                    <div class="logo-box-red">
+                        <div class="brand-logo">TV<span>TOTO</span></div>
                     </div>
+                    <div class="stat-card ontime">TEPAT WAKTU<br><span id="sOn">0</span></div>
+                    <div class="stat-card late">TERLAMBAT<br><span id="sLate">0</span></div>
+                    <div class="stat-card missing">BELUM ABSEN<br><span id="sAbs">65</span></div>
+                </div>
 
-                    <div class="banner-info">
-                        <div class="date-display">
-                            <small id="pDay">SABTU</small>
-                            <h2 id="pDate">21 FEB 2026</h2>
-                        </div>
-                        <div class="main-title">ABSEN TVTOTO</div>
+                <div class="banner-area">
+                    <div class="date-box">
+                        <div class="day-text" id="pDay">SABTU</div>
+                        <div class="date-text" id="pDate">21 FEB 2026</div>
                     </div>
+                    <div class="title-text">ABSEN TVTOTO</div>
+                </div>
 
-                    <div class="control-panel">
-                        <select id="sShift">
-                            <option value="PAGI">PAGI (07:45)</option>
-                            <option value="SHIFT G">SHIFT G (09:45)</option>
-                            <option value="SHIFT G2">SHIFT G2 (11:45)</option>
-                            <option value="SORE">SORE (15:45)</option>
-                            <option value="MALAM">MALAM (21:45)</option>
-                        </select>
-                        <input type="text" id="iName" placeholder="Ketik Nama Staff..." list="staffs">
-                        <datalist id="staffs"></datalist>
-                        <div id="clockDisplay" class="clock-box">14:02:22</div>
-                        <div class="action-btns">
-                            <button class="btn btn-blue" onclick="tambahAbsen()">ABSEN</button>
-                            <button class="btn btn-yellow" onclick="filterTelat()">CEK TELAT</button>
-                            <button class="btn btn-green" onclick="exportData()">CSV</button>
-                            <button class="btn btn-red" onclick="resetData()">RESET</button>
-                        </div>
+                <div class="control-bar">
+                    <select id="sShift">
+                        <option value="PAGI">PAGI (07:45)</option>
+                        <option value="SHIFT G">SHIFT G (09:45)</option>
+                        <option value="SHIFT G2">SHIFT G2 (11:45)</option>
+                        <option value="SORE">SORE (15:45)</option>
+                        <option value="MALAM">MALAM (21:45)</option>
+                    </select>
+                    <input type="text" id="iName" placeholder="Ketik Nama Staff..." list="staffs">
+                    <datalist id="staffs"></datalist>
+                    <div id="clockDisplay" class="digital-clock">00:00:00</div>
+                    <div class="btn-group">
+                        <button class="btn btn-blue" onclick="tambahAbsen()">ABSEN</button>
+                        <button class="btn btn-yellow" onclick="filterTelat()">CEK TELAT</button>
+                        <button class="btn btn-green" onclick="exportData()">CSV</button>
+                        <button class="btn btn-red" onclick="resetData()">RESET</button>
                     </div>
+                </div>
 
-                    <div class="table-area">
+                <div class="bottom-grid">
+                    <div class="table-container">
                         <table id="tblMain">
                             <thead>
                                 <tr>
                                     <th>SHIFT</th>
-                                    <th>NAMA STAFF</th>
+                                    <th>NAMA</th>
                                     <th>TARGET</th>
                                     <th>AKTUAL</th>
                                     <th>STATUS</th>
@@ -97,12 +91,9 @@
                             <tbody></tbody>
                         </table>
                     </div>
-                </div>
-
-                <div class="voice-section">
-                    <div class="voice-header">SYSTEM VOICE LOGS <span onclick="hapusChat()" style="cursor:pointer; color:red">Clear</span></div>
-                    <div class="voice-messages" id="chatWrap"></div>
-                    <div class="voice-input">
+                    <div class="voice-panel">
+                        <div class="voice-header">SYSTEM VOICE LOGS <span onclick="hapusChat()">Clear</span></div>
+                        <div class="voice-body" id="chatWrap"></div>
                         <input type="text" id="chatIn" placeholder="Pesan admin...">
                     </div>
                 </div>
