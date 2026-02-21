@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TVTOTO Absensi System v18.7 | PRO PROFILE EDITION</title>
+    <title>TVTOTO Absensi System v18.7 | FINAL PRO</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -15,10 +15,10 @@
         <div id="authFields">
             <input type="text" id="uUser" placeholder="Username">
             <input type="password" id="uPass" placeholder="Password">
-            <input type="email" id="uEmail" placeholder="Email (Khusus Daftar)" style="display:none;">
+            <input type="email" id="uEmail" placeholder="Email (Untuk Daftar)" style="display:none;">
             <input type="password" id="uConfirm" placeholder="Konfirmasi Password" style="display:none;">
         </div>
-        <button class="btn-auth" id="mainAuthBtn" onclick="handleAuth()">MASUK</button>
+        <button class="btn-auth" id="mainAuthBtn" onclick="handleAuth()">➜ Masuk</button>
         <div class="auth-links">
             <p id="toggleText">Belum punya akun? <span onclick="showRegister()">Daftar</span></p>
             <p id="forgotLink"><span onclick="showForgot()">Lupa Password?</span></p>
@@ -27,7 +27,7 @@
     </div>
 </div>
 
-<div class="logo-box"><img src="logo.png" onerror="this.src='logo.jpg';"></div>
+<div class="logo-box"><img src="logo.png" onerror="this.src='https://via.placeholder.com/120x50/2e3192/ffffff?text=TVTOTO';"></div>
 
 <div class="main-container">
     <div class="absensi-section">
@@ -38,7 +38,7 @@
         </div>
 
         <div class="header-main">
-            <div class="date-panel"><p id="pDay">SENIN</p><h2 id="pDate">26 JAN 2026</h2></div>
+            <div class="date-panel"><p id="pDay">SABTU</p><h2 id="pDate">21 FEB 2026</h2></div>
             <div class="title-panel">ABSEN TVTOTO</div>
         </div>
 
@@ -78,20 +78,20 @@
     <div class="user-profile-wrapper">
         <div class="support-label">⚙ Support</div>
         <div class="profile-card" onclick="toggleUserMenu()">
-            <div class="avatar" id="avatarInitial">A</div>
+            <div class="avatar" id="avatarInitial">U</div>
             <div class="profile-info">
                 <div class="profile-name" id="displayProfileName">Username</div>
-                <div class="profile-email" id="displayProfileEmail">email@gmail.com</div>
+                <div class="profile-email" id="displayProfileEmail">email@user.com</div>
             </div>
             <div class="profile-arrow">›</div>
         </div>
 
         <div class="user-dropup" id="userDropup">
             <div class="dropup-header">
-                <div class="avatar-small" id="avatarSmall">A</div>
+                <div class="avatar-small" id="avatarSmall">U</div>
                 <div class="header-info">
                     <div class="header-name" id="headerName">Username</div>
-                    <div class="header-email" id="headerEmail">email@gmail.com</div>
+                    <div class="header-email" id="headerEmail">email@user.com</div>
                 </div>
             </div>
             <div class="dropup-item" onclick="alert('Settings dalam pengembangan')">⚙ Settings</div>
