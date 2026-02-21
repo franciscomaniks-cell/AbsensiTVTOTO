@@ -1,4 +1,4 @@
-// --- KONFIGURASI SISTEM ---
+// --- CONFIGURATION ---
 const STAFF_LIST = [
     "RADO DINATA", "IRVAN GANESHA", "JOSIA ROMANDA GINTING", 
     "MUHAMMAD BAKRON", "JANNIFER MENTARI", "CINDY NURUL", 
@@ -6,162 +6,152 @@ const STAFF_LIST = [
 ];
 
 const SHIFT_TARGETS = {
-    "PAGI": "07:45",
-    "SHIFT G": "09:45",
-    "SORE": "15:45",
-    "MALAM": "21:45"
+    "PAGI": "07:45:00",
+    "SHIFT G": "09:45:00",
+    "SHIFT G2": "11:45:00",
+    "SORE": "15:45:00",
+    "MALAM": "21:45:00"
 };
 
-// --- INISIALISASI ---
+// --- INITIALIZATION ---
 window.onload = () => {
-    checkAuth();
-    startClock();
-    updateStaffDatalist();
+    // Jalankan Jam
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // Isi Datalist Nama
+    const dl = document.getElementById('staffs');
+    if (dl) dl.innerHTML = STAFF_LIST.map(name => `<option value="${name}">`).join('');
+
+    // Cek Login
+    if (localStorage.getItem('tv_auth') === 'true') {
+        document.getElementById('authOverlay').style.display = 'none';
+    }
+
     renderTable();
     updateStats();
 };
 
-// 1. Sistem Login
-function handleAuth() {
-    const user = document.getElementById('uUser').value;
-    const pass = document.getElementById('uPass').value;
-    
-    if (user === "admin" && pass === "admin123") {
-        localStorage.setItem('tv_logged_in', 'true');
-        document.getElementById('authOverlay').style.display = 'none';
-        addVoiceLog("System: Admin berhasil masuk.");
-    } else {
-        alert("Username atau Password salah!");
-    }
+// --- CORE FUNCTIONS ---
+
+function updateClock() {
+    const now = new Date();
+    const timeStr = now.toTimeString().split(' ')[0]; // HH:mm:ss
+    const options = { weekday: 'long', day: '2-digit', month: 'short', year: 'numeric' };
+    const dateParts = now.toLocaleDateString('id-ID', options).toUpperCase().split(' ');
+
+    if (document.getElementById('clockDisplay')) document.getElementById('clockDisplay').innerText = timeStr;
+    if (document.getElementById('pDay')) document.getElementById('pDay').innerText = dateParts[0].replace(',', '');
+    if (document.getElementById('pDate')) document.getElementById('pDate').innerText = dateParts.slice(1).join(' ');
 }
 
-function checkAuth() {
-    if (localStorage.getItem('tv_logged_in') === 'true') {
+function handleAuth() {
+    const u = document.getElementById('uUser').value;
+    const p = document.getElementById('uPass').value;
+    if (u === "admin" && p === "admin123") {
+        localStorage.setItem('tv_auth', 'true');
         document.getElementById('authOverlay').style.display = 'none';
+    } else {
+        alert("Akses Ditolak!");
     }
 }
 
 function logout() {
-    if (confirm("Keluar dari sistem?")) {
-        localStorage.removeItem('tv_logged_in');
-        location.reload();
-    }
-}
-
-// 2. Jam & Tanggal Real-time
-function startClock() {
-    setInterval(() => {
-        const now = new Date();
-        const timeStr = now.toLocaleTimeString('en-GB', { hour12: false });
-        const options = { weekday: 'long', day: '2-digit', month: 'short', year: 'numeric' };
-        const dateStr = now.toLocaleDateString('id-ID', options).toUpperCase();
-        
-        document.getElementById('clockDisplay').innerText = timeStr;
-        const [day, ...rest] = dateStr.split(' ');
-        document.getElementById('pDay').innerText = day.replace(',', '');
-        document.getElementById('pDate').innerText = rest.join(' ');
-    }, 1000);
-}
-
-// 3. Logika Absensi
-function updateStaffDatalist() {
-    const dl = document.getElementById('staffs');
-    dl.innerHTML = STAFF_LIST.map(name => `<option value="${name}">`).join('');
+    localStorage.removeItem('tv_auth');
+    location.reload();
 }
 
 function tambahAbsen() {
-    const nameInput = document.getElementById('iName');
-    const name = nameInput.value.trim().toUpperCase();
+    const name = document.getElementById('iName').value.toUpperCase();
     const shift = document.getElementById('sShift').value;
-    const currentTime = document.getElementById('clockDisplay').innerText;
+    const time = document.getElementById('clockDisplay').innerText;
 
-    if (!STAFF_LIST.includes(name)) {
-        alert("Nama staff tidak terdaftar!");
-        return;
-    }
+    if (!STAFF_LIST.includes(name)) return alert("Nama Staff Tidak Terdaftar!");
 
-    let logs = JSON.parse(localStorage.getItem('tv_absensi_data') || "[]");
+    let logs = JSON.parse(localStorage.getItem('tv_absensi') || "[]");
     
-    // Cek duplikat hari ini
-    const isDuplicate = logs.some(l => l.nama === name && l.shift === shift);
-    if (isDuplicate) {
-        alert("Staff sudah absen untuk shift ini!");
-        return;
-    }
+    // Logika Cek Terlambat
+    const target = SHIFT_TARGETS[shift];
+    const isLate = time > target;
+    const status = isLate ? "TERLAMBAT" : "TEPAT WAKTU";
 
-    const targetTime = SHIFT_TARGETS[shift];
-    const status = currentTime > targetTime ? "TERLAMBAT" : "TEPAT WAKTU";
+    const entry = { id: Date.now(), shift, name, target, actual: time, status };
+    logs.push(entry);
+    localStorage.setItem('tv_absensi', JSON.stringify(logs));
 
-    const newLog = {
-        id: Date.now(),
-        shift: shift,
-        nama: name,
-        target: targetTime,
-        aktual: currentTime,
-        status: status
-    };
-
-    logs.push(newLog);
-    localStorage.setItem('tv_absensi_data', JSON.stringify(logs));
-    
-    nameInput.value = "";
+    // Reset Input & Update View
+    document.getElementById('iName').value = "";
     addVoiceLog(`Absen: ${name} [${shift}] - ${status}`);
     renderTable();
     updateStats();
 }
 
-function renderTable(filterData = null) {
-    const logs = filterData || JSON.parse(localStorage.getItem('tv_absensi_data') || "[]");
+function renderTable(data = null) {
+    const logs = data || JSON.parse(localStorage.getItem('tv_absensi') || "[]");
     const tbody = document.querySelector('#tblMain tbody');
-    tbody.innerHTML = "";
+    if (!tbody) return;
 
-    logs.slice().reverse().forEach(log => {
-        const row = `
-            <tr class="${log.status === 'TERLAMBAT' ? 'row-late' : ''}">
-                <td>${log.shift}</td>
-                <td style="font-weight: 800">${log.nama}</td>
-                <td>${log.target}</td>
-                <td>${log.aktual}</td>
-                <td class="${log.status === 'TERLAMBAT' ? 'text-late' : 'text-ontime'}">${log.status}</td>
-                <td><button onclick="hapusEntry(${log.id})" class="btn-del">❌</button></td>
-            </tr>
-        `;
-        tbody.innerHTML += row;
-    });
+    tbody.innerHTML = logs.slice().reverse().map(x => `
+        <tr class="${x.status === 'TERLAMBAT' ? 'row-late' : ''}">
+            <td>${x.shift}</td>
+            <td style="font-weight:bold">${x.name}</td>
+            <td>${x.target}</td>
+            <td>${x.actual}</td>
+            <td class="status-cell ${x.status === 'TERLAMBAT' ? 'txt-red' : 'txt-green'}">${x.status}</td>
+            <td><button class="btn-del" onclick="hapusEntry(${x.id})">❌</button></td>
+        </tr>
+    `).join('');
 }
 
 function updateStats() {
-    const logs = JSON.parse(localStorage.getItem('tv_absensi_data') || "[]");
-    const ontime = logs.filter(l => l.status === "TEPAT WAKTU").length;
-    const late = logs.filter(l => l.status === "TERLAMBAT").length;
-    
-    document.getElementById('sOn').innerText = ontime;
+    const logs = JSON.parse(localStorage.getItem('tv_absensi') || "[]");
+    const onTime = logs.filter(x => x.status === "TEPAT WAKTU").length;
+    const late = logs.filter(x => x.status === "TERLAMBAT").length;
+
+    document.getElementById('sOn').innerText = onTime;
     document.getElementById('sLate').innerText = late;
-    document.getElementById('sAbs').innerText = Math.max(0, 65 - logs.length);
+    document.getElementById('sAbs').innerText = 65 - logs.length;
 }
 
 function filterTelat() {
-    const logs = JSON.parse(localStorage.getItem('tv_absensi_data') || "[]");
-    const lateOnly = logs.filter(l => l.status === "TERLAMBAT");
+    const logs = JSON.parse(localStorage.getItem('tv_absensi') || "[]");
+    const lateOnly = logs.filter(x => x.status === "TERLAMBAT");
     renderTable(lateOnly);
     addVoiceLog("System: Menampilkan daftar terlambat.");
 }
 
+function exportData() {
+    const logs = JSON.parse(localStorage.getItem('tv_absensi') || "[]");
+    if (logs.length === 0) return alert("Data Kosong!");
+
+    let csv = "SHIFT,NAMA,TARGET,AKTUAL,STATUS\n";
+    logs.forEach(x => csv += `${x.shift},${x.name},${x.target},${x.actual},${x.status}\n`);
+
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Absensi_TVTOTO_${new Date().toLocaleDateString()}.csv`;
+    a.click();
+}
+
 function resetData() {
-    if (confirm("Hapus semua data absensi hari ini?")) {
-        localStorage.removeItem('tv_absensi_data');
+    if (confirm("Hapus semua data absen hari ini?")) {
+        localStorage.removeItem('tv_absensi');
+        addVoiceLog("System: Database Reset.");
         renderTable();
         updateStats();
-        addVoiceLog("System: Database di-reset.");
     }
 }
 
-// 4. Voice Logs & CSV
+// --- LOGGING ---
 function addVoiceLog(msg) {
     const wrap = document.getElementById('chatWrap');
-    const time = new Date().toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
-    const entry = `<div class="log-item"><span>[${time}]</span> ${msg}</div>`;
-    wrap.innerHTML += entry;
+    const time = new Date().toLocaleTimeString();
+    const div = document.createElement('div');
+    div.className = 'log-entry';
+    div.innerHTML = `<span style="color:#94a3b8">[${time}]</span> ${msg}`;
+    wrap.appendChild(div);
     wrap.scrollTop = wrap.scrollHeight;
 }
 
@@ -169,27 +159,10 @@ function hapusChat() {
     document.getElementById('chatWrap').innerHTML = "";
 }
 
-function exportData() {
-    const logs = JSON.parse(localStorage.getItem('tv_absensi_data') || "[]");
-    if (logs.length === 0) return alert("Tidak ada data untuk diekspor!");
-
-    let csv = "SHIFT,NAMA,TARGET,AKTUAL,STATUS\n";
-    logs.forEach(l => {
-        csv += `${l.shift},${l.nama},${l.target},${l.aktual},${l.status}\n`;
-    });
-
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.setAttribute('href', url);
-    a.setAttribute('download', `Absensi_TVTOTO_${new Date().toLocaleDateString()}.csv`);
-    a.click();
-}
-
 function hapusEntry(id) {
-    let logs = JSON.parse(localStorage.getItem('tv_absensi_data') || "[]");
-    logs = logs.filter(l => l.id !== id);
-    localStorage.setItem('tv_absensi_data', JSON.stringify(logs));
+    let logs = JSON.parse(localStorage.getItem('tv_absensi') || "[]");
+    logs = logs.filter(x => x.id !== id);
+    localStorage.setItem('tv_absensi', JSON.stringify(logs));
     renderTable();
     updateStats();
 }
