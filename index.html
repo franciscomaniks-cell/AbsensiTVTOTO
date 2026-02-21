@@ -3,113 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website Layout - Versi Stabil</title>
-    <style>
-        /* Reset & Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            background-color: #f4f4f4;
-        }
-
-        /* Header & Navigation */
-        header {
-            background: #ffffff;
-            padding: 1rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #333;
-            /* Posisi kembali ke default kiri */
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-
-        nav ul li {
-            margin-left: 20px;
-        }
-
-        nav ul li a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        nav ul li a:hover {
-            color: #007bff;
-        }
-
-        /* Hero Section */
-        .hero {
-            height: 400px;
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
-                        url('https://via.placeholder.com/1200x400') no-repeat center center/cover;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-align: center;
-        }
-
-        /* Main Content */
-        main {
-            padding: 2rem 5%;
-        }
-
-        footer {
-            text-align: center;
-            padding: 2rem;
-            background: #333;
-            color: white;
-            margin-top: 2rem;
-        }
-    </style>
+    <title>TVTOTO Absensi System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <header>
-        <div class="logo">BRANDLOGO</div>
-        <nav>
-            <ul>
-                <li><a href="#">Beranda</a></li>
-                <li><a href="#">Tentang</a></li>
-                <li><a href="#">Layanan</a></li>
-                <li><a href="#">Kontak</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <section class="hero">
-        <div>
-            <h1>Selamat Datang di Website Kami</h1>
-            <p>Solusi digital terbaik untuk masa depan Anda.</p>
+    <div id="authOverlay">
+        <div class="auth-card">
+            <h2 id="authTitle">LOGIN SYSTEM</h2>
+            <div id="authFields">
+                <input type="text" id="uUser" placeholder="Username">
+                <input type="password" id="uPass" placeholder="Password">
+            </div>
+            <button class="btn-auth" onclick="handleAuth()">MASUK</button>
         </div>
-    </section>
+    </div>
 
-    <main>
-        <h2>Konten Utama</h2>
-        <p>Ini adalah versi yang telah dikembalikan ke pengaturan awal di mana tata letak logo dan navigasi berada pada posisi yang paling stabil (logo di kiri, menu di kanan).</p>
-    </main>
+    <div class="app-container">
+        
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="brand-logo">TVTOTO</div>
+            </div>
+            <nav class="nav-menu">
+                <div class="nav-item active" onclick="location.href='index.html'">
+                    🏠 Dashboard Absensi
+                </div>
+                <div class="nav-item" onclick="location.href='jobdesk.html'">
+                    📝 Atur Jobdesk
+                </div>
+                <div class="nav-divider"></div>
+                <div class="nav-item logout" onclick="logout()">
+                    🚪 Logout
+                </div>
+            </nav>
+        </aside>
 
-    <footer>
-        <p>&copy; 2026 Nama Perusahaan Anda. Seluruh hak cipta dilindungi.</p>
-    </footer>
+        <main class="content-wrapper">
+            <div class="top-logo-container">
+                <div class="logo-box">
+                    <img src="logo.png" alt="TVTOTO Logo" onerror="this.src='https://via.placeholder.com/50/FF0000/FFFFFF?text=TV'">
+                </div>
+            </div>
 
+            <div class="dashboard-layout">
+                <div class="absensi-panel">
+                    <div class="stat-grid">
+                        <div class="stat-card ontime"><h4>TEPAT WAKTU</h4><p id="sOn">0</p></div>
+                        <div class="stat-card late"><h4>TERLAMBAT</h4><p id="sLate">0</p></div>
+                        <div class="stat-card total"><h4>BELUM ABSEN</h4><p id="sAbs">65</p></div>
+                    </div>
+
+                    <div class="header-main">
+                        <div class="date-panel">
+                            <p id="pDay">SABTU</p>
+                            <h2 id="pDate">21 FEB 2026</h2>
+                        </div>
+                        <div class="title-panel">ABSEN TVTOTO</div>
+                    </div>
+
+                    <div class="tool-bar">
+                        <select id="sShift">
+                            <option value="PAGI">PAGI (07:45)</option>
+                            <option value="SHIFT G">SHIFT G (09:45)</option>
+                            <option value="SORE">SORE (15:45)</option>
+                            <option value="MALAM">MALAM (21:45)</option>
+                        </select>
+                        <input type="text" id="iName" placeholder="Ketik Nama Staff..." list="staffs">
+                        <datalist id="staffs"></datalist>
+                        <div id="clockDisplay" class="digital-clock">00:00:00</div>
+                        <div class="btn-group-action">
+                            <button class="btn btn-add" onclick="tambahAbsen()">ABSEN</button>
+                            <button class="btn btn-filter" onclick="filterTelat()">CEK TELAT</button>
+                            <button class="btn btn-csv" onclick="exportData()">CSV</button>
+                            <button class="btn btn-reset" onclick="resetData()">RESET</button>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table id="tblMain">
+                            <thead>
+                                <tr>
+                                    <th>SHIFT</th>
+                                    <th>NAMA STAFF</th>
+                                    <th>TARGET</th>
+                                    <th>AKTUAL</th>
+                                    <th>STATUS</th>
+                                    <th>AKSI</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="voice-logs-panel">
+                    <div class="chat-header">
+                        <strong>SYSTEM VOICE LOGS</strong>
+                        <button onclick="hapusChat()" class="btn-clear">Clear</button>
+                    </div>
+                    <div class="chat-messages" id="chatWrap"></div>
+                    <div class="chat-footer">
+                        <input type="text" id="chatIn" placeholder="Pesan admin...">
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
