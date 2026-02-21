@@ -3,45 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TVTOTO Absensi System</title>
+    <title>TVTOTO System v18.7</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="app-layout">
+    <div id="authOverlay">
+        <div class="auth-card">
+            <h2 id="authTitle">LOGIN SYSTEM</h2>
+            <div id="loginFields">
+                <input type="text" id="uUser" placeholder="Username">
+                <input type="password" id="uPass" placeholder="Password">
+            </div>
+            
+            <div id="registerFields" style="display:none;">
+                <input type="text" id="regUser" placeholder="Username Baru">
+                <input type="password" id="regPass" placeholder="Password Baru">
+                <input type="password" id="regConfirm" placeholder="Konfirmasi Password">
+            </div>
+
+            <div id="forgotFields" style="display:none;">
+                <p style="font-size: 11px; color: #94a3b8; margin-bottom: 10px;">Hubungi Admin IT untuk reset password Anda.</p>
+                <input type="text" id="forgotUser" placeholder="Masukkan Username">
+            </div>
+
+            <button class="btn-auth" id="mainAuthBtn" onclick="handleAuth()">MASUK</button>
+            
+            <div class="auth-footer">
+                <span id="toggleText" onclick="showRegister()">Belum punya akun? Daftar</span>
+                <span id="forgotLink" onclick="showForgot()">Lupa Password?</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container">
         <aside class="sidebar">
             <div class="sidebar-header">
-                <div class="brand-badge">DASHBOARD</div>
-                <button class="menu-toggle">☰</button>
+                <div class="brand-logo">DASHBOARD</div>
+                <button class="menu-btn">☰</button>
             </div>
-            <nav class="nav-links">
+            <nav class="nav-menu">
                 <a href="index.html" class="nav-item active">🏠 Home / Absensi</a>
                 <a href="jobdesk.html" class="nav-item">📝 Atur Jobdesk</a>
-                <div class="spacer"></div>
+                <div class="nav-divider"></div>
                 <a href="#" class="nav-item logout" onclick="logout()">🚪 Logout</a>
             </nav>
         </aside>
 
-        <main class="main-screen">
+        <main class="main-content">
             <div class="dashboard-grid">
                 
-                <div class="center-panel">
-                    <div class="stats-row">
-                        <div class="stat-box ontime"><span>TEPAT WAKTU</span><h3 id="sOn">0</h3></div>
-                        <div class="stat-box late"><span>TERLAMBAT</span><h3 id="sLate">0</h3></div>
-                        <div class="stat-box absent"><span>BELUM ABSEN</span><h3 id="sAbs">65</h3></div>
+                <div class="absensi-panel">
+                    <div class="stat-grid">
+                        <div class="stat-card ontime"><h4>TEPAT WAKTU</h4><p id="sOn">0</p></div>
+                        <div class="stat-card late"><h4>TERLAMBAT</h4><p id="sLate">0</p></div>
+                        <div class="stat-card total"><h4>BELUM ABSEN</h4><p id="sAbs">65</p></div>
                     </div>
 
-                    <div class="absensi-header">
-                        <div class="date-box">
-                            <small id="pDay">SABTU</small>
+                    <div class="header-banner">
+                        <div class="date-tag">
+                            <span id="pDay">SABTU</span>
                             <h2 id="pDate">21 FEB 2026</h2>
                         </div>
-                        <div class="title-box">ABSEN TVTOTO</div>
+                        <div class="main-title">ABSEN TVTOTO</div>
                     </div>
 
-                    <div class="toolbar">
+                    <div class="tool-bar">
                         <select id="sShift">
                             <option value="PAGI">PAGI (07:45)</option>
                             <option value="SHIFT G">SHIFT G (09:45)</option>
@@ -51,16 +79,17 @@
                         <input type="text" id="iName" placeholder="Ketik Nama Staff..." list="staffs">
                         <datalist id="staffs"></datalist>
                         <div class="digital-clock" id="clockDisplay">00:00:00</div>
-                        <div class="action-btns">
+                        
+                        <div class="btn-group">
                             <button class="btn btn-absen" onclick="tambahAbsen()">ABSEN</button>
                             <button class="btn btn-cek" onclick="filterTelat()">CEK TELAT</button>
                             <button class="btn btn-csv" onclick="exportData()">CSV</button>
                             <button class="btn btn-reset" onclick="resetData()">RESET</button>
-                            <button class="btn btn-logout-mobile" onclick="logout()">LOGOUT</button>
+                            <button class="btn btn-gray" onclick="logout()">LOGOUT</button>
                         </div>
                     </div>
 
-                    <div class="table-frame">
+                    <div class="table-wrap">
                         <table id="tblMain">
                             <thead>
                                 <tr>
@@ -76,13 +105,13 @@
                     </div>
                 </div>
 
-                <div class="right-panel">
+                <div class="voice-panel">
                     <div class="voice-header">
-                        <span>SYSTEM VOICE LOGS</span>
-                        <button class="clear-link" onclick="hapusChat()">Clear</button>
+                        <strong>SYSTEM VOICE LOGS</strong>
+                        <span class="clear-btn" onclick="hapusChat()">Clear</span>
                     </div>
-                    <div class="voice-content" id="chatWrap"></div>
-                    <div class="voice-input">
+                    <div class="voice-body" id="chatWrap"></div>
+                    <div class="voice-footer">
                         <input type="text" id="chatIn" placeholder="Pesan admin..." onkeypress="if(event.key==='Enter') sendAdminChat()">
                     </div>
                 </div>
