@@ -228,7 +228,7 @@ function updateClock() {
     if(pDay) pDay.innerText = now.toLocaleDateString('id-ID', {weekday:'long'}).toUpperCase();
 }
 
-// --- SIDEBAR & AUTO-LOGIN ---
+// --- AUTO-LOGIN LOGIC ---
 function checkLoginStatus() {
     const status = localStorage.getItem("tv_isLoggedIn");
     const overlay = document.getElementById("authOverlay");
@@ -237,42 +237,51 @@ function checkLoginStatus() {
     }
 }
 
+function handleAuth() {
+    const user = document.getElementById('uUser').value.trim();
+    const pass = document.getElementById('uPass').value.trim();
+    
+    // Admin default atau akun terdaftar
+    if(user === "admin" && pass === "admin123") {
+        localStorage.setItem('tv_isLoggedIn', 'true');
+        document.getElementById('authOverlay').style.display = 'none';
+    } else {
+        alert("Login Gagal!");
+    }
+}
+
+function logout() {
+    if(confirm("Keluar dari sistem?")) {
+        localStorage.removeItem('tv_isLoggedIn');
+        location.reload();
+    }
+}
+
+// --- SIDEBAR TOGGLE ---
 function toggleNav() {
     const sidebar = document.getElementById("mySidebar");
-    const mainContent = document.getElementById("mainContent");
-    const openBtn = document.getElementById("openBtn");
-
-    if (!sidebar) return;
+    const main = document.getElementById("mainContent");
+    const btn = document.getElementById("openBtn");
 
     if (sidebar.style.width === "0px" || sidebar.classList.contains("closed")) {
         sidebar.style.width = "250px";
         sidebar.classList.remove("closed");
-        if(mainContent) mainContent.classList.remove("wide");
-        if(openBtn) openBtn.style.display = "none";
+        main.classList.remove("wide");
+        btn.style.display = "none";
     } else {
         sidebar.style.width = "0px";
         sidebar.classList.add("closed");
-        if(mainContent) mainContent.classList.add("wide");
-        if(openBtn) openBtn.style.display = "block";
+        main.classList.add("wide");
+        btn.style.display = "block";
     }
 }
 
-// INISIALISASI AKHIR
+// --- INIT ---
 window.addEventListener('load', () => {
-    checkLoginStatus();
-    setInterval(updateClock, 1000);
-    render();
+    checkLoginStatus(); // Penting: Agar refresh tidak minta login ulang
     
-    const sidebar = document.getElementById("mySidebar");
-    const openBtn = document.getElementById("openBtn");
-    
-    if (window.innerWidth > 1024) {
-        if(sidebar) sidebar.style.width = "250px";
-    } else {
-        if(sidebar) {
-            sidebar.style.width = "0px";
-            sidebar.classList.add("closed");
-        }
-        if(openBtn) openBtn.style.display = "block";
+    // Inisialisasi tampilan sidebar
+    if (window.innerWidth <= 1024) {
+        toggleNav(); // Tutup otomatis di HP
     }
 });
