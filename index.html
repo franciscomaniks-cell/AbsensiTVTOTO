@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TVTOTO Absensi System</title>
+    <title>TVTOTO - Dashboard Absensi</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -25,10 +25,11 @@
         </div>
     </div>
 
-    <div class="app-container">
+    <div class="dashboard-wrapper">
         <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="brand-logo-new">TV<span>TOTO</span></div>
+            <div class="sidebar-top">
+                <div class="dashboard-tag">DASHBOARD</div>
+                <button class="menu-toggle">☰</button>
             </div>
             <nav class="nav-menu">
                 <div class="nav-item active" onclick="location.href='index.html'">
@@ -37,31 +38,33 @@
                 <div class="nav-item" onclick="location.href='jobdesk.html'">
                     📝 Atur Jobdesk
                 </div>
-                <div class="nav-divider"></div>
                 <div class="nav-item logout" onclick="logout()">
                     🚪 Logout
                 </div>
             </nav>
         </aside>
 
-        <main class="content-wrapper">
-            <div class="dashboard-layout">
-                <div class="absensi-panel">
-                    <div class="stat-grid">
-                        <div class="stat-card ontime"><h4>TEPAT WAKTU</h4><p id="sOn">0</p></div>
-                        <div class="stat-card late"><h4>TERLAMBAT</h4><p id="sLate">0</p></div>
-                        <div class="stat-card total"><h4>BELUM ABSEN</h4><p id="sAbs">65</p></div>
+        <main class="main-content">
+            <div class="content-grid">
+                <div class="absensi-section">
+                    <div class="top-stats">
+                        <div class="logo-container-new">
+                            <div class="brand-logo">TV<span>TOTO</span></div>
+                        </div>
+                        <div class="stat-box ontime">TEPAT WAKTU<br><span id="sOn">0</span></div>
+                        <div class="stat-box late">TERLAMBAT<br><span id="sLate">0</span></div>
+                        <div class="stat-box missing">BELUM ABSEN<br><span id="sAbs">65</span></div>
                     </div>
 
-                    <div class="header-main">
-                        <div class="date-panel">
-                            <p id="pDay">SABTU</p>
+                    <div class="banner-info">
+                        <div class="date-display">
+                            <small id="pDay">SABTU</small>
                             <h2 id="pDate">21 FEB 2026</h2>
                         </div>
-                        <div class="title-panel">ABSEN TVTOTO</div>
+                        <div class="main-title">ABSEN TVTOTO</div>
                     </div>
 
-                    <div class="tool-bar">
+                    <div class="control-panel">
                         <select id="sShift">
                             <option value="PAGI">PAGI (07:45)</option>
                             <option value="SHIFT G">SHIFT G (09:45)</option>
@@ -71,16 +74,16 @@
                         </select>
                         <input type="text" id="iName" placeholder="Ketik Nama Staff..." list="staffs">
                         <datalist id="staffs"></datalist>
-                        <div id="clockDisplay" class="digital-clock">00:00:00</div>
-                        <div class="btn-group-action">
-                            <button class="btn btn-add" onclick="tambahAbsen()">ABSEN</button>
-                            <button class="btn btn-filter" id="btnF" onclick="filterTelat()">CEK TELAT</button>
-                            <button class="btn btn-csv" onclick="exportData()">CSV</button>
-                            <button class="btn btn-reset" onclick="resetData()">RESET</button>
+                        <div id="clockDisplay" class="clock-box">14:02:22</div>
+                        <div class="action-btns">
+                            <button class="btn btn-blue" onclick="tambahAbsen()">ABSEN</button>
+                            <button class="btn btn-yellow" onclick="filterTelat()">CEK TELAT</button>
+                            <button class="btn btn-green" onclick="exportData()">CSV</button>
+                            <button class="btn btn-red" onclick="resetData()">RESET</button>
                         </div>
                     </div>
 
-                    <div class="table-container">
+                    <div class="table-area">
                         <table id="tblMain">
                             <thead>
                                 <tr>
@@ -89,7 +92,6 @@
                                     <th>TARGET</th>
                                     <th>AKTUAL</th>
                                     <th>STATUS</th>
-                                    <th>AKSI</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -97,13 +99,10 @@
                     </div>
                 </div>
 
-                <div class="voice-logs-panel">
-                    <div class="chat-header">
-                        <strong>SYSTEM VOICE LOGS</strong>
-                        <button onclick="hapusChat()" class="btn-clear">Clear</button>
-                    </div>
-                    <div class="chat-messages" id="chatWrap"></div>
-                    <div class="chat-footer">
+                <div class="voice-section">
+                    <div class="voice-header">SYSTEM VOICE LOGS <span onclick="hapusChat()" style="cursor:pointer; color:red">Clear</span></div>
+                    <div class="voice-messages" id="chatWrap"></div>
+                    <div class="voice-input">
                         <input type="text" id="chatIn" placeholder="Pesan admin...">
                     </div>
                 </div>
