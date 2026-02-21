@@ -127,138 +127,35 @@ body {
     height: 100vh;
 }
 
-/* --- SIDEBAR STYLE --- */
-.sidebar {
-    width: 260px;
-    background: rgba(10, 10, 25, 0.95);
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-}
-
-.brand-logo {
-    font-family: 'Orbitron';
-    color: #ffff00; /* Warna Kuning TVTOTO */
-    font-weight: 900;
-    font-size: 1.5rem;
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-.nav-item {
-    padding: 15px;
-    color: #fff;
-    border-radius: 10px;
-    margin-bottom: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: 0.3s;
-}
-
-.nav-item.active {
-    background: #2e3192; /* Warna Biru sesuai Atur Jobdesk */
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-}
-
-.nav-item:hover:not(.active) {
-    background: rgba(255,255,255,0.05);
-}
-
-/* --- DASHBOARD LAYOUT GRID --- */
-.content-wrapper {
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto;
-}
-
-.dashboard-layout {
-    display: grid;
-    grid-template-columns: 1fr 320px; /* Area Tabel & Area Chat */
-    gap: 20px;
-}
-
-.absensi-panel {
-    background: rgba(0,0,0,0.5);
-    border-radius: 20px;
-    padding: 20px;
-    border: 1px solid rgba(255,255,255,0.1);
-}
-
-/* --- STATS CARD --- */
+/* Update Layout Grid Statistik */
 .stat-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
-.stat-card {
-    padding: 15px;
-    border-radius: 12px;
-    text-align: center;
-    border-bottom: 4px solid transparent;
-}
-
-.stat-card.ontime { background: rgba(34, 197, 94, 0.2); border-color: #22c55e; color: #22c55e; }
-.stat-card.late { background: rgba(239, 68, 68, 0.2); border-color: #ef4444; color: #ef4444; }
-.stat-card.total { background: rgba(245, 158, 11, 0.2); border-color: #f59e0b; color: #f59e0b; }
-
-/* --- DIGITAL CLOCK --- */
-.digital-clock {
-    background: #000;
-    color: #00ff00;
-    padding: 10px 15px;
-    font-family: 'Orbitron';
-    border: 1px solid #00ff00;
-    border-radius: 8px;
-    font-size: 1.1rem;
-}
-
-/* --- TABLE STYLE --- */
-.table-container {
-    margin-top: 20px;
-    background: #fff;
-    border-radius: 12px;
-    overflow: hidden;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    color: #333;
-}
-
-th { background: #2e3192; color: #fff; padding: 15px; }
-td { padding: 12px; text-align: center; border-bottom: 1px solid #eee; font-weight: 600; }
-
-/* Mengatur grid agar memiliki 4 kolom (1 logo + 3 statistik) */
-.stat-grid {
-    display: grid;
-    grid-template-columns: 120px repeat(3, 1fr); /* Kotak logo lebih kecil, lainnya rata */
+    /* Membuat 4 kolom: kolom pertama untuk logo, sisanya untuk data statistik */
+    grid-template-columns: 140px repeat(3, 1fr); 
     gap: 15px;
     margin-bottom: 20px;
     align-items: stretch;
 }
 
-/* Styling khusus untuk kotak logo di dalam grid */
-.logo-container-repositioned {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+/* Styling Kotak Merah Tempat Logo */
+.logo-box-stats {
+    background: rgba(255, 0, 0, 0.1); /* Transparansi merah halus */
+    border: 2px solid #ff0000; /* Border merah sesuai tanda Anda */
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 10px !important;
+    padding: 5px !important;
     border-radius: 12px;
 }
 
-.mini-logo-dashboard {
-    max-width: 100%;
-    max-height: 50px; /* Sesuaikan dengan tinggi kotak merah */
+.img-stats-fixed {
+    width: 100%;
+    height: 100%;
+    max-height: 80px; /* Menyesuaikan tinggi kotak */
     object-fit: contain;
 }
 
-/* Hilangkan container logo lama yang di atas jika sudah tidak diperlukan */
-.top-logo-container {
-    display: none;
+/* Menghapus Logo lama agar tidak double */
+.top-logo-container, .logo-box {
+    display: none !important;
 }
