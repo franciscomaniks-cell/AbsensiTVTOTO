@@ -3,245 +3,184 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Jobdesk Staff TVTOTO - Pro</title>
+    <title>POWER - Atur Jobdesk TVTOTO</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #22c55e;
-            --primary-dark: #15803d;
-            --dark-bg: #020617;
-            --card-bg: #1e293b;
-            --input-bg: #0f172a;
+            --sidebar-bg: #121520;
+            --main-bg: #0b0e14;
+            --card-bg: #1a1f2b;
+            --primary-green: #22c55e;
             --accent-gold: #f59e0b;
-            --danger: #ef4444;
-            --text-main: #f8fafc;
+            --danger-red: #ef4444;
+            --text-light: #f8fafc;
             --text-muted: #94a3b8;
         }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--dark-bg);
-            color: var(--text-main);
+            background-color: var(--main-bg);
+            color: var(--text-light);
             margin: 0;
-            padding: 20px;
             display: flex;
-            justify-content: center;
+            min-height: 100vh;
         }
 
-        .container {
-            width: 100%;
-            max-width: 900px;
+        /* SIDEBAR STYLE */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid rgba(255,255,255,0.05);
         }
 
-        /* HEADER */
-        .brand-header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: #000;
-            padding: 30px;
-            border-radius: 20px;
-            text-align: center;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 30px rgba(34, 197, 94, 0.2);
+        .sidebar-header {
+            padding: 30px 25px;
+            font-size: 24px;
+            font-weight: 900;
+            color: #facc15; /* Power Gold */
+            letter-spacing: 2px;
         }
 
-        .brand-header h1 {
-            margin: 0;
-            font-size: 28px;
-            font-weight: 800;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+        .nav-menu {
+            flex-grow: 1;
+            padding: 10px;
         }
 
-        .date-badge {
-            background: rgba(0, 0, 0, 0.8);
-            color: var(--primary);
-            padding: 6px 18px;
-            border-radius: 50px;
-            font-size: 14px;
-            margin-top: 12px;
-            display: inline-block;
-            font-weight: 700;
-        }
-
-        /* CARD SYSTEM */
-        .card {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            margin-bottom: 20px;
-        }
-
-        .input-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 10px;
-            font-size: 11px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-        }
-
-        textarea, select {
-            width: 100%;
-            background: var(--input-bg);
-            border: 1px solid #334155;
-            color: #fff;
-            border-radius: 10px;
-            padding: 12px;
-            font-size: 13px;
-            box-sizing: border-box;
-            font-family: inherit;
-        }
-
-        textarea { height: 160px; resize: none; line-height: 1.6; }
-
-        /* BUTTONS */
-        .btn-group {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-
-        button {
-            padding: 14px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 12px;
-            transition: 0.2s;
-            text-transform: uppercase;
+        .nav-item {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn-acak { background: #fff; color: #000; }
-        .btn-copy { background: var(--accent-gold); color: #fff; }
-        .btn-png { background: var(--primary); color: #000; }
-
-        button:hover { transform: translateY(-2px); filter: brightness(1.1); }
-
-        /* REPORT AREA */
-        #captureArea {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            color: #1e293b;
-        }
-
-        .table-header {
-            text-align: center;
-            border-bottom: 2px solid var(--primary);
-            padding-bottom: 15px;
-            margin-bottom: 25px;
-        }
-
-        .table-header h2 { margin: 0; font-size: 20px; font-weight: 800; color: #0f172a; }
-        .table-header .shift-title { font-size: 24px; color: var(--primary-dark); font-weight: 900; margin: 5px 0; }
-
-        .result-table { width: 100%; border-collapse: collapse; }
-        .result-table th {
-            background: #f1f5f9;
-            padding: 12px;
-            border: 1px solid #e2e8f0;
-            color: #475569;
-            font-size: 11px;
-            text-transform: uppercase;
-        }
-
-        .result-table td {
-            padding: 14px;
-            border: 1px solid #e2e8f0;
-            text-align: center;
+            padding: 15px 20px;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 10px;
+            margin-bottom: 5px;
+            transition: 0.3s;
             font-size: 14px;
             font-weight: 600;
         }
 
-        .row-alt { background-color: #fff1f2; }
-        .row-operator {
-            background: #dcfce7 !important;
-            color: #166534;
-            font-weight: 800;
+        .nav-item i { margin-right: 15px; font-style: normal; }
+        .nav-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
+        .nav-item.active {
+            background: linear-gradient(90deg, #22c55e33 0%, transparent 100%);
+            color: var(--primary-green);
+            border-left: 4px solid var(--primary-green);
         }
 
-        /* HISTORY AREA */
-        .history-section {
-            margin-top: 40px;
+        /* MAIN CONTENT */
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-green) 0%, #15803d 100%);
+            color: #000;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(34, 197, 94, 0.2);
+        }
+
+        .page-header h1 { margin: 0; font-size: 24px; font-weight: 800; text-transform: uppercase; }
+        
+        /* CARD SYSTEM */
+        .card {
             background: var(--card-bg);
             padding: 20px;
-            border-radius: 15px;
-        }
-
-        .history-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            border-radius: 12px;
             margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
-        .btn-reset-all {
-            background: var(--danger);
-            color: white;
-            padding: 8px 16px;
-            font-size: 11px;
-            border-radius: 8px;
-        }
+        .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        label { display: block; margin-bottom: 10px; font-size: 12px; font-weight: 700; color: var(--primary-green); text-transform: uppercase; }
 
-        .history-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 12px;
-        }
-
-        .history-item {
-            background: var(--input-bg);
-            padding: 15px;
-            border-radius: 10px;
+        textarea, select {
+            width: 100%;
+            background: #0f172a;
             border: 1px solid #334155;
-            cursor: pointer;
-            transition: 0.2s;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            color: #fff;
+            border-radius: 8px;
+            padding: 12px;
+            font-family: inherit;
+            box-sizing: border-box;
         }
 
-        .history-item:hover { border-color: var(--primary); background: #1e293b; }
-        
-        @media (max-width: 600px) {
-            .input-grid, .btn-group { grid-template-columns: 1fr; }
+        textarea { height: 150px; resize: none; }
+
+        /* BUTTONS */
+        .btn-group { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0; }
+        button {
+            padding: 15px; border: none; border-radius: 10px; cursor: pointer;
+            font-weight: 700; text-transform: uppercase; transition: 0.2s;
         }
+        .btn-generate { background: #fff; color: #000; }
+        .btn-copy { background: var(--accent-gold); color: #fff; }
+        .btn-png { background: var(--primary-green); color: #000; }
+        button:hover { transform: translateY(-2px); opacity: 0.9; }
+
+        /* TABLE AREA */
+        #captureArea { background: white; padding: 40px; border-radius: 10px; color: #1e293b; }
+        .report-title { text-align: center; border-bottom: 2px solid var(--primary-green); padding-bottom: 15px; margin-bottom: 20px; }
+        .report-title h2 { margin: 0; color: #0f172a; font-size: 20px; }
+        .shift-label { font-size: 22px; font-weight: 900; color: #15803d; margin-top: 5px; }
+
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f1f5f9; padding: 12px; border: 1px solid #e2e8f0; font-size: 11px; }
+        td { padding: 12px; border: 1px solid #e2e8f0; text-align: center; font-weight: 600; font-size: 14px; }
+        .row-op { background: #dcfce7; color: #166534; font-weight: 800; }
+        .row-alt { background: #fff1f2; }
+
+        /* HISTORY */
+        .history-section { margin-top: 40px; }
+        .history-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .btn-del-all { background: var(--danger-red); color: white; padding: 5px 15px; font-size: 11px; border-radius: 5px; }
+        .history-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+        .history-card { background: var(--card-bg); padding: 15px; border-radius: 10px; cursor: pointer; border: 1px solid #334155; }
+        .history-card:hover { border-color: var(--primary-green); }
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="brand-header">
-            <h1>JOBDESK STAFF TVTOTO</h1>
-            <div class="date-badge" id="displayDate"></div>
+
+    <div class="sidebar">
+        <div class="sidebar-header">POWER</div>
+        <nav class="nav-menu">
+            <a href="#" class="nav-item"><i>🏠</i> Dashboard Absensi</a>
+            <a href="#" class="nav-item active"><i>📝</i> Atur Jobdesk</a>
+            <a href="#" class="nav-item"><i>📊</i> Laporan Harian</a>
+            <a href="#" class="nav-item"><i>⚙️</i> Pengaturan</a>
+        </nav>
+        <div style="padding: 20px;">
+            <a href="#" class="nav-item" style="color: var(--danger-red);"><i>🚪</i> Logout</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="page-header">
+            <h1>SISTEM ATUR JOBDESK TVTOTO</h1>
+            <div id="topDate" style="font-weight: 700; margin-top: 5px; opacity: 0.8;"></div>
         </div>
 
         <div class="card">
-            <label>🕒 Pilih Shift Operasional</label>
+            <label>Pilih Shift Operasional</label>
             <select id="shiftSelect">
-                <option value="PAGI">Shift PAGI</option>
-                <option value="SORE">Shift SORE</option>
-                <option value="MALAM">Shift MALAM</option>
+                <option value="PAGI">SHIFT PAGI</option>
+                <option value="SORE">SHIFT SORE</option>
+                <option value="MALAM">SHIFT MALAM</option>
             </select>
         </div>
 
         <div class="input-grid">
             <div class="card">
-                <label>👥 Daftar Staff (Baris 1 = Operator)</label>
+                <label>👥 Daftar Personel (Atas = Operator)</label>
                 <textarea id="staffInput">RADO DINATA
 IRVAN GANESHA
 JOSIA ROMANDA GINTING
@@ -253,7 +192,7 @@ SYUKUR KURNIAWAN
 HARYATI DEWI</textarea>
             </div>
             <div class="card">
-                <label>💼 Daftar Jobdesk (Akan Diacak)</label>
+                <label>💼 Daftar Jobdesk</label>
                 <textarea id="jobInput">DEPO BRI, BNI
 DEPO MANUAL, OGL
 DEPO DANA, SCATTER
@@ -266,158 +205,129 @@ WD MANUAL, SEABANK</textarea>
         </div>
 
         <div class="btn-group">
-            <button class="btn-acak" onclick="generateJobdesk()">🎲 Acak & Simpan</button>
+            <button class="btn-generate" onclick="generateJobdesk()">🎲 Acak & Simpan</button>
             <button class="btn-copy" onclick="copyToClipboard()">📋 Copy Gambar</button>
             <button class="btn-png" onclick="downloadImage()">📸 Simpan PNG</button>
         </div>
 
         <div id="captureArea">
-            <div class="table-header">
+            <div class="report-title">
                 <h2>LAPORAN PEMBAGIAN TUGAS</h2>
-                <div class="shift-title" id="shiftDisplayText">SHIFT PAGI</div>
-                <div id="tableDateText" style="font-weight: 700; color: #166534;"></div>
+                <div class="shift-label" id="shiftDisp">SHIFT PAGI</div>
+                <div id="tableDate" style="font-weight: 700; color: #475569;"></div>
             </div>
-            <table class="result-table">
+            <table>
                 <thead>
                     <tr>
                         <th width="50%">NAMA PERSONEL</th>
                         <th width="50%">TUGAS OPERASIONAL</th>
                     </tr>
                 </thead>
-                <tbody id="resultBody">
-                    </tbody>
+                <tbody id="resultBody"></tbody>
             </table>
         </div>
 
         <div class="history-section">
-            <div class="history-header">
-                <h3 style="margin: 0; font-size: 14px; color: var(--primary);">🕒 Riwayat Penugasan (Lokal)</h3>
-                <button class="btn-reset-all" onclick="clearHistory()">🗑️ HAPUS SEMUA</button>
+            <div class="history-top">
+                <h3 style="margin:0; font-size: 14px;">🕒 Riwayat Penugasan (Lokal)</h3>
+                <button class="btn-del-all" onclick="clearHistory()">HAPUS SEMUA</button>
             </div>
-            <div id="historyList" class="history-list">
-                <p style="color:var(--text-muted); font-size: 12px;">Belum ada riwayat.</p>
-            </div>
+            <div id="historyGrid" class="history-grid"></div>
         </div>
     </div>
 
     <script>
-        const options = { day: "numeric", month: "long", year: "numeric" };
-        const dateNow = new Date().toLocaleDateString("id-ID", options);
-        document.getElementById("displayDate").innerText = dateNow;
-        document.getElementById("tableDateText").innerText = dateNow;
+        const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const today = new Date().toLocaleDateString('id-ID', dateOptions);
+        document.getElementById('topDate').innerText = today;
+        document.getElementById('tableDate').innerText = today;
 
-        let dbHistory = JSON.parse(localStorage.getItem("tvtoto_history_pro")) || [];
+        let historyData = JSON.parse(localStorage.getItem('power_jobdesk_v3')) || [];
 
         function generateJobdesk() {
-            const shift = document.getElementById("shiftSelect").value;
-            document.getElementById("shiftDisplayText").innerText = "SHIFT " + shift;
+            const shift = document.getElementById('shiftSelect').value;
+            document.getElementById('shiftDisp').innerText = "SHIFT " + shift;
 
-            const staffArr = document.getElementById("staffInput").value.split("\n").filter(t => t.trim() !== "");
-            const jobArr = document.getElementById("jobInput").value.split("\n").filter(t => t.trim() !== "");
+            const staff = document.getElementById('staffInput').value.split('\n').filter(n => n.trim() !== "");
+            const jobs = document.getElementById('jobInput').value.split('\n').filter(j => j.trim() !== "");
 
-            if (staffArr.length < 1) return alert("Masukkan nama staff!");
+            if(staff.length === 0) return alert("Isi nama staff!");
 
-            // Logika Pengacakan
-            const operatorName = staffArr[0];
-            const otherStaff = staffArr.slice(1);
-            let shuffledJobs = [...jobArr].sort(() => Math.random() - 0.5);
+            const opName = staff[0];
+            const others = staff.slice(1);
+            const shuffledJobs = [...jobs].sort(() => Math.random() - 0.5);
 
-            const results = [];
-            results.push({ name: operatorName, job: "OPERATOR" });
-
-            otherStaff.forEach((name, i) => {
-                results.push({
-                    name: name,
-                    job: shuffledJobs[i] || "CADANGAN / STANDBY"
-                });
+            const finalData = [{ name: opName, job: "OPERATOR" }];
+            others.forEach((name, i) => {
+                finalData.push({ name, job: shuffledJobs[i] || "CADANGAN" });
             });
 
-            renderTable(results);
-            saveToLocalStorage(results, shift);
+            renderTable(finalData);
+            saveData(finalData, shift);
         }
 
         function renderTable(data) {
-            const tbody = document.getElementById("resultBody");
-            tbody.innerHTML = "";
+            const body = document.getElementById('resultBody');
+            body.innerHTML = "";
             data.forEach((item, i) => {
                 const isOp = item.job === "OPERATOR";
-                const rowClass = isOp ? "row-operator" : (i % 2 !== 0 ? "row-alt" : "");
-                tbody.innerHTML += `
-                    <tr class="${rowClass}">
-                        <td>${item.name.toUpperCase()}</td>
-                        <td>${item.job.toUpperCase()}</td>
-                    </tr>`;
+                const rowClass = isOp ? "row-op" : (i % 2 !== 0 ? "row-alt" : "");
+                body.innerHTML += `<tr class="${rowClass}"><td>${item.name.toUpperCase()}</td><td>${item.job.toUpperCase()}</td></tr>`;
             });
         }
 
-        function saveToLocalStorage(data, shift) {
-            const entry = {
-                id: Date.now(),
-                date: dateNow,
-                time: new Date().toLocaleTimeString("id-ID"),
-                shift: shift,
-                assignments: data
-            };
-            dbHistory.unshift(entry);
-            if (dbHistory.length > 12) dbHistory.pop();
-            localStorage.setItem("tvtoto_history_pro", JSON.stringify(dbHistory));
+        function saveData(data, shift) {
+            const entry = { id: Date.now(), shift, date: today, time: new Date().toLocaleTimeString('id-ID'), assignments: data };
+            historyData.unshift(entry);
+            if(historyData.length > 10) historyData.pop();
+            localStorage.setItem('power_jobdesk_v3', JSON.stringify(historyData));
             renderHistory();
         }
 
         function renderHistory() {
-            const container = document.getElementById("historyList");
-            if (dbHistory.length === 0) {
-                container.innerHTML = "<p style='color:#94a3b8; font-size:12px;'>Belum ada riwayat.</p>";
-                return;
-            }
-            container.innerHTML = dbHistory.map(item => `
-                <div class="history-item" onclick="loadHistoryItem(${item.id})">
-                    <div>
-                        <b style="color:var(--primary); font-size:13px;">${item.shift}</b><br>
-                        <small style="color:#94a3b8; font-size:10px;">${item.time}</small>
-                    </div>
-                    <span style="color:var(--primary)">➔</span>
+            const container = document.getElementById('historyGrid');
+            container.innerHTML = historyData.length === 0 ? "<p style='font-size:12px; color:gray;'>Kosong.</p>" : 
+            historyData.map(item => `
+                <div class="history-card" onclick="loadHistory(${item.id})">
+                    <div style="color:var(--primary-green); font-weight:800; font-size:12px;">${item.shift}</div>
+                    <div style="font-size:10px; color:var(--text-muted);">${item.time}</div>
                 </div>
-            `).join("");
+            `).join('');
         }
 
-        function loadHistoryItem(id) {
-            const item = dbHistory.find(h => h.id === id);
-            if (item) {
-                document.getElementById("shiftDisplayText").innerText = "SHIFT " + item.shift;
+        function loadHistory(id) {
+            const item = historyData.find(h => h.id === id);
+            if(item) {
+                document.getElementById('shiftDisp').innerText = "SHIFT " + item.shift;
                 renderTable(item.assignments);
-                window.scrollTo({ top: document.getElementById("captureArea").offsetTop - 50, behavior: "smooth" });
             }
         }
 
         function clearHistory() {
-            if (confirm("Hapus seluruh riwayat secara permanen?")) {
-                dbHistory = [];
-                localStorage.removeItem("tvtoto_history_pro");
+            if(confirm("Hapus semua riwayat?")) {
+                historyData = [];
+                localStorage.removeItem('power_jobdesk_v3');
                 renderHistory();
             }
         }
 
         async function copyToClipboard() {
-            const area = document.getElementById("captureArea");
-            const canvas = await html2canvas(area, { scale: 2 });
+            const canvas = await html2canvas(document.getElementById('captureArea'), { scale: 2 });
             canvas.toBlob(blob => {
-                const item = new ClipboardItem({ "image/png": blob });
-                navigator.clipboard.write([item]);
-                alert("✅ Gambar berhasil disalin!");
+                navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+                alert("Berhasil disalin ke clipboard!");
             });
         }
 
         function downloadImage() {
-            html2canvas(document.getElementById("captureArea"), { scale: 2 }).then(canvas => {
-                const link = document.createElement("a");
+            html2canvas(document.getElementById('captureArea'), { scale: 2 }).then(canvas => {
+                const link = document.createElement('a');
                 link.download = `Jobdesk_TVTOTO_${Date.now()}.png`;
                 link.href = canvas.toDataURL();
                 link.click();
             });
         }
 
-        // Inisialisasi
         renderHistory();
         generateJobdesk();
     </script>
