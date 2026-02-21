@@ -11,17 +11,10 @@
 
     <div id="authOverlay">
         <div class="auth-card">
-            <h2 id="authTitle">LOGIN SYSTEM</h2>
-            <div id="authFields">
-                <input type="text" id="uUser" placeholder="Username">
-                <input type="password" id="uPass" placeholder="Password">
-                <input type="password" id="uConfirm" style="display:none;" placeholder="Konfirmasi Password">
-            </div>
+            <h2>LOGIN SYSTEM</h2>
+            <input type="text" id="uUser" placeholder="Username">
+            <input type="password" id="uPass" placeholder="Password">
             <button class="btn-auth" onclick="handleAuth()">MASUK</button>
-            <div class="auth-links">
-                <p id="toggleText">Belum punya akun? <span onclick="showRegister()">Daftar</span></p>
-                <p onclick="showForgot()"><span>Lupa Password?</span></p>
-            </div>
         </div>
     </div>
 
@@ -43,7 +36,7 @@
             <div class="dashboard-wrapper">
                 <div class="top-stats-row">
                     <div class="logo-box-red">
-                        <div class="brand-logo">TV<span>TOTO</span></div>
+                        <img src="https://i.postimg.cc/0jX9fX4M/tvtoto-logo.png" alt="Logo" class="main-logo-img">
                     </div>
                     <div class="stat-card ontime">TEPAT WAKTU<br><span id="sOn">0</span></div>
                     <div class="stat-card late">TERLAMBAT<br><span id="sLate">0</span></div>
@@ -52,8 +45,8 @@
 
                 <div class="hero-banner">
                     <div class="date-panel">
-                        <div class="day-label" id="pDay">SABTU</div>
-                        <div class="date-label" id="pDate">21 FEB 2026</div>
+                        <div id="pDay">SABTU</div>
+                        <div id="pDate">21 FEB 2026</div>
                     </div>
                     <div class="hero-text">ABSEN TVTOTO</div>
                 </div>
@@ -69,12 +62,10 @@
                     <input type="text" id="iName" placeholder="Ketik Nama Staff..." list="staffs">
                     <datalist id="staffs"></datalist>
                     <div class="digital-clock" id="clockDisplay">00:00:00</div>
-                    <div class="btn-group">
-                        <button class="btn btn-blue" onclick="tambahAbsen()">ABSEN</button>
-                        <button class="btn btn-yellow" onclick="filterTelat()">CEK TELAT</button>
-                        <button class="btn btn-green" onclick="exportData()">CSV</button>
-                        <button class="btn btn-red" onclick="resetData()">RESET</button>
-                    </div>
+                    <button class="btn btn-blue" onclick="tambahAbsen()">ABSEN</button>
+                    <button class="btn btn-yellow" onclick="filterTelat()">CEK TELAT</button>
+                    <button class="btn btn-green" onclick="exportData()">CSV</button>
+                    <button class="btn btn-red" onclick="resetData()">RESET</button>
                 </div>
 
                 <div class="content-split">
@@ -87,7 +78,7 @@
                         </table>
                     </div>
                     <div class="log-area">
-                        <div class="log-header">SYSTEM VOICE LOGS <span onclick="hapusChat()">Clear</span></div>
+                        <div class="log-header">SYSTEM VOICE LOGS <span>Clear</span></div>
                         <div class="log-body" id="chatWrap"></div>
                         <input type="text" id="chatIn" placeholder="Pesan admin...">
                     </div>
@@ -95,7 +86,6 @@
             </div>
         </main>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
