@@ -161,3 +161,143 @@ window.onload = () => {
     renderJobHistory();
     document.getElementById('staffs').innerHTML = NAMES.map(n => `<option value="${n}">`).join('');
 };
+
+// --- LOGIKA KHUSUS ATUR JOBDESK (POWER EDITION) ---
+
+// 1. Inisialisasi Riwayat dari LocalStorage
+let dbHistory = JSON.parse(localStorage.getItem("tvtoto_history")) || [];
+
+// 2. Fungsi Utama: Acak & Simpan
+function generateJobdesk() {
+    const shift = document.getElementById("shiftSelect").value;
+    const staffInput = document.getElementById("staffInput").value.trim();
+    const jobInput = document.getElementById("jobInput").value.trim();
+
+    // Validasi
+    if (!staffInput) return alert("Daftar Staff tidak boleh kosong!");
+    if (!jobInput) return alert("Daftar Jobdesk tidak boleh kosong!");
+
+    const staffArr = staffInput.split("\n").filter(t => t.trim() !== "");
+    const jobArr = jobInput.split("\n").filter(t => t.trim() !== "");
+
+    // Ambil baris pertama sebagai Operator (Sesuai permintaan Anda)
+    const operatorName = staffArr[0];
+    const otherStaff = staffArr.slice(1);
+    
+    // Acak Jobdesk (Shuffle Algorithm)
+    let shuffledJobs = [...jobArr].sort(() => Math.random() - 0.5);
+
+    const results = [];
+    // Masukkan Operator di baris pertama
+    results.push({ name: operatorName, job: "OPERATOR" });
+
+    // Masukkan Staff lain dengan Jobdesk yang sudah diacak
+    otherStaff.forEach((name, i) => {
+        results.push({
+            name: name,
+            job: shuffledJobs[i] || "OFF / CADANGAN",
+        });
+    });
+
+    // Update Tampilan Preview
+    document.getElementById("shiftDisplayText").innerText = "SHIFT " + shift;
+    renderJobTable(results);
+    
+    // Simpan ke Riwayat
+    saveJobHistory(results, shift);
+    
+    speakAI("Jobdesk berhasil diacak untuk shift " + shift);
+}
+
+// 3. Fungsi Render Tabel Preview
+function renderJobTable(data) {
+    const tbody = document.getElementById("resultBody");
+    tbody.innerHTML = "";
+    
+    data.forEach((item, i) => {
+        const isOp = item.job === "OPERATOR";
+        const rowClass = isOp ? "operator-lock" : (i % 2 === 0 ? "row-pink" : "");
+        
+        const tr = document.createElement("tr");
+        if (isOp) tr.className = "operator-lock";
+        // Tambahkan style pink soft manual jika di CSS belum ada
+        if (!isOp && i % 2 === 0) tr.style.backgroundColor = "#fff1f2"; 
+
+        tr.innerHTML = `
+            <td style="text-align:left; padding-left:20px;">${item.name.toUpperCase()}</td>
+            <td style="font-weight:bold;">${item.job.toUpperCase()}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+// 4. Fungsi Riwayat (History)
+function saveJobHistory(data, shift) {
+    const now = new Date();
+    const entry = {
+        id: Date.now(),
+        date: now.toLocaleDateString("id-ID"),
+        time: now.toLocaleTimeString("id-ID"),
+        shift: shift,
+        assignments: data,
+    };
+    
+    dbHistory.unshift(entry);
+    if (dbHistory.length > 10) dbHistory.pop(); // Simpan 10 riwayat terakhir
+    localStorage.setItem("tvtoto_history", JSON.stringify(dbHistory));
+    renderJobHistoryList();
+}
+
+function renderJobHistoryList() {
+    const container = document.getElementById("historyList");
+    if (!container) return;
+    
+    container.innerHTML = dbHistory.map(item => `
+        <div class="log-item" style="cursor:pointer; border-left:3px solid var(--accent);" onclick="loadHistoryToPreview(${item.id})">
+            <div style="font-weight:bold; color:var(--accent);">${item.shift}</div>
+            <div style="font-size:0.7rem; color:#94a3b8;">${item.date} - ${item.time}</div>
+            <div style="font-size:0.7rem;">Op: ${item.assignments[0].name}</div>
+        </div>
+    `).join("");
+}
+
+function loadHistoryToPreview(id) {
+    const item = dbHistory.find(h => h.id === id);
+    if (item) {
+        document.getElementById("shiftDisplayText").innerText = "SHIFT " + item.shift;
+        renderJobTable(item.assignments);
+        alert("Riwayat dimuat ke preview!");
+    }
+}
+
+// 5. Fungsi Ekspor (PNG & Copy)
+async function copyToClipboard() {
+    const area = document.getElementById("captureArea");
+    try {
+        const canvas = await html2canvas(area, { scale: 2 });
+        canvas.toBlob(blob => {
+            const data = [new ClipboardItem({ [blob.type]: blob })];
+            navigator.clipboard.write(data).then(() => {
+                alert("✅ Gambar berhasil disalin ke clipboard!");
+            });
+        });
+    } catch (err) {
+        alert("Gagal menyalin gambar.");
+    }
+}
+
+function downloadImage() {
+    const area = document.getElementById("captureArea");
+    const shift = document.getElementById("shiftSelect").value;
+    html2canvas(area, { scale: 2 }).then(canvas => {
+        const link = document.createElement("a");
+        link.download = `JOBDESK-${shift}-${Date.now()}.png`;
+        link.href = canvas.toDataURL();
+        link.click();
+    });
+}
+
+// Panggil render riwayat saat startup
+window.addEventListener('load', () => {
+    renderJobHistoryList();
+});
