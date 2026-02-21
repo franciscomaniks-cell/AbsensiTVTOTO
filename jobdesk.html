@@ -1,366 +1,97 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TVTOTO | Atur Jobdesk</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <style>
-        :root {
-            --primary: #2e3192; 
-            --accent: #ffff00; 
-            --success: #22c55e; 
-            --danger: #ef4444; 
-            --glass: rgba(10, 10, 25, 0.96); 
-            --border-glass: rgba(255, 255, 255, 0.15);
-        }
-
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: #000 url('background.jpg') no-repeat center center fixed; 
-            background-size: cover;
-            color: #f8fafc;
-            margin: 0;
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* Sidebar Style - Menyesuaikan dengan Dashboard */
-        .sidebar {
-            width: 280px;
-            background: var(--glass);
-            border-right: 1px solid var(--border-glass);
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            backdrop-filter: blur(20px);
-        }
-
-        .sidebar-brand {
-            font-family: 'Orbitron';
-            font-weight: 900;
-            color: var(--accent);
-            font-size: 1.5rem;
-            margin-bottom: 40px;
-            text-align: center;
-        }
-
-        .nav-item {
-            padding: 15px;
-            border-radius: 12px;
-            cursor: pointer;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            transition: 0.3s;
-            color: #ccc;
-            font-weight: 600;
-        }
-
-        .nav-item:hover {
-            background: rgba(255,255,255,0.1);
-            color: #fff;
-        }
-
-        .nav-item.active {
-            background: var(--primary);
-            color: #fff;
-        }
-
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            padding: 30px;
-            overflow-y: auto;
-            background: rgba(0,0,0,0.6);
-        }
-
-        .container { max-width: 1000px; margin: auto; }
-
-        .brand-header {
-            background: var(--glass);
-            padding: 20px;
-            border-radius: 20px;
-            border: 1px solid var(--border-glass);
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .brand-header h1 {
-            font-family: 'Orbitron';
-            margin: 0;
-            font-size: 24px;
-            color: #fff;
-            letter-spacing: 2px;
-        }
-
-        .main-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .card {
-            background: var(--glass);
-            padding: 20px;
-            border-radius: 15px;
-            border: 1px solid var(--border-glass);
-        }
-
-        label {
-            display: block;
-            margin-bottom: 12px;
-            font-size: 12px;
-            color: var(--accent);
-            text-transform: uppercase;
-            font-weight: 800;
-        }
-
-        textarea, select {
-            width: 100%;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border-glass);
-            color: #fff;
-            border-radius: 10px;
-            padding: 12px;
-            font-size: 14px;
-        }
-
-        .btn-group {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 12px;
-            margin-bottom: 30px;
-        }
-
-        button {
-            padding: 15px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 800;
-            transition: 0.3s;
-            font-family: 'Orbitron';
-            font-size: 0.7rem;
-        }
-
-        .btn-acak { background: var(--accent); color: #000; }
-        .btn-png { background: var(--success); color: #000; }
-        .btn-reset { background: var(--danger); color: #fff; }
-
-        /* Area Capture */
-        #captureArea {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            color: #1e293b;
-        }
-
-        .result-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        .result-table th { background: #f1f5f9; padding: 12px; border: 1px solid #e2e8f0; }
-        .result-table td { padding: 12px; border: 1px solid #e2e8f0; text-align: center; font-weight: 700; }
-        
-        .operator-lock { background: #dcfce7 !important; color: #166534; font-weight: 900; }
-        
-        .history-section {
-            margin-top: 40px;
-            background: var(--glass);
-            padding: 20px;
-            border-radius: 20px;
-            border: 1px solid var(--border-glass);
-        }
-
-        .history-item {
-            background: rgba(255,255,255,0.05);
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <div class="sidebar">
-        <div class="sidebar-brand">TVTOTO</div>
-        <div class="nav-item" onclick="location.href='index.html'">
-            🏠 Dashboard Absensi
-        </div>
-        <div class="nav-item active">
-            📝 Atur Jobdesk
-        </div>
-        <div class="nav-item" onclick="alert('Logging out...'); location.href='index.html'">
-            🚪 Logout
-        </div>
-    </div>
-
-    <div class="main-content">
-        <div class="container">
-            <div class="brand-header">
-                <h1>SISTEM PENGACAK JOBDESK</h1>
-                <div id="displayDate" style="color: var(--accent); font-weight: bold; margin-top: 10px;"></div>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="brand-logo-new">TV<span>TOTO</span></div>
             </div>
+            <nav class="nav-menu">
+                <div class="nav-item" onclick="location.href='index.html'">🏠 Home / Absensi</div>
+                <div class="nav-item active">📝 Atur Jobdesk</div>
+                <div class="nav-divider"></div>
+                <div class="nav-item logout" onclick="logout()">🚪 Logout</div>
+            </nav>
+        </aside>
 
-            <div class="card" style="margin-bottom: 20px">
-                <label>🕒 Pilih Shift Kerja</label>
-                <select id="shiftSelect">
-                    <option value="PAGI">SHIFT PAGI</option>
-                    <option value="SORE">SHIFT SORE</option>
-                    <option value="MALAM">SHIFT MALAM</option>
-                </select>
-            </div>
+        <main class="content-wrapper">
+            <div class="jobdesk-container">
+                <div class="brand-header">
+                    <h1>PENGACAK JOBDESK</h1>
+                    <div id="displayDate" style="color: var(--accent); font-weight: bold;"></div>
+                </div>
 
-            <div class="main-grid">
-                <div class="card">
-                    <label>👥 Daftar Staff (Baris 1 = Operator)</label>
-                    <textarea id="staffInput">RADO DINATA
+                <div class="main-grid">
+                    <div class="card">
+                        <label>🕒 Pilih Shift</label>
+                        <select id="shiftSelect">
+                            <option value="PAGI">SHIFT PAGI</option>
+                            <option value="SORE">SHIFT SORE</option>
+                            <option value="MALAM">SHIFT MALAM</option>
+                        </select>
+                        <label style="margin-top:15px">👥 Daftar Staff</label>
+                        <textarea id="staffInput" rows="8">RADO DINATA
 IRVAN GANESHA
-JOSIA ROMANDA GINTING
-MUHAMMAD BAKRON
-JANNIFER MENTARI
-CINDY NURUL
-SENDI REVIAN
-SYUKUR KURNIAWAN
-HARYATI DEWI</textarea>
+JOSIA ROMANDA GINTING</textarea>
+                    </div>
+                    <div class="card">
+                        <label>💼 Daftar Jobdesk</label>
+                        <textarea id="jobInput" rows="12">DEPO BRI
+DEPO MANDIRI
+WD ALL BANK</textarea>
+                    </div>
                 </div>
-                <div class="card">
-                    <label>💼 Daftar Jobdesk</label>
-                    <textarea id="jobInput">DEPO BRI, BNI
-DEPO MANUAL, OGL
-DEPO DANA, SCATTER
-WD BCA, BRI
-WD MANDIRI, BNI
-SCATER
-WD DANA
-WD MANUAL, SEABANK</textarea>
+
+                <div class="btn-group">
+                    <button class="btn-auth" onclick="generateJobdesk()">🎲 ACAK & SIMPAN</button>
+                    <button class="btn-auth" style="background:#22c55e" onclick="downloadImage()">📸 UNDUH PNG</button>
+                </div>
+
+                <div id="captureArea" class="capture-card">
+                    <div class="capture-header">
+                        <h2>LAPORAN TUGAS OPERASIONAL</h2>
+                        <div id="shiftDisplayText" class="shift-tag">SHIFT PAGI</div>
+                    </div>
+                    <table class="result-table">
+                        <thead><tr><th>NAMA PERSONEL</th><th>TUGAS</th></tr></thead>
+                        <tbody id="resultBody"></tbody>
+                    </table>
                 </div>
             </div>
-
-            <div class="btn-group">
-                <button class="btn-acak" onclick="generateJobdesk()">🎲 ACAK & SIMPAN</button>
-                <button class="btn-png" onclick="downloadImage()">📸 UNDUH PNG</button>
-                <button class="btn-reset" onclick="clearHistory()">🗑️ RESET RIWAYAT</button>
-            </div>
-
-            <div id="captureArea">
-                <div style="text-align:center; border-bottom: 3px solid #2e3192; padding-bottom:10px;">
-                    <h2 style="margin:0; color:#2e3192">LAPORAN TUGAS OPERASIONAL</h2>
-                    <div id="shiftDisplayText" style="font-weight:900; color:#15803d; font-size:20px;">SHIFT PAGI</div>
-                    <div id="tableDateText" style="font-weight:bold; color:#64748b;"></div>
-                </div>
-                <table class="result-table">
-                    <thead>
-                        <tr>
-                            <th width="50%">NAMA PERSONEL</th>
-                            <th width="50%">TUGAS</th>
-                        </tr>
-                    </thead>
-                    <tbody id="resultBody"></tbody>
-                </table>
-            </div>
-
-            <div class="history-section">
-                <h3 style="margin-top:0">🕒 Riwayat Penugasan Terakhir</h3>
-                <div id="historyList"></div>
-            </div>
-        </div>
+        </main>
     </div>
-
+    <script src="script.js"></script>
     <script>
+        // Inisialisasi khusus halaman jobdesk
         const dateOptions = { day: "numeric", month: "long", year: "numeric" };
-        const dateNow = new Date().toLocaleDateString("id-ID", dateOptions);
-        document.getElementById("displayDate").innerText = dateNow;
-        document.getElementById("tableDateText").innerText = dateNow;
-
-        let dbHistory = JSON.parse(localStorage.getItem("tvtoto_job_history")) || [];
-
+        document.getElementById("displayDate").innerText = new Date().toLocaleDateString("id-ID", dateOptions);
+        
         function generateJobdesk() {
             const shift = document.getElementById("shiftSelect").value;
-            document.getElementById("shiftDisplayText").innerText = shift;
-
             const staffArr = document.getElementById("staffInput").value.split("\n").filter(t => t.trim() !== "");
             const jobArr = document.getElementById("jobInput").value.split("\n").filter(t => t.trim() !== "");
-
-            if (staffArr.length < 1) return alert("Masukkan nama staff!");
-
-            const operator = staffArr[0];
-            const others = staffArr.slice(1);
+            
+            if(staffArr.length === 0) return alert("Isi nama staff!");
+            
+            document.getElementById("shiftDisplayText").innerText = "SHIFT " + shift;
             let shuffledJobs = [...jobArr].sort(() => Math.random() - 0.5);
-
-            const results = [{ name: operator, job: "OPERATOR" }];
-            others.forEach((name, i) => {
-                results.push({ name, job: shuffledJobs[i] || "OFF / CADANGAN" });
-            });
-
-            renderTable(results);
-            saveData(results, shift);
-        }
-
-        function renderTable(data) {
+            
             const tbody = document.getElementById("resultBody");
-            tbody.innerHTML = data.map((item, i) => `
-                <tr class="${item.job === 'OPERATOR' ? 'operator-lock' : ''}">
-                    <td>${item.name.toUpperCase()}</td>
-                    <td>${item.job.toUpperCase()}</td>
+            tbody.innerHTML = staffArr.map((name, i) => `
+                <tr>
+                    <td>${name.toUpperCase()}</td>
+                    <td>${shuffledJobs[i] || "OFF/CADANGAN"}</td>
                 </tr>
             `).join('');
         }
-
-        function saveData(data, shift) {
-            const entry = { id: Date.now(), date: dateNow, shift, assignments: data };
-            dbHistory.unshift(entry);
-            if (dbHistory.length > 10) dbHistory.pop();
-            localStorage.setItem("tvtoto_job_history", JSON.stringify(dbHistory));
-            renderHistory();
-        }
-
-        function renderHistory() {
-            const container = document.getElementById("historyList");
-            container.innerHTML = dbHistory.map(item => `
-                <div class="history-item" onclick="loadHistory(${item.id})">
-                    <b>${item.shift} - Op: ${item.assignments[0].name}</b>
-                    <small>${item.date}</small>
-                </div>
-            `).join('') || "<p>Belum ada riwayat.</p>";
-        }
-
-        function loadHistory(id) {
-            const item = dbHistory.find(h => h.id === id);
-            if (item) {
-                document.getElementById("shiftDisplayText").innerText = item.shift;
-                renderTable(item.assignments);
-            }
-        }
-
-        function clearHistory() {
-            if (confirm("Hapus semua riwayat?")) {
-                dbHistory = [];
-                localStorage.removeItem("tvtoto_job_history");
-                renderHistory();
-            }
-        }
-
-        function downloadImage() {
-            html2canvas(document.getElementById("captureArea")).then(canvas => {
-                const link = document.createElement("a");
-                link.download = `Jobdesk-${dateNow}.png`;
-                link.href = canvas.toDataURL();
-                link.click();
-            });
-        }
-
-        renderHistory();
-        generateJobdesk();
     </script>
 </body>
 </html>
