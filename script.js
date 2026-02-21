@@ -104,3 +104,76 @@ window.onload = () => {
     }
     render();
 };
+
+// CONFIG & AUTH
+const ADMIN_PIN = "741852963";
+const NAMES = ["MARKUS FEBRIAN", "RADO DINATA", "PUTRI CAHAYA", "MUHAMMAD HABIB", "SELWEN AL KHAIRI"];
+const TARGETS = { "PAGI": "07:45:00", "SHIFT G": "09:45:00", "SHIFT G2": "11:45:00", "SORE": "15:45:00", "MALAM": "21:45:00" };
+
+function handleAuth() {
+    const u = document.getElementById('uUser').value;
+    const p = document.getElementById('uPass').value;
+    let accounts = JSON.parse(localStorage.getItem('tv_accounts') || '{"admin":"admin123"}');
+
+    if (accounts[u] === p) {
+        localStorage.setItem('isLoggedIn', 'true');
+        document.getElementById('authOverlay').style.display = 'none';
+    } else {
+        alert("Akses Ditolak!");
+    }
+}
+
+function showRegister() {
+    document.getElementById('authTitle').innerText = "REGISTER";
+    document.getElementById('uConfirm').style.display = "block";
+    document.getElementById('mainAuthBtn').innerText = "DAFTAR";
+}
+
+function showForgot() {
+    alert("Hubungi IT Administrator untuk reset password.");
+}
+
+function logout() {
+    localStorage.removeItem('isLoggedIn');
+    location.reload();
+}
+
+// ABSENSI LOGIC
+function tambahAbsen() {
+    const name = document.getElementById('iName').value.toUpperCase();
+    const shift = document.getElementById('sShift').value;
+    const time = document.getElementById('clockDisplay').innerText;
+
+    if(!NAMES.includes(name)) return alert("Nama tidak terdaftar!");
+    
+    let db = JSON.parse(localStorage.getItem('tv_v18') || "[]");
+    db.push({ shift, name, target: TARGETS[shift], actual: time });
+    localStorage.setItem('tv_v18', JSON.stringify(db));
+    render();
+}
+
+function render() {
+    const db = JSON.parse(localStorage.getItem('tv_v18') || "[]");
+    const tbody = document.querySelector('#tblMain tbody');
+    if(!tbody) return;
+    tbody.innerHTML = db.reverse().map(x => `
+        <tr>
+            <td>${x.shift}</td>
+            <td>${x.name}</td>
+            <td>${x.target}</td>
+            <td>${x.actual}</td>
+            <td>DONE</td>
+        </tr>
+    `).join('');
+}
+
+// INITIALIZE
+window.onload = () => {
+    if(localStorage.getItem('isLoggedIn') === 'true') {
+        document.getElementById('authOverlay').style.display = 'none';
+    }
+    render();
+    setInterval(() => {
+        document.getElementById('clockDisplay').innerText = new Date().toTimeString().split(' ')[0];
+    }, 1000);
+};
