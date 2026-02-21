@@ -1,81 +1,72 @@
 :root {
-    --bg-dark: #0f0f1e;
-    --sidebar-bg: #16162a;
+    --bg: #050510;
+    --side-bg: #111125;
     --accent: #ffff00;
-    --primary: #2e3192;
-    --danger: #ff0000;
-    --success: #00ff88;
+    --red: #ff0000;
 }
 
-body {
-    margin: 0; background: var(--bg-dark); color: white;
-    font-family: 'Plus Jakarta Sans', sans-serif; overflow: hidden;
+body { margin: 0; background: var(--bg); font-family: 'Plus Jakarta Sans', sans-serif; color: white; overflow: hidden; }
+
+.app-layout { display: flex; height: 100vh; }
+
+/* SIDEBAR (Gambar 1 & 4) */
+.sidebar { width: 260px; background: var(--side-bg); border-right: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; }
+.sidebar-header { padding: 20px; display: flex; justify-content: space-between; }
+.dash-label { background: var(--red); padding: 5px 15px; border-radius: 5px; font-weight: 800; font-size: 14px; }
+
+.side-nav { padding: 10px; flex: 1; }
+.nav-item { padding: 15px; margin-bottom: 5px; border-radius: 8px; cursor: pointer; color: #a0a0b0; }
+.nav-item.active { background: rgba(255,165,0,0.1); color: white; border-left: 4px solid orange; }
+.logout-link { color: #ff7675; margin-top: auto; }
+
+/* MAIN CONTENT (Gambar 2 & 3) */
+.main-screen { flex: 1; padding: 20px; background: url('https://w.wallhaven.cc/full/85/wallhaven-85m89y.jpg') center/cover; }
+
+.top-row { display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+
+/* LOGO BOX (KOTAK MERAH PADA GAMBAR ANDA) */
+.logo-box-red { 
+    background: #111125; border: 2px solid var(--red); border-radius: 12px; 
+    display: flex; align-items: center; justify-content: center; 
 }
-
-.dashboard-wrapper { display: flex; height: 100vh; }
-
-/* SIDEBAR SESUAI GAMBAR */
-.sidebar {
-    width: 260px; background: var(--sidebar-bg);
-    border-right: 1px solid rgba(255,255,255,0.1);
-    display: flex; flex-direction: column;
-}
-
-.sidebar-top {
-    padding: 20px; display: flex; justify-content: space-between; align-items: center;
-}
-
-.dashboard-tag {
-    background: var(--danger); color: white; padding: 8px 15px;
-    font-weight: 800; border-radius: 8px; font-size: 14px;
-}
-
-.nav-menu { padding: 10px; }
-.nav-item {
-    padding: 15px; margin-bottom: 5px; cursor: pointer;
-    border-radius: 8px; color: #a0a0b0; transition: 0.3s;
-}
-
-.nav-item:hover, .nav-item.active {
-    background: rgba(255,255,255,0.05); color: white;
-}
-
-.nav-item.active { border-left: 4px solid orange; background: rgba(255,165,0,0.1); }
-.nav-item.logout { margin-top: 20px; color: #ff7675; }
-
-/* LOGO CONTAINER (PINDAH KE KOTAK MERAH) */
-.logo-container-new {
-    background: #16162a; border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    border: 2px solid var(--danger); /* Identitas kotak merah */
-}
-
-.brand-logo { font-family: 'Orbitron'; font-weight: 900; font-size: 22px; }
+.brand-logo { font-family: 'Orbitron'; font-weight: 900; font-size: 24px; color: #fff; }
 .brand-logo span { color: var(--accent); }
 
-/* MAIN LAYOUT */
-.main-content { flex: 1; padding: 20px; overflow-y: auto; background: url('https://w.wallhaven.cc/full/85/wallhaven-85m89y.jpg'); background-size: cover; }
-.content-grid { display: grid; grid-template-columns: 1fr 320px; gap: 20px; }
+.stat-card { background: rgba(0,0,0,0.8); padding: 15px; border-radius: 12px; text-align: center; font-weight: bold; border-bottom: 4px solid white; }
+.stat-card.ontime { border-color: #00ff88; color: #00ff88; }
+.stat-card.late { border-color: var(--red); color: var(--red); }
+.stat-card.missing { border-color: var(--accent); color: var(--accent); }
 
-.top-stats { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-.stat-box { background: rgba(0,0,0,0.7); padding: 15px; border-radius: 12px; text-align: center; font-weight: 700; border-bottom: 4px solid white; }
-.stat-box.ontime { border-color: var(--success); }
-.stat-box.late { border-color: var(--danger); }
-.stat-box.missing { border-color: var(--accent); }
+/* BANNER */
+.banner-area { display: flex; background: rgba(46, 49, 146, 0.8); border-radius: 12px; margin-bottom: 15px; overflow: hidden; }
+.date-box { background: var(--accent); color: black; padding: 15px 30px; text-align: center; }
+.day-text { font-size: 12px; font-weight: 800; }
+.date-text { font-size: 20px; font-weight: 900; }
+.title-text { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 900; letter-spacing: 5px; }
 
-/* TABEL & CONTROLS */
-.control-panel { background: rgba(0,0,0,0.8); padding: 15px; border-radius: 12px; display: flex; gap: 10px; align-items: center; margin-bottom: 15px; }
-.control-panel select, .control-panel input { padding: 10px; border-radius: 5px; border: none; }
-.clock-box { background: #000; color: var(--success); padding: 10px 20px; border: 1px solid var(--success); font-family: monospace; font-size: 18px; border-radius: 5px; }
+/* CONTROL & TABLE */
+.control-bar { background: rgba(0,0,0,0.9); padding: 12px; border-radius: 12px; display: flex; gap: 10px; align-items: center; margin-bottom: 15px; }
+.digital-clock { background: #000; color: #00ff88; padding: 8px 15px; border-radius: 5px; font-family: monospace; font-size: 18px; border: 1px solid #00ff88; }
 
-/* BUTTONS */
-.btn { border: none; padding: 10px 15px; border-radius: 5px; font-weight: 700; cursor: pointer; color: white; }
-.btn-blue { background: #0984e3; }
-.btn-yellow { background: #fdcb6e; color: black; }
-.btn-green { background: #00b894; }
-.btn-red { background: #d63031; }
+.bottom-grid { display: grid; grid-template-columns: 1fr 300px; gap: 15px; height: 50vh; }
+.table-container { background: white; border-radius: 12px; overflow-y: auto; }
+table { width: 100%; border-collapse: collapse; color: #333; }
+th { background: #2e3192; color: white; padding: 12px; position: sticky; top: 0; }
+td { padding: 10px; border-bottom: 1px solid #eee; text-align: center; font-weight: 700; }
 
-/* AUTH OVERLAY */
-#authOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; display: flex; align-items: center; justify-content: center; }
-.auth-card { background: #1a1a2e; padding: 30px; border-radius: 15px; width: 350px; text-align: center; }
-.auth-card input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; background: #0f0f1e; border: 1px solid #333; color: white; }
+.voice-panel { background: rgba(0,0,0,0.8); border-radius: 12px; display: flex; flex-direction: column; padding: 10px; }
+.voice-header { border-bottom: 1px solid #333; padding-bottom: 10px; font-size: 13px; font-weight: bold; display: flex; justify-content: space-between; }
+.voice-body { flex: 1; overflow-y: auto; padding: 10px 0; }
+.voice-panel input { background: #000; border: none; padding: 10px; color: #00ff88; border-radius: 5px; }
+
+/* AUTH */
+#authOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 9999; display: flex; align-items: center; justify-content: center; }
+.auth-card { background: #1a1a2e; padding: 30px; border-radius: 15px; width: 320px; text-align: center; }
+.auth-card input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; background: #050510; border: 1px solid #333; color: white; box-sizing: border-box; }
+.btn-auth { width: 100%; padding: 12px; background: #2e3192; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+
+.btn { border: none; padding: 8px 15px; border-radius: 5px; font-weight: 800; cursor: pointer; color: white; }
+.btn-blue { background: #0084ff; }
+.btn-yellow { background: #ffcc00; color: black; }
+.btn-green { background: #00c853; }
+.btn-red { background: #ff3d00; }
