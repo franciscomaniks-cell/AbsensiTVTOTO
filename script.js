@@ -217,30 +217,34 @@ function updateClock() {
     document.getElementById('pDay').innerText = now.toLocaleDateString('id-ID', {weekday:'long'}).toUpperCase();
 }
 
-setInterval(updateClock, 1000);
-
-window.onload = () => { 
-    if(localStorage.getItem('tv_isLoggedIn') === 'true') {
-        document.getElementById('authOverlay').style.display = 'none';
-    }
-    window.speechSynthesis.getVoices();
-    updateClock(); 
-    render(); 
-};
+// --- FUNGSI TOGGLE SIDEBAR ---
 function toggleNav() {
     const sidebar = document.getElementById("mySidebar");
+    const mainContent = document.getElementById("mainContent");
     const openBtn = document.getElementById("openBtn");
-    const mainContent = document.querySelector(".main-container");
-    
+
     if (sidebar.style.width === "0px" || sidebar.classList.contains("closed")) {
-        sidebar.style.width = "260px";
+        // Buka Sidebar
+        sidebar.style.width = "250px";
         sidebar.classList.remove("closed");
-        openBtn.style.display = "none";
         mainContent.classList.remove("wide");
+        openBtn.style.display = "none";
     } else {
+        // Tutup Sidebar
         sidebar.style.width = "0px";
         sidebar.classList.add("closed");
-        openBtn.style.display = "block";
         mainContent.classList.add("wide");
+        openBtn.style.display = "block";
     }
 }
+
+// Inisialisasi tampilan awal
+window.addEventListener('load', () => {
+    // Pastikan sidebar terbuka di awal pada desktop
+    if (window.innerWidth > 768) {
+        document.getElementById("mySidebar").style.width = "250px";
+    } else {
+        document.getElementById("mySidebar").style.width = "0px";
+        document.getElementById("openBtn").style.display = "block";
+    }
+});
