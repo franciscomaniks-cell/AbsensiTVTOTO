@@ -3,22 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TVTOTO System</title>
+    <title>TVTOTO Absensi System</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <div id="authOverlay">
-        <div class="auth-card">
-            <h2 id="authTitle">LOGIN SYSTEM</h2>
-            <div id="authFields">
-                <input type="text" id="uUser" placeholder="Username">
-                <input type="password" id="uPass" placeholder="Password">
-            </div>
-            <button class="btn-auth" onclick="handleAuth()">MASUK</button>
-        </div>
-    </div>
 
     <div class="app-container">
         <aside class="sidebar">
@@ -63,10 +52,12 @@
                         <input type="text" id="iName" placeholder="Ketik Nama Staff..." list="staffs">
                         <datalist id="staffs"></datalist>
                         <div id="clockDisplay" class="digital-clock">00:00:00</div>
-                        <button class="btn btn-add" onclick="tambahAbsen()">ABSEN</button>
-                        <button class="btn btn-filter" onclick="filterTelat()">CEK TELAT</button>
-                        <button class="btn btn-csv" onclick="exportData()">CSV</button>
-                        <button class="btn btn-reset" onclick="resetData()">RESET</button>
+                        <div class="btn-group-action">
+                            <button class="btn btn-add" onclick="tambahAbsen()">ABSEN</button>
+                            <button class="btn btn-filter" onclick="filterTelat()">CEK TELAT</button>
+                            <button class="btn btn-csv" onclick="exportData()">CSV</button>
+                            <button class="btn btn-reset" onclick="resetData()">RESET</button>
+                        </div>
                     </div>
 
                     <div class="table-container">
@@ -87,12 +78,23 @@
                 </div>
 
                 <div class="voice-logs-panel">
-                    <div class="chat-header"><strong>SYSTEM VOICE LOGS</strong></div>
+                    <div class="chat-header"><strong>SYSTEM VOICE LOGS</strong><button onclick="hapusChat()" class="btn-clear-chat">Clear</button></div>
                     <div id="chatWrap" class="chat-messages"></div>
                     <div class="chat-footer"><input type="text" id="chatIn" placeholder="Pesan admin..."></div>
                 </div>
             </div>
         </main>
+    </div>
+
+    <div id="authOverlay">
+        <div class="auth-card">
+            <h2 id="authTitle">LOGIN SYSTEM</h2>
+            <div id="authFields">
+                <input type="text" id="uUser" placeholder="Username" autocomplete="off">
+                <input type="password" id="uPass" placeholder="Password">
+            </div>
+            <button class="btn-auth" id="mainAuthBtn" onclick="handleAuth()">MASUK</button>
+        </div>
     </div>
 
     <script src="script.js"></script>
