@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TVTOTO Absensi - POWER</title>
+    <title>TVTOTO Absensi | POWER</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <div id="mySidebar" class="sidebar">
         <div class="sidebar-header">
             <span class="brand-text">POWER</span>
@@ -30,22 +29,30 @@
                 <div id="authFields">
                     <input type="text" id="uUser" placeholder="Username">
                     <input type="password" id="uPass" placeholder="Password">
-                    <input type="password" id="uConfirm" placeholder="Konfirmasi Password" style="display:none;">
+                    <input type="password" id="uConfirm" style="display:none;" placeholder="Konfirmasi Password">
                 </div>
                 <button class="btn-auth" id="mainAuthBtn" onclick="handleAuth()">MASUK</button>
                 <div class="auth-links">
                     <p id="toggleText">Belum punya akun? <span onclick="showRegister()">Daftar</span></p>
-                    <p id="forgotLink"><span onclick="showForgot()">Lupa Password?</span></p>
                 </div>
             </div>
         </div>
 
         <div class="absensi-section">
-            <div class="header-main">
-                <div class="title-panel">ABSEN TVTOTO</div>
-                <div id="clockDisplay" class="digital-clock">00:00:00</div>
+            <div class="stat-grid">
+                <div class="stat-card stat-ontime"><h4>Tepat Waktu</h4><p id="sOn">0</p></div>
+                <div class="stat-card stat-late"><h4>Terlambat</h4><p id="sLate">0</p></div>
+                <div class="stat-card stat-absent"><h4>Belum Absen</h4><p id="sAbs">0</p></div>
             </div>
-            
+
+            <div class="header-main">
+                <div class="date-panel">
+                    <p id="pDay">SENIN</p>
+                    <h2 id="pDate">-- --- ----</h2>
+                </div>
+                <div class="title-panel">ABSEN TVTOTO</div>
+            </div>
+
             <div class="tool-bar">
                 <select id="sShift">
                     <option value="PAGI">PAGI (07:45)</option>
@@ -56,25 +63,40 @@
                 </select>
                 <input type="text" id="iName" placeholder="Ketik Nama Staff..." list="staffs">
                 <datalist id="staffs"></datalist>
+                <div id="clockDisplay" class="digital-clock">00:00:00</div>
                 <button class="btn btn-add" onclick="tambahAbsen()">ABSEN</button>
+                <button class="btn btn-filter" id="btnF" onclick="filterTelat()">CEK TELAT</button>
+                <button class="btn btn-csv" onclick="exportData()">CSV</button>
+                <button class="btn btn-reset" onclick="resetData()">RESET</button>
             </div>
 
-            <table id="tblMain">
-                <thead>
-                    <tr>
-                        <th>SHIFT</th>
-                        <th>NAMA</th>
-                        <th>TARGET</th>
-                        <th>AKTUAL</th>
-                        <th>STATUS</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            <div class="table-pro-wrap">
+                <div class="table-scroll">
+                    <table id="tblMain">
+                        <thead>
+                            <tr>
+                                <th>SHIFT</th>
+                                <th>NAMA STAFF</th>
+                                <th>TARGET</th>
+                                <th>AKTUAL</th>
+                                <th>STATUS</th>
+                                <th width="40"></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-chat">
+            <div class="chat-header"><strong>VOICE LOGS</strong></div>
+            <div class="chat-messages" id="chatWrap"></div>
+            <div class="chat-footer">
+                <input type="text" id="chatIn" placeholder="Pesan admin...">
+            </div>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
