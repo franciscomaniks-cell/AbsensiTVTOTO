@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TVTOTO Absensi - REALTIME DATABASE</title>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    
+    <title>TVTOTO Absensi System v20.0 PRO</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -16,134 +13,313 @@
         * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s ease; }
         body { margin: 0; padding: 0; background: #000 url('background.jpg') no-repeat center center fixed; background-size: cover; height: 100vh; overflow: hidden; display: flex; justify-content: center; align-items: center; color: #fff; }
 
-        /* --- AUTH & APP HIDDEN BY DEFAULT --- */
+        /* --- AUTH STYLING --- */
         #authContainer { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); display: flex; justify-content: center; align-items: center; z-index: 10000; }
-        .auth-card { background: #4a4a4a; padding: 35px; border-radius: 20px; width: 380px; text-align: center; border: 1px solid #5d5d5d; }
-        
-        #mainApp { width: 100%; height: 100%; padding: 20px; display: none; position: relative; }
-        .main-container { display: grid; grid-template-columns: 1fr 380px; gap: 20px; width: 100%; height: 92vh; margin-top: 40px; }
+        .auth-card { background: #4a4a4a; padding: 35px; border-radius: 20px; width: 380px; text-align: center; border: 1px solid #5d5d5d; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
+        .input-group { background: #5d5d5d; border: 1px solid #777; border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; padding: 0 15px; }
+        .input-group span { margin-right: 10px; }
+        .input-group input { background: transparent; border: none; color: #fff; flex: 1; height: 45px; outline: none; }
+        .btn-action { width: 100%; background: #d4a017; color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 1rem; margin-bottom: 10px; }
+        .auth-footer { margin-top: 15px; font-size: 0.75rem; color: #ccc; }
+        .auth-link { color: #d4a017; cursor: pointer; text-decoration: underline; font-weight: bold; }
 
-        /* --- CHAT BOX UI --- */
+        /* --- MAIN APP STYLING --- */
+        #mainApp { width: 100%; height: 100%; padding: 20px; display: none; position: relative; }
+        .btn-logout { position: absolute; top: 20px; right: 20px; background: rgba(255,77,77,0.2); color: #ff4d4d; border: 1px solid #ff4d4d; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: 800; font-size: 0.7rem; z-index: 1001; }
+        .logo-box { position: absolute; top: 20px; left: 20px; width: 120px; z-index: 1000; }
+        .logo-box img { width: 100%; border-radius: 10px; }
+        
+        .main-container { display: grid; grid-template-columns: 1fr 380px; gap: 20px; width: 100%; height: 92vh; margin-top: 40px; }
+        .absensi-section { background: var(--glass); border-radius: 25px; padding: 25px; border: 1px solid var(--border-glass); display: flex; flex-direction: column; }
+        
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; margin-left: 140px; }
+        .stat-card { padding: 10px; border-radius: 12px; text-align: center; background: rgba(0,0,0,0.3); border-bottom: 4px solid #fff; }
+        .stat-card h4 { margin: 0; font-size: 10px; text-transform: uppercase; }
+        .stat-card p { margin: 5px 0 0; font-family: 'Orbitron'; font-size: 1.5rem; font-weight: 900; }
+        
+        .header-main { display: flex; margin-bottom: 20px; border: 2px solid #fff; border-radius: 12px; overflow: hidden; }
+        .date-panel { background: var(--accent); color: #000; padding: 10px; text-align: center; min-width: 150px; }
+        .title-panel { background: linear-gradient(90deg, #000, var(--primary)); flex: 1; display: flex; align-items: center; justify-content: center; font-family: 'Orbitron'; font-size: 1.8rem; letter-spacing: 5px; }
+
+        .tool-bar { display: grid; grid-template-columns: 160px 1fr 160px auto auto auto; gap: 10px; margin-bottom: 20px; }
+        .digital-clock { background: #000; color: #00ff88; border: 1px solid #00ff88; font-family: 'Orbitron'; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-weight: bold; font-size: 1.2rem; }
+        
+        .table-pro-wrap { background: #fff; border-radius: 15px; flex: 1; overflow-y: auto; color: #000; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: var(--primary); color: #fff; padding: 12px; position: sticky; top: 0; font-size: 0.8rem; z-index: 10; }
+        td { padding: 10px; text-align: center; border-bottom: 1px solid #eee; font-weight: bold; font-size: 0.9rem; }
+        .row-late { background: #ffebeb !important; color: #d63031; }
+        .row-ontime { background: #f0fff4 !important; color: #27ae60; }
+
         .sidebar-chat { background: var(--glass); border-radius: 25px; border: 1px solid var(--border-glass); display: flex; flex-direction: column; overflow: hidden; }
         #chatWrap { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
-        .chat-bubble { background: #22252a; padding: 12px; border-radius: 12px; border-left: 4px solid var(--accent); font-size: 0.9rem; }
-        .chat-bubble b { text-transform: uppercase; color: var(--accent); }
         
-        /* Utility */
-        .btn-action { width: 100%; background: var(--accent); color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 800; cursor: pointer; margin-top: 10px; }
-        .input-group { background: #5d5d5d; border: 1px solid #777; border-radius: 8px; margin-bottom: 12px; padding: 10px; display: flex; }
-        .input-group input { background: transparent; border: none; color: #fff; flex: 1; outline: none; }
+        /* Bubble Chat Style - Match with Image User */
+        .chat-bubble { background: #22252a; padding: 12px 18px; border-radius: 12px; border-left: 4px solid var(--accent); font-size: 0.9rem; color: #fff; position: relative; }
+        .chat-bubble b { color: #fff; text-transform: uppercase; margin-right: 5px; }
+        
+        .btn-clear-chat { background: transparent; color: #ff4d4d; border: none; cursor: pointer; font-size: 0.7rem; font-weight: bold; text-decoration: underline; }
     </style>
 </head>
 <body>
 
 <div id="authContainer">
     <div id="loginBox" class="auth-card">
-        <h3 style="font-family:'Orbitron'; color:var(--accent);">LOGIN SYSTEM</h3>
-        <div class="input-group"><input type="text" id="userIn" placeholder="Username"></div>
-        <div class="input-group"><input type="password" id="passIn" placeholder="Password"></div>
+        <h3 style="font-family:'Orbitron'; color:var(--accent); margin-top:0;">LOGIN SYSTEM</h3>
+        <div class="input-group"><span>👤</span><input type="text" id="userIn" placeholder="Username"></div>
+        <div class="input-group"><span>🔒</span><input type="password" id="passIn" placeholder="Password"></div>
         <button class="btn-action" onclick="handleLogin()">➜ Masuk</button>
+        <div class="auth-footer">
+            Belum punya akun? <span class="auth-link" onclick="switchAuth('daftar')">Daftar</span><br>
+            Lupa atau ingin <span class="auth-link" onclick="switchAuth('reset')">Reset Password?</span>
+        </div>
+    </div>
+
+    <div id="daftarBox" class="auth-card" style="display: none;">
+        <h3 style="font-family:'Orbitron';">DAFTAR ADMIN</h3>
+        <div class="input-group"><input type="text" id="newUsers" placeholder="Username Baru"></div>
+        <div class="input-group"><input type="password" id="newPass" placeholder="Password Baru"></div>
+        <button class="btn-action" onclick="handleDaftar()">Buat Akun</button>
+        <div class="auth-footer">Kembali ke <span class="auth-link" onclick="switchAuth('login')">Login</span></div>
+    </div>
+
+    <div id="resetBox" class="auth-card" style="display: none;">
+        <h3 style="font-family:'Orbitron'; color:var(--warning);">RESET PASSWORD</h3>
+        <div class="input-group"><input type="text" id="resetUser" placeholder="Username Anda"></div>
+        <div class="input-group"><input type="password" id="resetPassNew" placeholder="Password Baru"></div>
+        <button class="btn-action" style="background:var(--warning); color:#000;" onclick="handleResetPass()">Update Password</button>
+        <div class="auth-footer">Kembali ke <span class="auth-link" onclick="switchAuth('login')">Login</span></div>
     </div>
 </div>
 
 <div id="mainApp">
-    <button onclick="handleLogout()" style="position:absolute; top:20px; right:20px; color:red; cursor:pointer;">✕ LOGOUT</button>
-    
+    <button class="btn-logout" onclick="handleLogout()">✕ KELUAR SISTEM</button>
+    <div class="logo-box"><img src="logo.png" onerror="this.src='logo.jpg';"></div>
+
     <div class="main-container">
-        <div style="background:var(--glass); border-radius:25px; padding:20px;">
-            <h2 style="font-family:'Orbitron';">SISTEM ABSENSI</h2>
-            <div id="status">Menghubungkan ke Firebase...</div>
-            <hr>
-            <input type="text" id="iName" placeholder="Nama Staff..." style="padding:10px; width:200px;">
-            <button onclick="tambahAbsen()" class="btn-action" style="width:auto;">ABSEN</button>
+        <div class="absensi-section">
+            <div class="stat-grid">
+                <div class="stat-card" style="color:var(--success); border-color:var(--success)"><h4>Tepat</h4><p id="sOn">0</p></div>
+                <div class="stat-card" style="color:var(--danger); border-color:var(--danger)"><h4>Telat</h4><p id="sLate">0</p></div>
+                <div class="stat-card" style="color:var(--warning); border-color:var(--warning)"><h4>Belum</h4><p id="sAbs">65</p></div>
+            </div>
+
+            <div class="header-main">
+                <div class="date-panel"><p id="pDay" style="margin:0; font-size:10px; font-weight:800;">HARI</p><h2 id="pDate" style="margin:0;">TANGGAL</h2></div>
+                <div class="title-panel">ABSEN TVTOTO</div>
+            </div>
+
+            <div class="tool-bar">
+                <select id="sShift" style="padding:10px; border-radius:8px; border:none; font-weight:bold;">
+                    <option value="PAGI">PAGI (07:45)</option>
+                    <option value="SHIFT G">SHIFT G (09:45)</option>
+                    <option value="SORE">SORE (15:45)</option>
+                    <option value="MALAM">MALAM (21:45)</option>
+                </select>
+                <input type="text" id="iName" placeholder="Ketik Nama Staff..." list="staffs" style="padding:10px; border-radius:8px; border:none; font-weight:bold;">
+                <datalist id="staffs"></datalist>
+                <div id="clockDisplay" class="digital-clock">00:00:00</div>
+                <button onclick="tambahAbsen()" style="background:var(--primary); color:white; border:none; padding:0 20px; border-radius:8px; cursor:pointer; font-weight:bold;">ABSEN</button>
+                <button onclick="exportData()" style="background:var(--success); color:black; border:none; padding:0 15px; border-radius:8px; cursor:pointer; font-weight:bold;">CSV</button>
+                <button onclick="resetHarian()" style="background:var(--danger); color:white; border:none; padding:0 15px; border-radius:8px; cursor:pointer; font-weight:bold;">RESET</button>
+            </div>
+
+            <div class="table-pro-wrap">
+                <table id="tblMain">
+                    <thead><tr><th>SHIFT</th><th>NAMA STAFF</th><th>TARGET</th><th>AKTUAL</th><th>STATUS</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </div>
 
         <div class="sidebar-chat">
-            <div style="padding:15px; background:rgba(255,255,255,0.1); font-weight:bold; display:flex; justify-content:space-between;">
-                VOICE LOGS <span onclick="clearChatFirebase()" style="color:red; cursor:pointer; font-size:0.7rem;">HAPUS LOG</span>
+            <div style="padding:15px; background:rgba(255,255,255,0.1); font-weight:bold; font-family:'Orbitron'; font-size:0.8rem; display:flex; justify-content:space-between; align-items:center;">
+                VOICE LOGS 
+                <button class="btn-clear-chat" onclick="clearChat()">HAPUS LOG</button>
             </div>
             <div id="chatWrap"></div>
-            <input type="text" id="chatIn" placeholder="Ketik pesan..." style="margin:15px; padding:12px; border-radius:8px; border:none; background:rgba(255,255,255,0.2); color:white;">
+            <input type="text" id="chatIn" placeholder="Pesan Suara..." style="margin:15px; padding:12px; border-radius:8px; border:none; background:rgba(255,255,255,0.1); color:white;">
         </div>
     </div>
 </div>
 
 <script>
-    // 1. KONFIGURASI FIREBASE (Ganti dengan milik Anda)
-    const firebaseConfig = {
-        apiKey: "MASUKKAN_API_KEY_ANDA",
-        databaseURL: "https://PROYEK-ANDA-default-rtdb.firebaseio.com/",
-        projectId: "PROYEK-ANDA",
-        storageBucket: "PROYEK-ANDA.appspot.com",
-        messagingSenderId: "ID_SENDER",
-        appId: "APP_ID"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+    const NAMES = ["MARKUS FEBRIAN PAMUNGKAS ATJE", "PUTRI CAHAYA", "RADO DINATA", "SELWEN AL KHAIRI", "GIERDAV ALDEN AZUTOS DUMAT", "S PRIYA DARSIN", "DONY KRIS SANDI", "ALIKA SALSABILAH", "MUHAMMAD HABIB", "RIZKY AULIA", "NOVITA SARI", "ZULMADIL REYDINATA", "INDA AFRITYA", "AMANDA REZKY TANJUNG", "SAWALUDDIN HASIBUAN", "RISKA ARNITA PUTRI", "DIAN THERESA SIMAMORA", "JONATHAN QUEEN", "HENDRA", "SENDI REVIAN", "SYUKUR KURNIAWAN", "OGI CANDRA SAPUTRA", "IRVAN GANESHA", "RAHMA TINA", "JOSIA ROMANDA GINTING", "MUHAMMAD BAKRON MAULANA", "JIMMY", "CINDY NURUL AMALIA HASIBUAN", "DEVA NANDA", "MUHAMMAD JUHARI", "FANNY FADILLA", "WIRA ARIA SAPUTRA", "JANNIFER MENTARI SINGKOH", "AGUSSALIM FAJAR", "SASITHAREN", "JUWAN", "FRENDYCO", "KHOIRUL AMRI", "AL BETO", "APRI YOGO JOHANDA SEMBIRING", "ANDI", "FRANS WILLIAM ISKANDAR TAMBUNAN", "INDRA", "WILSON LEO WU", "ECHA ADELIA", "AHLUN IQBAL", "INDRA KURNIAWAN", "MARIO CHRISTOPHER SUNARWAN", "NADYA TASYA", "LUSI", "YOGI ARDIANSYAH", "SANJELIA PUTRI", "ARUN RAJZ", "KHAIRUL AZHAR", "BOBI ARFANDI", "HARIS MULIA MANURUNG", "ANDRA FAUZI", "ADITYA RIWANA", "JOHANDA JAYUSMAN", "SABAR MORANDO FRANCISCO MANIK", "RAJA EDWARD BANGUN", "DENNIS GOLDSTEIN", "DWIKI RAMDANI", "ABDUL TARIGAN", "RAHMAT HIDAYAT"];
+    const TARGETS = { "PAGI": "07:45:00", "SHIFT G": "09:45:00", "SORE": "15:45:00", "MALAM": "21:45:00" };
 
     // --- AUTH LOGIC ---
+    function switchAuth(t) {
+        document.getElementById('loginBox').style.display = t==='login'?'block':'none';
+        document.getElementById('daftarBox').style.display = t==='daftar'?'block':'none';
+        document.getElementById('resetBox').style.display = t==='reset'?'block':'none';
+    }
+
     function handleLogin() {
         const u = document.getElementById('userIn').value.trim();
         const p = document.getElementById('passIn').value.trim();
-        if(u === "admin" && p === "741852963") { // Contoh simple
-            localStorage.setItem('currentUser', u);
+        let users = JSON.parse(localStorage.getItem('tv_users')) || [{user:"admin", pass:"741852963"}];
+        
+        if(users.find(x => x.user === u && x.pass === p)) {
             localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('currentUser', u); // SIMPAN USERNAME AKTIF
             location.reload();
-        } else { alert("User/Pass Salah"); }
+        } else { alert("Login Gagal!"); }
+    }
+
+    function handleDaftar() {
+        const u = document.getElementById('newUsers').value.trim();
+        const p = document.getElementById('newPass').value.trim();
+        if(!u || !p) return alert("Isi data!");
+        let users = JSON.parse(localStorage.getItem('tv_users')) || [{user:"admin", pass:"741852963"}];
+        if(users.some(x => x.user === u)) return alert("Username ada!");
+        users.push({user:u, pass:p});
+        localStorage.setItem('tv_users', JSON.stringify(users));
+        alert("Berhasil!"); switchAuth('login');
+    }
+
+    function handleResetPass() {
+        const u = document.getElementById('resetUser').value.trim();
+        const pNew = document.getElementById('resetPassNew').value.trim();
+        let users = JSON.parse(localStorage.getItem('tv_users')) || [{user:"admin", pass:"741852963"}];
+        const idx = users.findIndex(x => x.user === u);
+        if(idx !== -1) {
+            users[idx].pass = pNew;
+            localStorage.setItem('tv_users', JSON.stringify(users));
+            alert("Selesai!"); switchAuth('login');
+        } else { alert("User tidak ditemukan!"); }
     }
 
     function handleLogout() {
-        localStorage.clear();
-        location.reload();
+        if(confirm("Logout?")) {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('currentUser');
+            location.reload();
+        }
     }
 
-    // --- REALTIME CHAT LOGIC ---
-    const chatRef = db.ref('chats');
+    // --- DYNAMIC CHAT LOGIC ---
+    function clearChat() {
+        if(confirm("Hapus semua pesan?")) {
+            document.getElementById('chatWrap').innerHTML = "";
+            localStorage.removeItem('tv_chat_logs');
+        }
+    }
 
-    // MENGIRIM PESAN
+    function saveChat(user, msg) {
+        let logs = JSON.parse(localStorage.getItem('tv_chat_logs') || "[]");
+        logs.push({ sender: user, text: msg });
+        localStorage.setItem('tv_chat_logs', JSON.stringify(logs));
+    }
+
+    function renderChat() {
+        let logs = JSON.parse(localStorage.getItem('tv_chat_logs') || "[]");
+        const wrap = document.getElementById('chatWrap');
+        wrap.innerHTML = logs.map(m => `
+            <div class="chat-bubble">
+                <b>${m.sender}:</b> ${m.text}
+            </div>`).join('');
+        wrap.scrollTop = wrap.scrollHeight;
+    }
+
+    // --- ABSENSI LOGIC ---
+    function speakAI(t) {
+        window.speechSynthesis.cancel();
+        let ut = new SpeechSynthesisUtterance(t.toLowerCase());
+        ut.lang = 'id-ID'; ut.rate = 0.9;
+        window.speechSynthesis.speak(ut);
+    }
+
+    function hitungTelat(target, aktual) {
+        const [th, tm, ts] = target.split(':').map(Number);
+        const [ah, am, as] = aktual.split(':').map(Number);
+        let diff = (ah*3600+am*60+as) - (th*3600+tm*60+ts);
+        if(diff <= 0) return null;
+        return `${Math.floor(diff/3600)}j ${Math.floor((diff%3600)/60)}m`;
+    }
+
+    function tambahAbsen() {
+        const name = document.getElementById('iName').value.trim().toUpperCase();
+        const shift = document.getElementById('sShift').value;
+        const time = document.getElementById('clockDisplay').innerText;
+        const currentUser = localStorage.getItem('currentUser') || "SYSTEM";
+        
+        if(!NAMES.includes(name)) return alert("Staff tidak terdaftar!");
+        let db = JSON.parse(localStorage.getItem('tv_data') || "[]");
+        if(db.some(x => x.name === name)) return alert("Sudah absen!");
+        
+        const telat = hitungTelat(TARGETS[shift], time);
+        const logMsg = telat ? `${name} TELAT ${telat}` : `${name} TEPAT WAKTU`;
+        
+        speakAI(telat ? `${name} terlambat ${telat}` : `${name} berhasil absen`);
+        saveChat("SYSTEM", logMsg);
+        
+        db.push({shift, name, target:TARGETS[shift], actual:time});
+        localStorage.setItem('tv_data', JSON.stringify(db));
+        document.getElementById('iName').value = ""; 
+        render();
+        renderChat();
+    }
+
+    function render() {
+        let db = JSON.parse(localStorage.getItem('tv_data') || "[]");
+        const tbody = document.querySelector('#tblMain tbody');
+        tbody.innerHTML = "";
+        let lateCount = 0;
+        [...db].reverse().forEach(x => {
+            const t = hitungTelat(x.target, x.actual);
+            if(t) lateCount++;
+            tbody.innerHTML += `
+                <tr class="${t?'row-late':'row-ontime'}">
+                    <td>${x.shift}</td><td>${x.name}</td><td>${x.target}</td><td>${x.actual}</td><td>${t ? 'TELAT ' + t : 'TEPAT'}</td>
+                </tr>`;
+        });
+        document.getElementById('sOn').innerText = db.length - lateCount;
+        document.getElementById('sLate').innerText = lateCount;
+        document.getElementById('sAbs').innerText = NAMES.length - db.length;
+        document.getElementById('staffs').innerHTML = NAMES.map(n => `<option value="${n}">`).join('');
+    }
+
+    function resetHarian() {
+        if(confirm("Reset data?")) { localStorage.removeItem('tv_data'); render(); }
+    }
+
+    function exportData() {
+        let db = JSON.parse(localStorage.getItem('tv_data') || "[]");
+        if(db.length === 0) return alert("Data kosong!");
+        let csv = "SHIFT,NAMA STAFF,TARGET,AKTUAL,STATUS\n" + db.map(x => `${x.shift},${x.name},${x.target},${x.actual},${hitungTelat(x.target,x.actual)?'TELAT':'TEPAT'}`).join('\n');
+        const blob = new Blob([csv], {type:'text/csv'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `Absen_TVTOTO.csv`; a.click();
+    }
+
+    function updateClock() {
+        const now = new Date();
+        document.getElementById('clockDisplay').innerText = now.toTimeString().split(' ')[0];
+        document.getElementById('pDate').innerText = now.toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'}).toUpperCase();
+        document.getElementById('pDay').innerText = now.toLocaleDateString('id-ID', {weekday:'long'}).toUpperCase();
+    }
+
     document.getElementById('chatIn').addEventListener('keypress', (e) => {
         if(e.key === 'Enter') {
-            const user = localStorage.getItem('currentUser') || "Guest";
             const msg = e.target.value;
+            const currentUser = localStorage.getItem('currentUser') || "USER";
             if(!msg) return;
-
-            chatRef.push({
-                sender: user,
-                text: msg,
-                timestamp: Date.now()
-            });
+            saveChat(currentUser, msg);
+            speakAI(msg);
+            renderChat();
             e.target.value = "";
         }
     });
 
-    // MENERIMA PESAN (Realtime Listen)
-    chatRef.on('value', (snapshot) => {
-        const wrap = document.getElementById('chatWrap');
-        wrap.innerHTML = "";
-        snapshot.forEach((child) => {
-            const data = child.val();
-            wrap.innerHTML += `
-                <div class="chat-bubble">
-                    <b>${data.sender}:</b> ${data.text}
-                </div>`;
-        });
-        wrap.scrollTop = wrap.scrollHeight;
-    });
-
-    function clearChatFirebase() {
-        if(confirm("Hapus semua chat untuk SEMUA orang?")) {
-            chatRef.remove();
-        }
-    }
-
-    // --- INITIAL LOAD ---
     window.onload = () => {
         if(localStorage.getItem('isLoggedIn') === 'true') {
             document.getElementById('authContainer').style.display = 'none';
             document.getElementById('mainApp').style.display = 'block';
-            document.getElementById('status').innerText = "🟢 Terhubung ke Server";
+            renderChat();
         }
+        setInterval(updateClock, 1000); 
+        render();
     };
 </script>
 </body>
