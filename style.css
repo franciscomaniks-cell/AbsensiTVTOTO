@@ -109,3 +109,86 @@ tbody tr {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+/* Layout Wrapper */
+.app-wrapper {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* Sidebar Styling Sesuai Gambar */
+.sidebar {
+    width: 280px;
+    background: #0a0b14; /* Biru sangat tua/gelap */
+    border-right: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+}
+
+.sidebar-header {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-text {
+    background: red;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 8px;
+    font-family: 'Plus Jakarta Sans';
+    font-weight: 800;
+    font-size: 1.2rem;
+}
+
+.sidebar-nav {
+    padding: 10px;
+    flex-grow: 1;
+}
+
+.nav-item {
+    padding: 15px;
+    color: #a0a0a0;
+    cursor: pointer;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.nav-item:hover {
+    background: rgba(255,255,255,0.05);
+    color: white;
+}
+
+.nav-item.active {
+    background: #1a1b2e; /* Highlight warna dashboard */
+    color: white;
+    border-left: 4px solid #ffff00; /* Garis kuning di samping */
+}
+
+.nav-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.1);
+    margin: 15px 0;
+}
+
+.logout {
+    color: #ff4d4d;
+}
+
+/* Penyesuaian Main Content agar tidak numpuk */
+.main-container {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 350px; /* Dashboard utama & Voice logs */
+    gap: 15px;
+    padding: 15px;
+    overflow-y: auto;
+}
