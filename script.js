@@ -227,3 +227,20 @@ window.onload = () => {
     updateClock(); 
     render(); 
 };
+function toggleNav() {
+    const sidebar = document.getElementById("mySidebar");
+    const openBtn = document.getElementById("openBtn");
+    const mainContent = document.querySelector(".main-container");
+    
+    if (sidebar.style.width === "0px" || sidebar.classList.contains("closed")) {
+        sidebar.style.width = "260px";
+        sidebar.classList.remove("closed");
+        openBtn.style.display = "none";
+        mainContent.classList.remove("wide");
+    } else {
+        sidebar.style.width = "0px";
+        sidebar.classList.add("closed");
+        openBtn.style.display = "block";
+        mainContent.classList.add("wide");
+    }
+}
