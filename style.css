@@ -1,54 +1,103 @@
 :root {
     --primary: #2e3192;
     --accent: #ffff00;
+    --success: #00ff88;
+    --danger: #ff4d4d;
+    --warning: #ffcc00;
     --glass: rgba(10, 10, 25, 0.96);
     --border-glass: rgba(255, 255, 255, 0.15);
-    --orange-power: #f39c12;
+    --sidebar-w: 260px;
 }
 
-* { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+* { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s ease; }
 
 body {
-    margin: 0; background: #0f101a; color: #fff; height: 100vh; overflow: hidden;
+    margin: 0; padding: 0; color: #fff; height: 100vh;
+    background: #000 url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
+    background-size: cover; overflow: hidden;
 }
 
 /* --- SIDEBAR POWER --- */
 .sidebar {
-    height: 100%; width: 250px; position: fixed; z-index: 2000;
-    top: 0; left: 0; background-color: #1a1b2d; transition: 0.3s;
-    border-right: 1px solid var(--border-glass);
+    height: 100%; width: var(--sidebar-w); position: fixed;
+    z-index: 3000; top: 0; left: 0; background-color: #0a0a1a;
+    border-right: 1px solid var(--border-glass); transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sidebar-header {
-    padding: 20px; display: flex; align-items: center; justify-content: space-between;
-    border-bottom: 1px solid var(--border-glass);
+    padding: 30px 20px; display: flex; align-items: center; justify-content: space-between;
 }
 
 .brand-text {
-    font-family: 'Orbitron'; color: var(--orange-power);
-    font-weight: 900; font-size: 1.2rem; letter-spacing: 2px;
+    font-family: 'Orbitron'; color: var(--accent); font-weight: 900; font-size: 1.5rem; letter-spacing: 3px;
 }
 
 .menu-items a {
-    padding: 15px 25px; text-decoration: none; color: #8a8b9f;
-    display: flex; align-items: center; transition: 0.2s;
+    padding: 15px 25px; text-decoration: none; color: #888; display: flex; align-items: center; font-weight: 600;
 }
 
-.menu-items a.active {
-    background: rgba(243, 156, 18, 0.1); color: #fff;
-    border-left: 4px solid var(--orange-power);
+.menu-items a:hover, .menu-items a.active {
+    color: #fff; background: rgba(255,255,255,0.05); border-left: 4px solid var(--accent);
 }
 
-.main-container { margin-left: 250px; padding: 20px; transition: 0.3s; height: 100vh; display: grid; grid-template-columns: 1fr 350px; gap: 20px; }
-.main-container.wide { margin-left: 0; }
+.open-sidebar-btn {
+    position: fixed; top: 15px; left: 15px; z-index: 2000;
+    background: var(--primary); color: white; border: none; padding: 10px 15px;
+    border-radius: 8px; cursor: pointer; display: none;
+}
 
-/* --- AUTH OVERLAY --- */
+/* --- MAIN LAYOUT --- */
+.main-container {
+    margin-left: var(--sidebar-w); display: grid; grid-template-columns: 1fr 380px;
+    gap: 20px; height: 100vh; padding: 20px; transition: 0.4s;
+}
+
+.main-container.wide { margin-left: 0; grid-template-columns: 1fr; }
+.sidebar.closed { left: -260px; }
+
+/* --- LOGIN SYSTEM --- */
 #authOverlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.9);
-    z-index: 9999; display: flex; align-items: center; justify-content: center;
+    position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px);
+    display: flex; justify-content: center; align-items: center; z-index: 9999;
 }
 
-/* Sisanya gunakan CSS yang sudah Anda miliki untuk tabel dan stat-card */
-.digital-clock { background: #000; color: #00ff88; border: 1px solid #00ff88; font-family: 'Orbitron'; padding: 10px; border-radius: 8px; text-align: center; }
-.btn { cursor: pointer; border: none; border-radius: 5px; font-weight: bold; }
-.btn-add { background: #007bff; color: white; }
+.auth-card {
+    background: #1a1a2e; padding: 40px; border-radius: 20px; width: 100%; max-width: 380px;
+    border: 1px solid var(--border-glass); text-align: center;
+}
+
+.auth-card input {
+    width: 100%; height: 50px; margin-bottom: 15px; background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0 15px; border-radius: 10px;
+}
+
+.btn-auth {
+    width: 100%; background: var(--accent); color: #000; font-weight: 800;
+    height: 50px; border-radius: 10px; cursor: pointer; border: none;
+}
+
+/* --- STATS & TABLE --- */
+.stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
+.stat-card { padding: 15px; border-radius: 12px; background: rgba(0,0,0,0.5); text-align: center; border-bottom: 4px solid #fff; }
+.stat-card p { font-size: 2rem; font-family: 'Orbitron'; margin: 5px 0; }
+
+.absensi-section { background: var(--glass); padding: 25px; border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; }
+.header-main { display: flex; margin-bottom: 20px; border: 1px solid #fff; border-radius: 10px; overflow: hidden; }
+.date-panel { background: var(--accent); color: #000; padding: 10px 20px; text-align: center; }
+.title-panel { background: #000; flex-grow: 1; display: flex; align-items: center; justify-content: center; font-family: 'Orbitron'; font-size: 1.5rem; letter-spacing: 5px; }
+
+.tool-bar { display: grid; grid-template-columns: 150px 1fr 140px auto auto auto auto; gap: 8px; margin-bottom: 15px; }
+.digital-clock { background: #000; color: var(--success); font-family: 'Orbitron'; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+
+.table-pro-wrap { background: #fff; border-radius: 12px; flex-grow: 1; overflow: hidden; }
+table { width: 100%; border-collapse: collapse; color: #000; }
+th { background: var(--primary); color: #fff; padding: 12px; font-size: 0.8rem; }
+td { padding: 10px; text-align: center; border-bottom: 1px solid #eee; font-weight: bold; }
+
+.sidebar-chat { background: var(--glass); border-radius: 20px; display: flex; flex-direction: column; }
+.chat-messages { flex-grow: 1; padding: 15px; overflow-y: auto; }
+.chat-bubble { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid var(--accent); }
+
+/* Jobdesk Card */
+.card-job label { display: block; margin-bottom: 10px; color: var(--accent); font-weight: bold; }
+.card-job textarea { width: 100%; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--border-glass); border-radius: 10px; padding: 10px; }
