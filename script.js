@@ -1,66 +1,89 @@
-// Konfigurasi Sistem
 const STAFF_LIST = ["RADO DINATA", "IRVAN GANESHA", "JOSIA ROMANDA GINTING", "MUHAMMAD BAKRON", "JANNIFER MENTARI", "CINDY NURUL", "SENDI REVIAN", "SYUKUR KURNIAWAN", "HARYATI DEWI"];
 const SHIFT_TIME = { "PAGI": "07:45", "SHIFT G": "09:45", "SORE": "15:45", "MALAM": "21:45" };
-let authMode = 'login';
+let currentMode = 'login';
 
-// --- FITUR SUARA ---
-function bicara(teks) {
-    const msg = new SpeechSynthesisUtterance();
-    msg.text = teks;
-    msg.lang = 'id-ID';
-    msg.rate = 1;
-    window.speechSynthesis.speak(msg);
-}
-
-// --- SISTEM LOGIN ---
-function showRegister() {
-    authMode = 'register';
-    document.getElementById('authTitle').innerText = 'DAFTAR AKUN';
-    document.getElementById('loginFields').style.display = 'none';
-    document.getElementById('registerFields').style.display = 'block';
-    document.getElementById('forgotFields').style.display = 'none';
-    document.getElementById('mainAuthBtn').innerText = 'DAFTAR SEKARANG';
-    document.getElementById('toggleText').innerText = 'Sudah punya akun? Login';
-}
-
-function showForgot() {
-    authMode = 'forgot';
-    document.getElementById('authTitle').innerText = 'LUPA PASSWORD';
-    document.getElementById('loginFields').style.display = 'none';
-    document.getElementById('registerFields').style.display = 'none';
-    document.getElementById('forgotFields').style.display = 'block';
-    document.getElementById('mainAuthBtn').innerText = 'KIRIM PERMINTAAN';
-    document.getElementById('toggleText').innerText = 'Kembali ke Login';
-}
-
-function handleAuth() {
-    if (authMode === 'login') {
-        const u = document.getElementById('uUser').value;
-        const p = document.getElementById('uPass').value;
-        if(u === "admin" && p === "admin123") {
-            localStorage.setItem('tv_logged', 'true');
-            document.getElementById('authOverlay').style.display = 'none';
-            bicara("Selamat datang di sistem absensi TV Toto");
-        } else {
-            alert("Login gagal!");
-        }
-    } else if (authMode === 'register') {
-        alert("Pendaftaran berhasil diajukan ke Admin.");
-        location.reload();
-    } else {
-        alert("Permintaan reset terkirim.");
-        location.reload();
-    }
-}
-
-// --- FITUR ABSENSI ---
+// --- LOGIKA AWAL (CEK LOGIN) ---
 window.onload = () => {
+    const isLogged = localStorage.getItem('tv_logged');
+    const overlay = document.getElementById('authOverlay');
+    
+    if (isLogged === 'true') {
+        overlay.style.display = 'none'; // Tetap sembunyi jika sudah login
+    } else {
+        overlay.style.display = 'flex'; // Tampilkan jika belum
+    }
+    
     setInterval(updateClock, 1000);
-    if(localStorage.getItem('tv_logged') === 'true') document.getElementById('authOverlay').style.display='none';
     document.getElementById('staffs').innerHTML = STAFF_LIST.map(s => `<option value="${s}">`).join('');
     renderTable();
     updateStats();
 };
+
+// --- FITUR CHAT (PERBAIKAN) ---
+function sendAdminChat() {
+    const input = document.getElementById('chatIn');
+    const pesan = input.value.trim();
+    
+    if (pesan !== "") {
+        const time = new Date().toLocaleTimeString('en-GB');
+        const wrap = document.getElementById('chatWrap');
+        
+        // Tambahkan ke log tampilan
+        wrap.innerHTML += `<div><span style="color:#8b949e">[${time}]</span> <span style="color:#fff">Admin:</span> ${pesan}</div>`;
+        
+        // Bicara otomatis jika diawali pesan tertentu (opsional)
+        // bicara(pesan); 
+
+        input.value = ""; // Kosongkan input
+        wrap.scrollTop = wrap.scrollHeight; // Auto scroll ke bawah
+    }
+}
+
+// --- FUNGSI LOGIN / DAFTAR ---
+function toggleAuth(mode) {
+    currentMode = mode;
+    document.getElementById('loginGroup').style.display = 'none';
+    document.getElementById('registerGroup').style.display = 'none';
+    document.getElementById('forgotGroup').style.display = 'none';
+    
+    if(mode === 'login') {
+        document.getElementById('authTitle').innerText = "LOGIN SYSTEM";
+        document.getElementById('loginGroup').style.display = 'block';
+    } else if(mode === 'register') {
+        document.getElementById('authTitle').innerText = "DAFTAR AKUN";
+        document.getElementById('registerGroup').style.display = 'block';
+    } else {
+        document.getElementById('authTitle').innerText = "RESET PASSWORD";
+        document.getElementById('forgotGroup').style.display = 'block';
+    }
+}
+
+function handleAuth() {
+    if (currentMode === 'login') {
+        const u = document.getElementById('uUser').value;
+        const p = document.getElementById('uPass').value;
+        if (u === "admin" && p === "admin123") {
+            localStorage.setItem('tv_logged', 'true');
+            document.getElementById('authOverlay').style.display = 'none';
+            bicara("Selamat datang admin");
+        } else { alert("User atau Password salah!"); }
+    } else {
+        alert("Permintaan berhasil diproses.");
+        toggleAuth('login');
+    }
+}
+
+function logout() {
+    localStorage.removeItem('tv_logged');
+    location.reload();
+}
+
+// --- FITUR ABSENSI ---
+function bicara(teks) {
+    const speech = new SpeechSynthesisUtterance(teks);
+    speech.lang = 'id-ID';
+    window.speechSynthesis.speak(speech);
+}
 
 function updateClock() {
     const now = new Date();
@@ -75,18 +98,17 @@ function tambahAbsen() {
     const shift = document.getElementById('sShift').value;
     const time = document.getElementById('clockDisplay').innerText;
 
-    if (!STAFF_LIST.includes(name)) return alert("Staff tidak terdaftar!");
+    if (!STAFF_LIST.includes(name)) return alert("Nama tidak terdaftar!");
 
     let logs = JSON.parse(localStorage.getItem('tv_logs') || "[]");
-    const isLate = time.substring(0, 5) > SHIFT_TIME[shift];
-    const status = isLate ? "TERLAMBAT" : "TEPAT WAKTU";
+    const status = time.substring(0, 5) > SHIFT_TIME[shift] ? "TERLAMBAT" : "TEPAT WAKTU";
 
     logs.push({ shift, name, target: SHIFT_TIME[shift], actual: time, status });
     localStorage.setItem('tv_logs', JSON.stringify(logs));
 
-    // Suara Konfirmasi
-    bicara(`Absen Berhasil. ${name}. Status. ${status}`);
-    addVoiceLog(`Absen: ${name} - ${status}`);
+    bicara(`${name} berhasil absen. Status ${status}`);
+    const wrap = document.getElementById('chatWrap');
+    wrap.innerHTML += `<div><span style="color:#8b949e">[${time}]</span> ${name} - ${status}</div>`;
     
     document.getElementById('iName').value = "";
     renderTable();
@@ -113,12 +135,4 @@ function updateStats() {
     document.getElementById('sAbs').innerText = 65 - logs.length;
 }
 
-function addVoiceLog(msg) {
-    const wrap = document.getElementById('chatWrap');
-    wrap.innerHTML += `<div><span style="color:#94a3b8">[${new Date().toLocaleTimeString()}]</span> ${msg}</div>`;
-    wrap.scrollTop = wrap.scrollHeight;
-}
-
-function logout() { localStorage.removeItem('tv_logged'); location.reload(); }
 function hapusChat() { document.getElementById('chatWrap').innerHTML = ""; }
-function resetData() { if(confirm("Hapus data hari ini?")) { localStorage.removeItem('tv_logs'); renderTable(); updateStats(); } }
