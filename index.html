@@ -3,108 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TVTOTO Absensi System v18.7 | SECURE EDITION</title>
+    <title>TVTOTO POWER System v18.7</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div id="authOverlay">
     <div class="auth-card">
-        <h2 id="authTitle">LOGIN</h2>
-        <div id="authFields">
-            <input type="text" id="uUser" placeholder="Username">
-            <input type="password" id="uPass" placeholder="Password">
-            <input type="password" id="uConfirm" placeholder="Konfirmasi Password" style="display:none;">
-        </div>
-        <button class="btn-auth" id="mainAuthBtn" onclick="handleAuth()">MASUK</button>
-        <div class="auth-links">
-            <p id="toggleText">Belum punya akun? <span onclick="showRegister()">Daftar</span></p>
-            <p id="forgotLink"><span onclick="showForgot()">Lupa Password?</span></p>
-        </div>
-        <div class="ip-indicator">103.20.83.166 <span class="dot-online">●</span></div>
+        <h2 id="authTitle">POWER LOGIN</h2>
+        <input type="text" id="uUser" placeholder="Username">
+        <input type="password" id="uPass" placeholder="Password">
+        <button class="btn-auth" onclick="handleAuth()">MASUK</button>
     </div>
 </div>
 
-<div class="logo-box"><img src="logo.png" onerror="this.src='logo.jpg';"></div>
-
 <div class="sidebar">
-    <div class="sidebar-header">MENU</div>
-    <a href="javascript:void(0)" class="nav-link active" id="nav-absensi" onclick="showPage('absensi')">DASHBOARD ABSENSI</a>
-    <a href="javascript:void(0)" class="nav-link" id="nav-jobdesk" onclick="showPage('jobdesk')">ATUR JOBDESK</a>
-    <div style="flex-grow:1"></div>
+    <div class="sidebar-header">
+        <div class="brand-power">POWER</div>
+        <div class="brand-sub">CORE SYSTEM</div>
+    </div>
+    <nav>
+        <a href="javascript:void(0)" class="nav-link active" id="nav-absensi" onclick="showPage('absensi')">
+            <span class="icon">📊</span> ABSENSI STAFF
+        </a>
+        <a href="javascript:void(0)" class="nav-link" id="nav-jobdesk" onclick="showPage('jobdesk')">
+            <span class="icon">⚙️</span> ATUR JOBDESK
+        </a>
+    </nav>
+    <div style="flex-grow: 1;"></div>
     <button class="btn-logout-sidebar" onclick="logout()">LOGOUT</button>
 </div>
 
-<div class="main-container">
+<div class="main-content">
     
-    <div id="page-absensi" class="page-content active">
-        <div class="absensi-section">
-            <div class="stat-grid">
-                <div class="stat-card stat-ontime"><h4>Tepat Waktu</h4><p id="sOn">0</p></div>
-                <div class="stat-card stat-late"><h4>Terlambat</h4><p id="sLate">0</p></div>
-                <div class="stat-card stat-absent"><h4>Belum Absen</h4><p id="sAbs">65</p></div>
-            </div>
-
-            <div class="header-main">
-                <div class="date-panel">
-                    <p id="pDay">SENIN</p>
-                    <h2 id="pDate">26 JAN 2026</h2>
+    <div id="page-absensi" class="page-container active">
+        <div class="dashboard-grid">
+            <div class="absensi-left">
+                <div class="stat-row">
+                    <div class="stat-card ontime"><h4>TEPAT WAKTU</h4><p id="sOn">0</p></div>
+                    <div class="stat-card late"><h4>TERLAMBAT</h4><p id="sLate">0</p></div>
+                    <div class="stat-card absent"><h4>BELUM ABSEN</h4><p id="sAbs">0</p></div>
                 </div>
-                <div class="title-panel">ABSEN TVTOTO</div>
-            </div>
 
-            <div class="tool-bar">
-                <select id="sShift">
-                    <option value="PAGI">PAGI (07:45)</option>
-                    <option value="SHIFT G">SHIFT G (09:45)</option>
-                    <option value="SHIFT G2">SHIFT G2 (11:45)</option>
-                    <option value="SORE">SORE (15:45)</option>
-                    <option value="MALAM">MALAM (21:45)</option>
-                </select>
-                <input type="text" id="iName" placeholder="Ketik Nama Staff..." list="staffs">
-                <datalist id="staffs"></datalist>
-                <div id="clockDisplay" class="digital-clock">00:00:00</div>
-                <button class="btn btn-add" onclick="tambahAbsen()">ABSEN</button>
-                <button class="btn btn-filter" id="btnF" onclick="filterTelat()">CEK TELAT</button>
-                <button class="btn btn-csv" onclick="exportData()">CSV</button>
-                <button class="btn btn-reset" onclick="resetData()">RESET</button>
-            </div>
+                <div class="header-banner">
+                    <div class="banner-date">
+                        <p id="pDay">SENIN</p>
+                        <h2 id="pDate">26 JAN 2026</h2>
+                    </div>
+                    <div class="banner-title">ABSENSI TVTOTO</div>
+                </div>
 
-            <div class="table-pro-wrap">
-                <div class="table-scroll">
+                <div class="control-panel">
+                    <select id="sShift">
+                        <option value="PAGI">PAGI (07:45)</option>
+                        <option value="SHIFT G">SHIFT G (09:45)</option>
+                        <option value="SHIFT G2">SHIFT G2 (11:45)</option>
+                        <option value="SORE">SORE (15:45)</option>
+                        <option value="MALAM">MALAM (21:45)</option>
+                    </select>
+                    <input type="text" id="iName" placeholder="Nama Staff..." list="staffs">
+                    <datalist id="staffs"></datalist>
+                    <div id="clockDisplay" class="clock">00:00:00</div>
+                    <button class="btn-primary" onclick="tambahAbsen()">ABSEN</button>
+                    <button class="btn-outline" onclick="exportData()">CSV</button>
+                    <button class="btn-danger" onclick="resetData()">RESET</button>
+                </div>
+
+                <div class="table-wrapper">
                     <table id="tblMain">
                         <thead>
                             <tr>
                                 <th>SHIFT</th>
-                                <th>NAMA STAFF</th>
+                                <th>NAMA</th>
                                 <th>TARGET</th>
                                 <th>AKTUAL</th>
                                 <th>STATUS</th>
-                                <th width="40"></th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
                 </div>
             </div>
-        </div>
-
-        <div class="sidebar-chat">
-            <div class="chat-header"><strong>VOICE LOGS</strong></div>
-            <div class="chat-messages" id="chatWrap"></div>
-            <div class="chat-footer">
-                <input type="text" id="chatIn" placeholder="Pesan admin...">
+            
+            <div class="absensi-right">
+                <div class="voice-logs">
+                    <div class="logs-header">SYSTEM VOICE LOGS</div>
+                    <div id="chatWrap" class="logs-body"></div>
+                    <div class="logs-footer">
+                        <input type="text" id="chatIn" placeholder="Ketik pesan suara...">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div id="page-jobdesk" class="page-content">
-        <div class="absensi-section">
-            <h1 style="color: var(--accent); font-family: Orbitron;">ATUR JOBDESK STAFF</h1>
-            <hr style="border: 0.5px solid rgba(255,255,255,0.1); width: 100%;">
-            <p>Halaman ini sekarang aktif dan tidak akan menghalangi Dashboard Absensi.</p>
+    <div id="page-jobdesk" class="page-container">
+        <div class="jobdesk-grid">
+            <div class="jobdesk-inputs">
+                <div class="card">
+                    <label>🕒 PILIH SHIFT</label>
+                    <select id="shiftSelect">
+                        <option value="PAGI">SHIFT PAGI</option>
+                        <option value="SORE">SHIFT SORE</option>
+                        <option value="MALAM">SHIFT MALAM</option>
+                    </select>
+                </div>
+                <div class="card">
+                    <label>👥 DAFTAR STAFF (Baris 1 = Operator)</label>
+                    <textarea id="staffInput">RADO DINATA
+IRVAN GANESHA
+JOSIA ROMANDA GINTING
+MUHAMMAD BAKRON
+JANNIFER MENTARI
+CINDY NURUL
+SENDI REVIAN
+SYUKUR KURNIAWAN
+HARYATI DEWI</textarea>
+                </div>
+                <div class="card">
+                    <label>💼 DAFTAR JOBDESK</label>
+                    <textarea id="jobInput">DEPO BRI, BNI
+DEPO MANUAL, OGL
+DEPO DANA, SCATTER
+WD BCA, BRI
+WD MANDIRI, BNI
+SCATER
+WD DANA
+WD MANUAL, SEABANK</textarea>
+                </div>
+                <div class="btn-group-vertical">
+                    <button class="btn-primary" onclick="generateJobdesk()">🎲 ACAK & SIMPAN</button>
+                    <button class="btn-outline" onclick="copyToClipboard()">📋 COPY GAMBAR</button>
+                    <button class="btn-success" onclick="downloadImage()">📸 SIMPAN PNG</button>
+                </div>
             </div>
+
+            <div class="jobdesk-preview">
+                <div id="captureArea" class="capture-box">
+                    <div class="capture-header">
+                        <h2>LAPORAN PEMBAGIAN TUGAS</h2>
+                        <div id="shiftDisplayText" class="shift-tag">SHIFT PAGI</div>
+                        <div id="tableDateText" class="date-tag"></div>
+                    </div>
+                    <table class="result-table">
+                        <thead>
+                            <tr>
+                                <th>NAMA PERSONEL</th>
+                                <th>TUGAS OPERASIONAL</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resultBody"></tbody>
+                    </table>
+                </div>
+                
+                <div class="history-box">
+                    <h3>🕒 RIWAYAT TERBARU</h3>
+                    <div id="historyList"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>
