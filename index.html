@@ -9,12 +9,19 @@
 </head>
 <body>
 
-    <nav class="main-nav">
-        <div class="nav-container">
-            <a href="index.html" class="nav-link active">🏠 ABSENSI</a>
-            <a href="jobdesk.html" class="nav-link">📝 ATUR JOBDESK</a>
-        </div>
-    </nav>
+    <div id="mySidebar" class="sidebar">
+    <div class="sidebar-header">
+        <span class="brand-text">POWER</span>
+        <button class="toggle-btn" onclick="toggleNav()">☰</button>
+    </div>
+    <div class="menu-items">
+        <a href="index.html" class="active"><i>🏠</i> Home / Absensi</a>
+        <a href="jobdesk.html"><i>📝</i> Atur Jobdesk</a>
+        <a href="#" onclick="logout()"><i>🚪</i> Logout</a>
+    </div>
+</div>
+
+<button id="openBtn" class="open-btn" onclick="toggleNav()">☰</button>
 
     <div id="authOverlay">
         <div class="auth-card">
@@ -106,3 +113,4 @@
     <script src="script.js"></script>
 </body>
 </html>
+
