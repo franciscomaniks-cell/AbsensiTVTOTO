@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TVTOTO Absensi System</title>
+    <title>TVTOTO Absensi System | Official</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -19,13 +19,16 @@
     </div>
 
     <div class="app-container">
-        <aside class="sidebar">
-            <div class="sidebar-header"><div class="brand-logo">DASHBOARD</div></div>
+        <aside class="sidebar" id="mySidebar">
+            <div class="sidebar-header">
+                <div class="brand-logo">DASHBOARD</div>
+                <button class="menu-toggle">☰</button>
+            </div>
             <nav class="nav-menu">
-                <div class="nav-item active" onclick="location.href='index.html'">🏠 Home / Absensi</div>
-                <div class="nav-item" onclick="location.href='jobdesk.html'">📝 Atur Jobdesk</div>
+                <a href="index.html" class="nav-item active">🏠 Home / Absensi</a>
+                <a href="jobdesk.html" class="nav-item">📝 Atur Jobdesk</a>
                 <div class="nav-divider"></div>
-                <div class="nav-item logout" onclick="logout()">🚪 Logout</div>
+                <a href="#" class="nav-item logout-link" onclick="logout()">🚪 Logout</a>
             </nav>
         </aside>
 
@@ -57,11 +60,14 @@
                         <input type="text" id="iName" placeholder="Ketik Nama Staff..." list="staffs">
                         <datalist id="staffs"></datalist>
                         <div id="clockDisplay" class="digital-clock">00:00:00</div>
-                        <button class="btn btn-blue" onclick="tambahAbsen()">ABSEN</button>
-                        <button class="btn btn-yellow" onclick="filterTelat()">CEK TELAT</button>
-                        <button class="btn btn-green" onclick="exportData()">CSV</button>
-                        <button class="btn btn-red" onclick="resetData()">RESET</button>
-                        <button class="btn btn-gray" onclick="logout()">LOGOUT</button>
+                        
+                        <div class="btn-group">
+                            <button class="btn btn-blue" onclick="tambahAbsen()">ABSEN</button>
+                            <button class="btn btn-yellow" onclick="filterTelat()">CEK TELAT</button>
+                            <button class="btn btn-green" onclick="exportData()">CSV</button>
+                            <button class="btn btn-red" onclick="resetData()">RESET</button>
+                            <button class="btn btn-gray" onclick="logout()">LOGOUT</button>
+                        </div>
                     </div>
 
                     <div class="table-container">
