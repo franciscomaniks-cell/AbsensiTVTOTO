@@ -231,3 +231,34 @@ table {
 
 th { background: #2e3192; color: #fff; padding: 15px; }
 td { padding: 12px; text-align: center; border-bottom: 1px solid #eee; font-weight: 600; }
+
+/* Mengatur grid agar memiliki 4 kolom (1 logo + 3 statistik) */
+.stat-grid {
+    display: grid;
+    grid-template-columns: 120px repeat(3, 1fr); /* Kotak logo lebih kecil, lainnya rata */
+    gap: 15px;
+    margin-bottom: 20px;
+    align-items: stretch;
+}
+
+/* Styling khusus untuk kotak logo di dalam grid */
+.logo-container-repositioned {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px !important;
+    border-radius: 12px;
+}
+
+.mini-logo-dashboard {
+    max-width: 100%;
+    max-height: 50px; /* Sesuaikan dengan tinggi kotak merah */
+    object-fit: contain;
+}
+
+/* Hilangkan container logo lama yang di atas jika sudah tidak diperlukan */
+.top-logo-container {
+    display: none;
+}
