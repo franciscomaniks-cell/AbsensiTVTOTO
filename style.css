@@ -1,200 +1,54 @@
 :root {
-    --primary: #2e3192; 
-    --accent: #ffff00; 
-    --success: #00ff88; 
-    --danger: #ff4d4d; 
-    --warning: #ffcc00;
-    --glass: rgba(10, 10, 25, 0.96); 
+    --primary: #2e3192;
+    --accent: #ffff00;
+    --glass: rgba(10, 10, 25, 0.96);
     --border-glass: rgba(255, 255, 255, 0.15);
+    --orange-power: #f39c12;
 }
 
-* { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s ease; }
-
-body { 
-    margin: 0; padding: 15px; color: #fff; height: 100vh; 
-    background: #000 url('background.jpg') no-repeat center center fixed; 
-    background-size: cover; display: flex; justify-content: center; 
-    overflow: hidden; position: relative; 
-}
-
-/* --- AUTH SYSTEM --- */
-#authOverlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.8); backdrop-filter: blur(20px);
-    display: flex; justify-content: center; align-items: center; z-index: 9999;
-}
-
-.auth-card {
-    background: #444; padding: 40px; border-radius: 20px;
-    width: 100%; max-width: 400px; border: 1px solid rgba(255,255,255,0.1);
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5); text-align: center;
-}
-
-#authTitle { font-family: 'Orbitron'; color: #fff; margin-bottom: 30px; letter-spacing: 2px; }
-
-.auth-card input {
-    width: 100%; height: 50px; margin-bottom: 15px; background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 0 15px; border-radius: 10px; font-size: 1rem;
-}
-
-.btn-auth {
-    width: 100%; background: #c5a021; color: #fff; font-weight: 800;
-    margin-top: 10px; height: 50px; border-radius: 10px; cursor: pointer; border: none; font-size: 1rem;
-}
-
-.auth-links { margin-top: 20px; font-size: 0.85rem; color: #ccc; }
-.auth-links span { color: var(--accent); cursor: pointer; font-weight: bold; }
-.auth-links span:hover { text-decoration: underline; }
-
-.ip-indicator { margin-top: 25px; font-size: 0.8rem; color: #888; letter-spacing: 1px; }
-.dot-online { color: #00ff88; margin-left: 5px; }
-
-/* --- MAIN LAYOUT --- */
-.logo-box { position: absolute; top: 20px; left: 20px; z-index: 1000; width: 120px; }
-.logo-box img { width: 100%; border-radius: 10px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.3)); }
-
-.main-container { display: grid; grid-template-columns: 1fr 380px; gap: 20px; width: 100%; max-width: 1800px; height: 95vh; padding-top: 10px; }
-
-.stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; margin-left: 140px; }
-.stat-card { padding: 12px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); }
-.stat-card h4 { margin: 0; font-size: 0.65rem; text-transform: uppercase; opacity: 0.7; }
-.stat-card p { margin: 5px 0 0; font-size: 1.8rem; font-family: 'Orbitron'; font-weight: 900; }
-.stat-ontime { border-bottom: 4px solid var(--success); color: var(--success); }
-.stat-late { border-bottom: 4px solid var(--danger); color: var(--danger); }
-.stat-absent { border-bottom: 4px solid var(--warning); color: var(--warning); }
-
-.absensi-section { background: var(--glass); backdrop-filter: blur(30px); border-radius: 25px; padding: 25px; border: 1px solid var(--border-glass); display: flex; flex-direction: column; }
-
-.header-main { display: flex; margin-bottom: 20px; border: 2px solid #fff; border-radius: 12px; overflow: hidden; }
-.date-panel { background: var(--accent); color: #000; padding: 10px 20px; text-align: center; min-width: 160px; }
-#pDay { margin:0; font-size:0.6rem; font-weight:800; }
-.title-panel { background: linear-gradient(90deg, #000, var(--primary)); flex-grow: 1; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-family: 'Orbitron'; font-weight: 900; letter-spacing: 8px; }
-
-.tool-bar { display: grid; grid-template-columns: 160px 1fr 160px auto auto auto auto auto; gap: 10px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; margin-bottom: 20px; align-items: center; }
-.digital-clock { background: #000; color: #00ff88; border: 1px solid #00ff88; text-align: center; font-family: 'Orbitron'; font-size: 1.2rem; height: 50px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
-
-input, select { height: 50px; border-radius: 8px; border: none; padding: 0 12px; font-weight: 700; background: #fff; color: #000; }
-
-.btn { height: 50px; padding: 0 15px; border-radius: 8px; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 0.75rem; }
-.btn-add { background: #007bff; color: #fff; }
-.btn-filter { background: var(--accent); color: #000; }
-.btn-filter.active { background: #ff00ff; color: #fff; }
-.btn-csv { background: var(--success); color: #000; }
-.btn-reset { background: var(--danger); color: #fff; }
-.btn-logout { background: #333; color: #fff; border: 1px solid #555; }
-
-.table-pro-wrap { background: #fff; border-radius: 15px; overflow: hidden; flex-grow: 1; display: flex; flex-direction: column; }
-.table-scroll { overflow-y: auto; flex-grow: 1; }
-table { width: 100%; border-collapse: collapse; color: #111; }
-th { background: var(--primary); color: #fff; padding: 15px; position: sticky; top: 0; font-size: 0.7rem; }
-td { padding: 12px; text-align: center; border-bottom: 1px solid #eee; font-weight: 700; }
-.row-late { background: #fff0f0 !important; color: #d63031 !important; }
-.row-ontime { background: #f0fff4 !important; color: #27ae60 !important; }
-.btn-del-pin { background: none; border: none; color: #999; cursor: pointer; font-size: 1.1rem; }
-
-/* --- SIDEBAR CHAT --- */
-.sidebar-chat { background: var(--glass); border-radius: 25px; border: 1px solid var(--border-glass); display: flex; flex-direction: column; overflow: hidden; }
-.chat-header { padding: 15px; background: rgba(255,255,255,0.05); border-bottom: 1px solid var(--border-glass); display: flex; justify-content: space-between; align-items: center; }
-.btn-clear-chat { color:red; background:none; border:none; cursor:pointer; font-size:0.7rem; }
-.chat-messages { flex-grow: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
-.chat-bubble { background: rgba(255,255,255,0.08); padding: 10px; border-radius: 10px; border-left: 3px solid var(--accent); }
-.bubble-name { color: var(--accent); font-size: 0.65rem; font-weight: 800; }
-.chat-footer { padding: 15px; background: rgba(0,0,0,0.3); border-top: 1px solid var(--border-glass); }
-.chat-footer input { width: 100%; height: 40px; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid var(--border-glass); padding: 0 10px; border-radius: 8px; }
-
-:root {
-    --bg-dark: #1a1b2d;
-    --sidebar-w: 250px;
-    --orange-power: #ff9f43;
-}
+* { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
 
 body {
-    margin: 0;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background-color: #0f101a;
-    color: white;
+    margin: 0; background: #0f101a; color: #fff; height: 100vh; overflow: hidden;
 }
 
-/* --- SIDEBAR --- */
+/* --- SIDEBAR POWER --- */
 .sidebar {
-    height: 100%;
-    width: var(--sidebar-w);
-    position: fixed;
-    z-index: 2000;
-    top: 0; left: 0;
-    background-color: var(--bg-dark);
-    transition: 0.3s;
-    border-right: 1px solid rgba(255,255,255,0.1);
+    height: 100%; width: 250px; position: fixed; z-index: 2000;
+    top: 0; left: 0; background-color: #1a1b2d; transition: 0.3s;
+    border-right: 1px solid var(--border-glass);
 }
 
 .sidebar-header {
-    padding: 25px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    padding: 20px; display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--border-glass);
 }
 
 .brand-text {
-    font-family: 'Orbitron';
-    color: var(--orange-power);
-    font-weight: 900;
-    font-size: 1.4rem;
-    letter-spacing: 2px;
+    font-family: 'Orbitron'; color: var(--orange-power);
+    font-weight: 900; font-size: 1.2rem; letter-spacing: 2px;
 }
 
 .menu-items a {
-    padding: 15px 25px;
-    text-decoration: none;
-    color: #8a8b9f;
-    display: flex;
-    align-items: center;
-    transition: 0.2s;
+    padding: 15px 25px; text-decoration: none; color: #8a8b9f;
+    display: flex; align-items: center; transition: 0.2s;
 }
 
 .menu-items a.active {
-    background: rgba(255, 159, 67, 0.1);
-    color: white;
+    background: rgba(243, 156, 18, 0.1); color: #fff;
     border-left: 4px solid var(--orange-power);
 }
 
-.menu-items a:hover {
-    background: rgba(255,255,255,0.05);
-    color: white;
-}
-
-/* --- KONTEN UTAMA --- */
-.main-container {
-    margin-left: var(--sidebar-w);
-    padding: 20px;
-    transition: 0.3s;
-}
-
+.main-container { margin-left: 250px; padding: 20px; transition: 0.3s; height: 100vh; display: grid; grid-template-columns: 1fr 350px; gap: 20px; }
 .main-container.wide { margin-left: 0; }
-.sidebar.closed { width: 0; overflow: hidden; }
 
-.open-sidebar-btn {
-    position: fixed; top: 20px; left: 20px; z-index: 1000;
-    background: var(--bg-dark); color: white; border: 1px solid #333;
-    padding: 10px; cursor: pointer; display: none;
-}
-
-/* --- LOGIN OVERLAY --- */
+/* --- AUTH OVERLAY --- */
 #authOverlay {
     position: fixed; inset: 0; background: rgba(0,0,0,0.9);
     z-index: 9999; display: flex; align-items: center; justify-content: center;
 }
 
-.auth-card {
-    background: var(--bg-dark); padding: 30px; border-radius: 15px;
-    width: 320px; text-align: center; border: 1px solid #333;
-}
-
-input {
-    width: 100%; padding: 12px; margin: 10px 0; border-radius: 5px;
-    border: 1px solid #444; background: #25263a; color: white; box-sizing: border-box;
-}
-
-.btn-auth {
-    width: 100%; padding: 12px; background: var(--orange-power);
-    border: none; border-radius: 5px; cursor: pointer; font-weight: bold;
-}
+/* Sisanya gunakan CSS yang sudah Anda miliki untuk tabel dan stat-card */
+.digital-clock { background: #000; color: #00ff88; border: 1px solid #00ff88; font-family: 'Orbitron'; padding: 10px; border-radius: 8px; text-align: center; }
+.btn { cursor: pointer; border: none; border-radius: 5px; font-weight: bold; }
+.btn-add { background: #007bff; color: white; }
