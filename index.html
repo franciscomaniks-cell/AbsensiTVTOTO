@@ -18,17 +18,18 @@
                 <input type="password" id="uConfirm" placeholder="Konfirmasi Password" style="display:none;">
             </div>
             <button class="btn-auth" id="mainAuthBtn" onclick="handleAuth()">MASUK</button>
+            
             <div class="auth-links">
                 <p id="toggleText">Belum punya akun? <span onclick="showRegister()">Daftar</span></p>
                 <p id="forgotLink"><span onclick="showForgot()">Lupa Password?</span></p>
             </div>
-            <div class="ip-indicator">103.20.83.166 <span class="dot-online">●</span></div>
+            <div class="ip-indicator">
+                103.20.83.166 <span class="dot-online">●</span>
+            </div>
         </div>
     </div>
 
-    <div class="logo-box">
-        <img src="logo.png" onerror="this.src='logo.jpg';">
-    </div>
+    <div class="logo-box"><img src="logo.png" onerror="this.src='logo.jpg';"></div>
 
     <div class="main-container">
         <div class="absensi-section">
@@ -40,8 +41,8 @@
 
             <div class="header-main">
                 <div class="date-panel">
-                    <p id="pDay">SABTU</p>
-                    <h2 id="pDate">21 FEB 2026</h2>
+                    <p id="pDay">SENIN</p>
+                    <h2 id="pDate">26 JAN 2026</h2>
                 </div>
                 <div class="title-panel">ABSEN TVTOTO</div>
             </div>
@@ -58,9 +59,10 @@
                 <datalist id="staffs"></datalist>
                 <div id="clockDisplay" class="digital-clock">00:00:00</div>
                 <button class="btn btn-add" onclick="tambahAbsen()">ABSEN</button>
+                <button class="btn btn-filter" id="btnF" onclick="filterTelat()">CEK TELAT</button>
                 <button class="btn btn-csv" onclick="exportData()">CSV</button>
+                <button class="btn btn-reset" onclick="resetData()">RESET</button>
                 <button class="btn btn-logout" onclick="logout()">LOGOUT</button>
-                <button class="btn btn-jobdesk" onclick="window.location.href='jobdesk.html'">JOBDESK</button>
             </div>
 
             <div class="table-pro-wrap">
@@ -83,7 +85,10 @@
         </div>
 
         <div class="sidebar-chat">
-            <div class="chat-header"><strong>SYSTEM VOICE LOGS</strong></div>
+            <div class="chat-header">
+                <strong>SYSTEM VOICE LOGS</strong>
+                <button onclick="hapusChat()" class="btn-clear-chat">Clear</button>
+            </div>
             <div class="chat-messages" id="chatWrap"></div>
             <div class="chat-footer">
                 <input type="text" id="chatIn" placeholder="Pesan admin...">
