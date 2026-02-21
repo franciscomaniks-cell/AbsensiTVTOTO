@@ -2,37 +2,36 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>TVTOTO - Atur Jobdesk</title>
+    <title>TVTOTO - Jobdesk</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
-    <div class="app-layout">
+    <div class="app-container">
         <aside class="sidebar">
-            <div class="sidebar-header"><div class="dash-label">DASHBOARD</div></div>
-            <nav class="side-nav">
+            <div class="sidebar-header"><div class="dash-tag">DASHBOARD</div></div>
+            <nav class="nav-menu">
                 <div class="nav-item" onclick="location.href='index.html'">🏠 Home / Absensi</div>
                 <div class="nav-item active">📝 Atur Jobdesk</div>
-                <div class="nav-divider"></div>
-                <div class="nav-item logout-link" onclick="logout()">🚪 Logout</div>
+                <div class="nav-spacer"></div>
+                <div class="nav-item logout" onclick="logout()">🚪 Logout</div>
             </nav>
         </aside>
-        <main class="main-screen">
-            <div class="job-container">
-                <h2 style="color:white; margin-bottom:20px">PENGACAK JOBDESK OPERASIONAL</h2>
-                <div class="job-flex">
-                    <div class="input-group">
+        <main class="main-content">
+            <div class="job-card">
+                <h2>PENGACAK JOBDESK OPERASIONAL</h2>
+                <div class="job-inputs">
+                    <div>
                         <label>Daftar Nama Staff</label>
-                        <textarea id="staffList" placeholder="Contoh: RADO DINATA (Enter per nama)"></textarea>
+                        <textarea id="staffList" placeholder="Masukkan nama (1 baris 1 nama)"></textarea>
                     </div>
-                    <div class="input-group">
+                    <div>
                         <label>Daftar Tugas</label>
-                        <textarea id="taskList" placeholder="Contoh: DEPO BRI (Enter per tugas)"></textarea>
+                        <textarea id="taskList" placeholder="Masukkan tugas (1 baris 1 tugas)"></textarea>
                     </div>
                 </div>
-                <button class="btn btn-blue" style="width:100%; margin-top:15px; padding:15px" onclick="generateJobs()">🎲 ACAK & SIMPAN</button>
-                <div id="jobResults" style="margin-top:20px"></div>
+                <button class="btn btn-blue" style="width:100%; margin-top:15px;" onclick="generateJobs()">🎲 ACAK & SIMPAN</button>
+                <div id="jobResults" style="margin-top:20px;"></div>
             </div>
         </main>
     </div>
