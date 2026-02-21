@@ -227,12 +227,3 @@ window.onload = () => {
     updateClock(); 
     render(); 
 };
-
-// Tambahkan ini di script.js
-function goToJobdesk() {
-    window.location.href = 'jobdesk.html';
-}
-
-function goToDashboard() {
-    window.location.href = 'index.html';
-}
