@@ -107,17 +107,16 @@ td { padding: 12px; text-align: center; border-bottom: 1px solid #eee; font-weig
     height: 100%;
     width: 250px;
     position: fixed;
-    z-index: 2000; /* Pastikan di atas konten */
-    top: 0;
-    left: 0;
-    background-color: #1e1e2d; /* Warna gelap POWER */
+    z-index: 2000;
+    top: 0; left: 0;
+    background-color: #1a1b2d; /* Warna biru gelap POWER */
     overflow-x: hidden;
     transition: 0.3s;
     border-right: 1px solid rgba(255,255,255,0.05);
 }
 
 .sidebar-header {
-    padding: 20px;
+    padding: 25px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -126,21 +125,19 @@ td { padding: 12px; text-align: center; border-bottom: 1px solid #eee; font-weig
 
 .brand-text {
     font-family: 'Orbitron';
-    color: #f39c12; /* Warna Orange POWER */
+    color: #ff9f43; /* Warna Orange POWER */
     font-weight: 900;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     letter-spacing: 2px;
 }
 
-.menu-items {
-    padding: 20px 0;
-}
+.menu-items { padding: 20px 0; }
 
 .menu-items a {
     padding: 15px 25px;
     text-decoration: none;
-    font-size: 0.9rem;
-    color: #a2a3b7;
+    font-size: 0.95rem;
+    color: #8a8b9f;
     display: flex;
     align-items: center;
     transition: 0.3s;
@@ -149,55 +146,33 @@ td { padding: 12px; text-align: center; border-bottom: 1px solid #eee; font-weig
 
 .menu-items a:hover, .menu-items a.active {
     background: rgba(255,255,255,0.05);
-    color: #fff;
+    color: #ffffff;
 }
 
-.menu-items a .icon {
-    margin-right: 15px;
-    font-size: 1.1rem;
-}
+.menu-items a .icon { margin-right: 15px; font-size: 1.1rem; }
 
 .toggle-btn-inner {
-    background: none;
-    border: none;
-    color: #fff;
-    cursor: pointer;
-    font-size: 1.2rem;
+    background: none; border: none; color: #fff; cursor: pointer; font-size: 1.2rem;
 }
 
 .open-sidebar-btn {
-    position: fixed;
-    top: 15px;
-    left: 15px;
-    z-index: 1000;
-    background: #1e1e2d;
-    color: white;
-    border: 1px solid rgba(255,255,255,0.1);
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    display: none; /* Muncul saat sidebar tertutup */
+    position: fixed; top: 15px; left: 15px; z-index: 1000;
+    background: #1a1b2d; color: white; border: 1px solid rgba(255,255,255,0.1);
+    padding: 10px 15px; border-radius: 5px; cursor: pointer; display: none;
 }
 
-/* Update Container Utama */
+/* Penyesuaian Konten Utama */
 .main-container {
-    margin-left: 250px; /* Jarak awal saat sidebar buka */
+    margin-left: 250px;
     transition: 0.3s;
-    padding: 20px;
+    min-height: 100vh;
 }
 
-/* State saat sidebar ditutup */
-.sidebar.closed {
-    width: 0;
-}
+.sidebar.closed { width: 0; }
+.main-container.wide { margin-left: 0; }
 
-.main-container.wide {
-    margin-left: 0;
-}
+/* Sembunyikan navigasi lama jika masih ada */
+.main-nav, .nav-container { display: none !important; }
 
-/* Responsif untuk layar kecil */
-@media screen and (max-width: 768px) {
-    .sidebar { width: 0; }
-    .main-container { margin-left: 0; }
-    .open-sidebar-btn { display: block; }
-}
+/* CSS Asli Anda tetap simpan di bawah sini */
+/* ... (kode CSS login, tabel, stat-grid, dll) ... */
