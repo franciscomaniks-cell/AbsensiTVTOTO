@@ -15,46 +15,48 @@
             <div id="authFields">
                 <input type="text" id="uUser" placeholder="Username">
                 <input type="password" id="uPass" placeholder="Password">
-                <input type="password" id="uConfirm" placeholder="Konfirmasi Password" style="display:none;">
+                <input type="password" id="uConfirm" style="display:none;" placeholder="Konfirmasi Password">
             </div>
-            <button class="btn-auth" id="mainAuthBtn" onclick="handleAuth()">MASUK</button>
+            <button class="btn-auth" onclick="handleAuth()">MASUK</button>
             <div class="auth-links">
                 <p id="toggleText">Belum punya akun? <span onclick="showRegister()">Daftar</span></p>
-                <p id="forgotLink"><span onclick="showForgot()">Lupa Password?</span></p>
+                <p onclick="showForgot()"><span>Lupa Password?</span></p>
             </div>
         </div>
     </div>
 
-    <div class="app-layout">
+    <div class="app-container">
         <aside class="sidebar">
             <div class="sidebar-header">
-                <div class="dash-label">DASHBOARD</div>
-                <div class="menu-icon">☰</div>
+                <div class="dash-tag">DASHBOARD</div>
+                <div class="menu-toggle">☰</div>
             </div>
-            <nav class="side-nav">
+            <nav class="nav-menu">
                 <div class="nav-item active" onclick="location.href='index.html'">🏠 Home / Absensi</div>
                 <div class="nav-item" onclick="location.href='jobdesk.html'">📝 Atur Jobdesk</div>
-                <div class="nav-item logout-link" onclick="logout()">🚪 Logout</div>
+                <div class="nav-spacer"></div>
+                <div class="nav-item logout" onclick="logout()">🚪 Logout</div>
             </nav>
         </aside>
 
-        <main class="main-screen">
-            <div class="content-container">
-                <div class="top-row">
-                    <div class="logo-box-red">
-                        <div class="brand-logo">TV<span>TOTO</span></div>
+        <main class="main-content">
+            <div class="dashboard-grid">
+                
+                <div class="stats-row">
+                    <div class="logo-box-final">
+                        <div class="brand-text">TV<span>TOTO</span></div>
                     </div>
-                    <div class="stat-card ontime">TEPAT WAKTU<br><span id="sOn">0</span></div>
-                    <div class="stat-card late">TERLAMBAT<br><span id="sLate">0</span></div>
-                    <div class="stat-card missing">BELUM ABSEN<br><span id="sAbs">65</span></div>
+                    <div class="stat-card success">TEPAT WAKTU<br><span id="sOn">0</span></div>
+                    <div class="stat-card danger">TERLAMBAT<br><span id="sLate">0</span></div>
+                    <div class="stat-card warning">BELUM ABSEN<br><span id="sAbs">65</span></div>
                 </div>
 
-                <div class="banner-area">
-                    <div class="date-box">
-                        <div class="day-text" id="pDay">SABTU</div>
-                        <div class="date-text" id="pDate">21 FEB 2026</div>
+                <div class="hero-banner">
+                    <div class="time-info">
+                        <div id="pDay">SABTU</div>
+                        <div id="pDate">21 FEB 2026</div>
                     </div>
-                    <div class="title-text">ABSEN TVTOTO</div>
+                    <div class="hero-title">ABSEN TVTOTO</div>
                 </div>
 
                 <div class="control-bar">
@@ -67,7 +69,7 @@
                     </select>
                     <input type="text" id="iName" placeholder="Ketik Nama Staff..." list="staffs">
                     <datalist id="staffs"></datalist>
-                    <div id="clockDisplay" class="digital-clock">00:00:00</div>
+                    <div class="clock-display" id="clockDisplay">00:00:00</div>
                     <div class="btn-group">
                         <button class="btn btn-blue" onclick="tambahAbsen()">ABSEN</button>
                         <button class="btn btn-yellow" onclick="filterTelat()">CEK TELAT</button>
@@ -76,24 +78,25 @@
                     </div>
                 </div>
 
-                <div class="bottom-grid">
-                    <div class="table-container">
+                <div class="lower-grid">
+                    <div class="table-wrapper">
                         <table id="tblMain">
                             <thead>
-                                <tr><th>SHIFT</th><th>NAMA</th><th>TARGET</th><th>AKTUAL</th><th>STATUS</th></tr>
+                                <tr><th>SHIFT</th><th>NAMA STAFF</th><th>TARGET</th><th>AKTUAL</th><th>STATUS</th></tr>
                             </thead>
                             <tbody></tbody>
                         </table>
                     </div>
-                    <div class="voice-panel">
-                        <div class="voice-header">SYSTEM VOICE LOGS <span onclick="hapusChat()">Clear</span></div>
-                        <div class="voice-body" id="chatWrap"></div>
+                    <div class="voice-logs">
+                        <div class="logs-header">SYSTEM VOICE LOGS <span onclick="hapusChat()">Clear</span></div>
+                        <div class="logs-body" id="chatWrap"></div>
                         <input type="text" id="chatIn" placeholder="Pesan admin...">
                     </div>
                 </div>
             </div>
         </main>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
