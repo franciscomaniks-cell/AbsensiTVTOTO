@@ -5,6 +5,7 @@
     <title>TVTOTO - Atur Jobdesk</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
     <div class="app-layout">
@@ -13,17 +14,24 @@
             <nav class="side-nav">
                 <div class="nav-item" onclick="location.href='index.html'">🏠 Home / Absensi</div>
                 <div class="nav-item active">📝 Atur Jobdesk</div>
+                <div class="nav-divider"></div>
                 <div class="nav-item logout-link" onclick="logout()">🚪 Logout</div>
             </nav>
         </aside>
         <main class="main-screen">
             <div class="job-container">
-                <h2 style="color:white; margin-bottom:20px">PENGACAK JOBDESK</h2>
+                <h2 style="color:white; margin-bottom:20px">PENGACAK JOBDESK OPERASIONAL</h2>
                 <div class="job-flex">
-                    <textarea id="staffList" placeholder="Daftar Nama..."></textarea>
-                    <textarea id="taskList" placeholder="Daftar Tugas..."></textarea>
+                    <div class="input-group">
+                        <label>Daftar Nama Staff</label>
+                        <textarea id="staffList" placeholder="Contoh: RADO DINATA (Enter per nama)"></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label>Daftar Tugas</label>
+                        <textarea id="taskList" placeholder="Contoh: DEPO BRI (Enter per tugas)"></textarea>
+                    </div>
                 </div>
-                <button class="btn btn-blue" style="width:100%; margin-top:15px; padding:15px" onclick="generateJobs()">ACAK TUGAS</button>
+                <button class="btn btn-blue" style="width:100%; margin-top:15px; padding:15px" onclick="generateJobs()">🎲 ACAK & SIMPAN</button>
                 <div id="jobResults" style="margin-top:20px"></div>
             </div>
         </main>
