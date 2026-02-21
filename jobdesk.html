@@ -2,96 +2,42 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TVTOTO | Atur Jobdesk</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <title>TVTOTO - Atur Jobdesk</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="app-container">
+    <div class="dashboard-wrapper">
         <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="brand-logo-new">TV<span>TOTO</span></div>
+            <div class="sidebar-top">
+                <div class="dashboard-tag">DASHBOARD</div>
             </div>
             <nav class="nav-menu">
                 <div class="nav-item" onclick="location.href='index.html'">🏠 Home / Absensi</div>
                 <div class="nav-item active">📝 Atur Jobdesk</div>
-                <div class="nav-divider"></div>
                 <div class="nav-item logout" onclick="logout()">🚪 Logout</div>
             </nav>
         </aside>
 
-        <main class="content-wrapper">
-            <div class="jobdesk-container">
-                <div class="brand-header">
-                    <h1>PENGACAK JOBDESK</h1>
-                    <div id="displayDate" style="color: var(--accent); font-weight: bold;"></div>
-                </div>
-
-                <div class="main-grid">
-                    <div class="card">
-                        <label>🕒 Pilih Shift</label>
-                        <select id="shiftSelect">
-                            <option value="PAGI">SHIFT PAGI</option>
-                            <option value="SORE">SHIFT SORE</option>
-                            <option value="MALAM">SHIFT MALAM</option>
-                        </select>
-                        <label style="margin-top:15px">👥 Daftar Staff</label>
-                        <textarea id="staffInput" rows="8">RADO DINATA
-IRVAN GANESHA
-JOSIA ROMANDA GINTING</textarea>
+        <main class="main-content">
+            <div class="jobdesk-panel">
+                <h1 style="color:white; margin-bottom: 20px;">PENGACAK JOBDESK OPERASIONAL</h1>
+                <div class="job-grid">
+                    <div class="input-card">
+                        <label>Daftar Staff (Satu nama per baris)</label>
+                        <textarea id="staffList" rows="10"></textarea>
                     </div>
-                    <div class="card">
-                        <label>💼 Daftar Jobdesk</label>
-                        <textarea id="jobInput" rows="12">DEPO BRI
-DEPO MANDIRI
-WD ALL BANK</textarea>
+                    <div class="input-card">
+                        <label>Daftar Tugas</label>
+                        <textarea id="jobList" rows="10"></textarea>
                     </div>
                 </div>
-
-                <div class="btn-group">
-                    <button class="btn-auth" onclick="generateJobdesk()">🎲 ACAK & SIMPAN</button>
-                    <button class="btn-auth" style="background:#22c55e" onclick="downloadImage()">📸 UNDUH PNG</button>
-                </div>
-
-                <div id="captureArea" class="capture-card">
-                    <div class="capture-header">
-                        <h2>LAPORAN TUGAS OPERASIONAL</h2>
-                        <div id="shiftDisplayText" class="shift-tag">SHIFT PAGI</div>
-                    </div>
-                    <table class="result-table">
-                        <thead><tr><th>NAMA PERSONEL</th><th>TUGAS</th></tr></thead>
-                        <tbody id="resultBody"></tbody>
-                    </table>
-                </div>
+                <button class="btn btn-blue" style="width:100%; margin-top:20px; padding:15px" onclick="acakTugas()">GENERATE JOBDESK</button>
+                
+                <div id="resultArea" style="margin-top:30px"></div>
             </div>
         </main>
     </div>
     <script src="script.js"></script>
-    <script>
-        // Inisialisasi khusus halaman jobdesk
-        const dateOptions = { day: "numeric", month: "long", year: "numeric" };
-        document.getElementById("displayDate").innerText = new Date().toLocaleDateString("id-ID", dateOptions);
-        
-        function generateJobdesk() {
-            const shift = document.getElementById("shiftSelect").value;
-            const staffArr = document.getElementById("staffInput").value.split("\n").filter(t => t.trim() !== "");
-            const jobArr = document.getElementById("jobInput").value.split("\n").filter(t => t.trim() !== "");
-            
-            if(staffArr.length === 0) return alert("Isi nama staff!");
-            
-            document.getElementById("shiftDisplayText").innerText = "SHIFT " + shift;
-            let shuffledJobs = [...jobArr].sort(() => Math.random() - 0.5);
-            
-            const tbody = document.getElementById("resultBody");
-            tbody.innerHTML = staffArr.map((name, i) => `
-                <tr>
-                    <td>${name.toUpperCase()}</td>
-                    <td>${shuffledJobs[i] || "OFF/CADANGAN"}</td>
-                </tr>
-            `).join('');
-        }
-    </script>
 </body>
 </html>
