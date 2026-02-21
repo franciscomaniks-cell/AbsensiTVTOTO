@@ -227,3 +227,109 @@ window.onload = () => {
     updateClock(); 
     render(); 
 };
+
+/* ROOT & RESET TETAP SAMA SEPERTI SEBELUMNYA */
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: #000 url('background.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+.app-container {
+    display: flex; /* Membagi Sidebar dan Konten */
+    width: 100vw;
+    height: 100vh;
+}
+
+/* --- SIDEBAR SESUAI GAMBAR --- */
+.sidebar {
+    width: 260px;
+    background: rgba(10, 10, 25, 0.98);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    backdrop-filter: blur(15px);
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.brand-logo {
+    font-family: 'Orbitron';
+    color: var(--accent);
+    font-weight: 900;
+    font-size: 1.4rem;
+}
+
+.nav-item {
+    padding: 14px 18px;
+    color: #a0a0b0;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.nav-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+}
+
+.nav-item.active {
+    background: var(--primary); /* Biru Tua sesuai gambar */
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.nav-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 20px 0;
+}
+
+/* --- CONTENT WRAPPER --- */
+.content-wrapper {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.absensi-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px; /* Tabel Absensi & Voice Logs */
+    gap: 20px;
+    height: calc(100vh - 120px);
+}
+
+.absensi-main {
+    background: var(--glass);
+    border-radius: 25px;
+    padding: 25px;
+    border: 1px solid var(--border-glass);
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Penyesuaian agar Stat Grid tidak terlalu ke kiri --- */
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+/* CSS SISANYA (Table, Button, Clock, dll) TETAP SAMA SEPERTI KODE LAMA ANDA */
