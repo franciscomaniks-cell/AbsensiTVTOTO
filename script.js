@@ -1,38 +1,86 @@
+// --- KONFIGURASI DATA ---
 const ADMIN_PIN = "741852963"; 
 const NAMES = ["MARKUS FEBRIAN PAMUNGKAS ATJE", "PUTRI CAHAYA", "RADO DINATA", "SELWEN AL KHAIRI", "GIERDAV ALDEN AZUTOS DUMAT", "S PRIYA DARSIN", "DONY KRIS SANDI", "ALIKA SALSABILAH", "MUHAMMAD HABIB", "RIZKY AULIA", "NOVITA SARI", "ZULMADIL REYDINATA", "INDA AFRITYA", "AMANDA REZKY TANJUNG", "SAWALUDDIN HASIBUAN", "RISKA ARNITA PUTRI", "DIAN THERESA SIMAMORA", "JONATHAN QUEEN", "HENDRA", "SENDI REVIAN", "SYUKUR KURNIAWAN", "OGI CANDRA SAPUTRA", "IRVAN GANESHA", "RAHMA TINA", "JOSIA ROMANDA GINTING", "MUHAMMAD BAKRON MAULANA", "JIMMY", "CINDY NURUL AMALIA HASIBUAN", "DEVA NANDA", "MUHAMMAD JUHARI", "FANNY FADILLA", "WIRA ARIA SAPUTRA", "JANNIFER MENTARI SINGKOH", "AGUSSALIM FAJAR", "SASITHAREN", "JUWAN", "FRENDYCO", "KHOIRUL AMRI", "AL BETO", "APRI YOGO JOHANDA SEMBIRING", "ANDI", "FRANS WILLIAM ISKANDAR TAMBUNAN", "INDRA", "WILSON LEO WU", "ECHA ADELIA", "AHLUN IQBAL", "INDRA KURNIAWAN", "MARIO CHRISTOPHER SUNARWAN", "NADYA TASYA", "LUSI", "YOGI ARDIANSYAH", "SANJELIA PUTRI", "ARUN RAJZ", "KHAIRUL AZHAR", "BOBI ARFANDI", "HARIS MULIA MANURUNG", "ANDRA FAUZI", "ADITYA RIWANA", "JOHANDA JAYUSMAN", "SABAR MORANDO FRANCISCO MANIK", "RAJA EDWARD BANGUN", "DENNIS GOLDSTEIN", "DWIKI RAMDANI", "ABDUL TARIGAN", "RAHMAT HIDAYAT"];
 const TARGETS = { "PAGI": "07:45:00", "SHIFT G": "09:45:00", "SHIFT G2": "11:45:00", "SORE": "15:45:00", "MALAM": "21:45:00" };
 let modeTelat = false;
+let authMode = 'LOGIN';
 
-// LOGIN & SESSION
-function cekLogin() {
-    const user = document.getElementById('adminUser').value.trim();
-    const pass = document.getElementById('adminPass').value.trim();
-    if(user.toLowerCase() === "admin" && pass === ADMIN_PIN) {
-        localStorage.setItem('tv_auth', 'true');
-        document.getElementById('loginPage').style.display = 'none';
-        document.getElementById('mainApp').style.display = 'block';
-        speakAI("Login sukses. Selamat bekerja.");
-    } else {
-        alert("Username atau Password Salah!");
+// --- SISTEM AUTH (LOGIN, DAFTAR, RESET) ---
+function handleAuth() {
+    const user = document.getElementById('uUser').value.trim();
+    const pass = document.getElementById('uPass').value.trim();
+    const conf = document.getElementById('uConfirm').value.trim();
+    let accounts = JSON.parse(localStorage.getItem('tv_accounts') || '{"admin":"admin123"}');
+
+    if(!user || !pass) return alert("Harap isi semua kolom!");
+
+    if(authMode === 'LOGIN') {
+        if(accounts[user] && accounts[user] === pass) {
+            localStorage.setItem('tv_isLoggedIn', 'true');
+            document.getElementById('authOverlay').style.display = 'none';
+            speakAI("Akses diterima. Selamat datang.");
+        } else { alert("Username atau Password salah!"); }
+    } 
+    else if(authMode === 'REGISTER') {
+        if(accounts[user]) return alert("Username sudah digunakan!");
+        accounts[user] = pass;
+        localStorage.setItem('tv_accounts', JSON.stringify(accounts));
+        alert("Pendaftaran Berhasil! Silakan Login.");
+        showLogin();
+    }
+    else if(authMode === 'FORGOT') {
+        if(!accounts[user]) return alert("Username tidak ditemukan!");
+        if(pass !== conf) return alert("Konfirmasi password tidak cocok!");
+        accounts[user] = pass;
+        localStorage.setItem('tv_accounts', JSON.stringify(accounts));
+        alert("Password berhasil diperbarui!");
+        showLogin();
     }
 }
 
+function showRegister() {
+    authMode = 'REGISTER';
+    document.getElementById('authTitle').innerText = 'DAFTAR';
+    document.getElementById('mainAuthBtn').innerText = 'BUAT AKUN';
+    document.getElementById('uConfirm').style.display = 'none';
+    document.getElementById('forgotLink').style.display = 'none';
+    document.getElementById('toggleText').innerHTML = 'Sudah punya akun? <span onclick="showLogin()">Masuk</span>';
+}
+
+function showLogin() {
+    authMode = 'LOGIN';
+    document.getElementById('authTitle').innerText = 'LOGIN';
+    document.getElementById('mainAuthBtn').innerText = 'MASUK';
+    document.getElementById('uConfirm').style.display = 'none';
+    document.getElementById('forgotLink').style.display = 'block';
+    document.getElementById('toggleText').innerHTML = 'Belum punya akun? <span onclick="showRegister()">Daftar</span>';
+}
+
+function showForgot() {
+    authMode = 'FORGOT';
+    document.getElementById('authTitle').innerText = 'RESET';
+    document.getElementById('mainAuthBtn').innerText = 'UPDATE PASSWORD';
+    document.getElementById('uPass').placeholder = 'Password Baru';
+    document.getElementById('uConfirm').style.display = 'block';
+    document.getElementById('toggleText').innerHTML = '<span onclick="showLogin()">Kembali ke Login</span>';
+}
+
 function logout() {
-    if(confirm("Keluar dari sistem?")) {
-        localStorage.removeItem('tv_auth');
+    if(confirm("Apakah anda ingin logout?")) {
+        localStorage.removeItem('tv_isLoggedIn');
         location.reload();
     }
 }
 
-// LOGIKA ABSENSI
+// --- SISTEM ABSENSI ---
 function speakAI(text) {
     const synth = window.speechSynthesis;
     synth.cancel(); 
-    let utter = new SpeechSynthesisUtterance(text.toLowerCase());
+    const utter = new SpeechSynthesisUtterance(text.toLowerCase());
     const voices = synth.getVoices();
     const idVoice = voices.find(v => v.lang.includes('id-ID'));
     if (idVoice) utter.voice = idVoice;
-    utter.lang = 'id-ID'; utter.rate = 1.0;
+    utter.lang = 'id-ID';
     synth.speak(utter);
 }
 
@@ -45,7 +93,8 @@ function hitungSelisih(target, aktual) {
     if (diff <= 0) return null;
     const h = Math.floor(diff/3600);
     const m = Math.floor((diff%3600)/60);
-    return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:00`;
+    const s = diff%60;
+    return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
 }
 
 function tambahAbsen() {
@@ -56,12 +105,12 @@ function tambahAbsen() {
     
     if(!NAMES.includes(name)) return alert("Nama tidak terdaftar!");
     let db = JSON.parse(localStorage.getItem('tv_v18') || "[]");
-    if(db.some(x => x.name === name)) return alert("Sudah absen!");
+    if(db.some(x => x.name === name)) return alert("Staff sudah absen!");
 
     const telat = hitungSelisih(TARGETS[shift], time);
     if(telat) {
         const [h, m] = telat.split(':').map(Number);
-        speakAI(`Perhatian ${name.toLowerCase()}, anda terlambat ${h} jam ${m} menit.`);
+        speakAI(`Perhatian ${name.toLowerCase()}, terlambat ${h} jam ${m} menit.`);
     } else {
         speakAI(`Selamat datang ${name.toLowerCase()}.`);
     }
@@ -77,14 +126,14 @@ function hapusSatu(nama) {
         db = db.filter(x => x.name !== nama);
         localStorage.setItem('tv_v18', JSON.stringify(db));
         render();
-    }
+    } else { alert("PIN Salah!"); }
 }
 
 function resetData() {
     if(prompt("PIN ADMIN:") === ADMIN_PIN) {
         localStorage.removeItem('tv_v18');
         render();
-    }
+    } else { alert("PIN Salah!"); }
 }
 
 function render() {
@@ -127,7 +176,7 @@ function filterTelat() {
 
 function exportData() {
     const db = JSON.parse(localStorage.getItem('tv_v18') || "[]");
-    if (db.length === 0) return;
+    if (db.length === 0) return alert("Tidak ada data!");
     let csv = "SHIFT,NAMA,TARGET,AKTUAL,STATUS\n";
     db.forEach(x => {
         const t = hitungSelisih(x.target, x.actual);
@@ -136,14 +185,14 @@ function exportData() {
     const blob = new Blob([csv], {type: 'text/csv'});
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = `ABSEN_${new Date().toLocaleDateString()}.csv`;
+    a.download = `ABSEN_TVTOTO_${new Date().toLocaleDateString()}.csv`;
     a.click();
 }
 
 function renderChat() {
     const box = document.getElementById('chatWrap');
     const c = JSON.parse(localStorage.getItem('tv_chat_v18') || "[]");
-    box.innerHTML = c.map(m => `<div class="chat-bubble"><span class="bubble-name">ADMIN</span><br><span>${m.text}</span></div>`).join('');
+    box.innerHTML = c.map(m => `<div class="chat-bubble"><span class="bubble-name">ADMIN</span><br><span style="font-size:0.85rem;">${m.text}</span></div>`).join('');
     box.scrollTop = box.scrollHeight;
 }
 
@@ -153,11 +202,13 @@ document.getElementById('chatIn').addEventListener('keypress', (e) => {
         let c = JSON.parse(localStorage.getItem('tv_chat_v18') || "[]");
         c.push({ text: pesan });
         localStorage.setItem('tv_chat_v18', JSON.stringify(c));
-        speakAI(pesan); e.target.value = ""; renderChat();
+        speakAI(pesan); 
+        e.target.value = ""; 
+        renderChat();
     }
 });
 
-function hapusChat() { if(confirm("Hapus log?")) { localStorage.removeItem('tv_chat_v18'); renderChat(); } }
+function hapusChat() { if(confirm("Hapus log suara?")) { localStorage.removeItem('tv_chat_v18'); renderChat(); } }
 
 function updateClock() {
     const now = new Date();
@@ -167,10 +218,12 @@ function updateClock() {
 }
 
 setInterval(updateClock, 1000);
+
 window.onload = () => { 
-    updateClock(); render(); 
-    if(localStorage.getItem('tv_auth') === 'true') {
-        document.getElementById('loginPage').style.display = 'none';
-        document.getElementById('mainApp').style.display = 'block';
+    if(localStorage.getItem('tv_isLoggedIn') === 'true') {
+        document.getElementById('authOverlay').style.display = 'none';
     }
+    window.speechSynthesis.getVoices();
+    updateClock(); 
+    render(); 
 };
