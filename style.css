@@ -127,86 +127,65 @@ body {
     height: 100vh;
 }
 
-/* --- SIDEBAR SESUAI GAMBAR --- */
+/* --- SIDEBAR STYLE --- */
 .sidebar {
     width: 260px;
-    background: rgba(10, 10, 25, 0.98);
+    background: rgba(10, 10, 25, 0.95);
     border-right: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     flex-direction: column;
     padding: 20px;
-    backdrop-filter: blur(15px);
-}
-
-.sidebar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 40px;
 }
 
 .brand-logo {
     font-family: 'Orbitron';
-    color: var(--accent);
+    color: #ffff00; /* Warna Kuning TVTOTO */
     font-weight: 900;
-    font-size: 1.4rem;
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 40px;
 }
 
 .nav-item {
-    padding: 14px 18px;
-    color: #a0a0b0;
-    border-radius: 12px;
+    padding: 15px;
+    color: #fff;
+    border-radius: 10px;
     margin-bottom: 8px;
     cursor: pointer;
     font-weight: 600;
     transition: 0.3s;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.nav-item:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: #fff;
 }
 
 .nav-item.active {
-    background: var(--primary); /* Biru Tua sesuai gambar */
-    color: #fff;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    background: #2e3192; /* Warna Biru sesuai Atur Jobdesk */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
 }
 
-.nav-divider {
-    height: 1px;
-    background: rgba(255, 255, 255, 0.1);
-    margin: 20px 0;
+.nav-item:hover:not(.active) {
+    background: rgba(255,255,255,0.05);
 }
 
-/* --- CONTENT WRAPPER --- */
+/* --- DASHBOARD LAYOUT GRID --- */
 .content-wrapper {
     flex: 1;
     padding: 20px;
     overflow-y: auto;
-    background: rgba(0, 0, 0, 0.4);
 }
 
-.absensi-layout {
+.dashboard-layout {
     display: grid;
-    grid-template-columns: 1fr 340px; /* Tabel Absensi & Voice Logs */
+    grid-template-columns: 1fr 320px; /* Area Tabel & Area Chat */
     gap: 20px;
-    height: calc(100vh - 120px);
 }
 
-.absensi-main {
-    background: var(--glass);
-    border-radius: 25px;
-    padding: 25px;
-    border: 1px solid var(--border-glass);
-    display: flex;
-    flex-direction: column;
+.absensi-panel {
+    background: rgba(0,0,0,0.5);
+    border-radius: 20px;
+    padding: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
-/* --- Penyesuaian agar Stat Grid tidak terlalu ke kiri --- */
+/* --- STATS CARD --- */
 .stat-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -214,4 +193,41 @@ body {
     margin-bottom: 20px;
 }
 
-/* CSS SISANYA (Table, Button, Clock, dll) TETAP SAMA SEPERTI KODE LAMA ANDA */
+.stat-card {
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+    border-bottom: 4px solid transparent;
+}
+
+.stat-card.ontime { background: rgba(34, 197, 94, 0.2); border-color: #22c55e; color: #22c55e; }
+.stat-card.late { background: rgba(239, 68, 68, 0.2); border-color: #ef4444; color: #ef4444; }
+.stat-card.total { background: rgba(245, 158, 11, 0.2); border-color: #f59e0b; color: #f59e0b; }
+
+/* --- DIGITAL CLOCK --- */
+.digital-clock {
+    background: #000;
+    color: #00ff00;
+    padding: 10px 15px;
+    font-family: 'Orbitron';
+    border: 1px solid #00ff00;
+    border-radius: 8px;
+    font-size: 1.1rem;
+}
+
+/* --- TABLE STYLE --- */
+.table-container {
+    margin-top: 20px;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #333;
+}
+
+th { background: #2e3192; color: #fff; padding: 15px; }
+td { padding: 12px; text-align: center; border-bottom: 1px solid #eee; font-weight: 600; }
