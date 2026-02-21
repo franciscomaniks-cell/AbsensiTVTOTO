@@ -10,42 +10,40 @@
 <body>
 
     <div id="mySidebar" class="sidebar">
-    <div class="sidebar-header">
-        <span class="brand-text">POWER</span>
-        <button class="toggle-btn" onclick="toggleNav()">☰</button>
-    </div>
-    <div class="menu-items">
-        <a href="index.html" class="active"><i>🏠</i> Home / Absensi</a>
-        <a href="jobdesk.html"><i>📝</i> Atur Jobdesk</a>
-        <a href="#" onclick="logout()"><i>🚪</i> Logout</a>
-    </div>
-</div>
-
-<button id="openBtn" class="open-btn" onclick="toggleNav()">☰</button>
-
-    <div id="authOverlay">
-        <div class="auth-card">
-            <h2 id="authTitle">LOGIN</h2>
-            <div id="authFields">
-                <input type="text" id="uUser" placeholder="Username">
-                <input type="password" id="uPass" placeholder="Password">
-                <input type="password" id="uConfirm" placeholder="Konfirmasi Password" style="display:none;">
-            </div>
-            <button class="btn-auth" id="mainAuthBtn" onclick="handleAuth()">MASUK</button>
-            
-            <div class="auth-links">
-                <p id="toggleText">Belum punya akun? <span onclick="showRegister()">Daftar</span></p>
-                <p id="forgotLink"><span onclick="showForgot()">Lupa Password?</span></p>
-            </div>
-            <div class="ip-indicator">
-                103.20.83.166 <span class="dot-online">●</span>
-            </div>
+        <div class="sidebar-header">
+            <span class="brand-text">POWER</span>
+            <button class="toggle-btn-inner" onclick="toggleNav()">☰</button>
+        </div>
+        <div class="menu-items">
+            <a href="index.html" class="active"><span class="icon">🏠</span> Home / Absensi</a>
+            <a href="jobdesk.html"><span class="icon">📝</span> Atur Jobdesk</a>
+            <a href="#" onclick="logout()"><span class="icon">🚪</span> Logout</a>
         </div>
     </div>
 
-    <div class="logo-box"><img src="logo.png" onerror="this.src='logo.jpg';"></div>
+    <button id="openBtn" class="open-sidebar-btn" onclick="toggleNav()">☰</button>
 
-    <div class="main-container">
+    <div class="main-container" id="mainContent">
+        
+        <div id="authOverlay">
+            <div class="auth-card">
+                <h2 id="authTitle">LOGIN</h2>
+                <div id="authFields">
+                    <input type="text" id="uUser" placeholder="Username">
+                    <input type="password" id="uPass" placeholder="Password">
+                    <input type="password" id="uConfirm" placeholder="Konfirmasi Password" style="display:none;">
+                </div>
+                <button class="btn-auth" id="mainAuthBtn" onclick="handleAuth()">MASUK</button>
+                <div class="auth-links">
+                    <p id="toggleText">Belum punya akun? <span onclick="showRegister()">Daftar</span></p>
+                    <p id="forgotLink"><span onclick="showForgot()">Lupa Password?</span></p>
+                </div>
+                <div class="ip-indicator">103.20.83.166 <span class="dot-online">●</span></div>
+            </div>
+        </div>
+
+        <div class="logo-box"><img src="logo.png" onerror="this.src='logo.jpg';"></div>
+
         <div class="absensi-section">
             <div class="stat-grid">
                 <div class="stat-card stat-ontime"><h4>Tepat Waktu</h4><p id="sOn">0</p></div>
@@ -113,4 +111,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-
