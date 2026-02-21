@@ -1,105 +1,83 @@
-:root {
-    --primary: #2e3192; --accent: #c5a021; --success: #00ff88; --danger: #ff4d4d; --warning: #ffcc00;
-    --glass: rgba(15, 15, 25, 0.98); --border-glass: rgba(255, 255, 255, 0.1);
+// Data Default
+const ADMIN_PIN = "741852963";
+const DEFAULT_ACCOUNTS = {"admin": {"pass": "admin123", "email": "admin@tvtoto.com"}};
+const NAMES = ["MARKUS FEBRIAN PAMUNGKAS ATJE", "PUTRI CAHAYA", "RADO DINATA", "SELWEN AL KHAIRI", "GIERDAV ALDEN AZUTOS DUMAT", "DIAN THERESA SIMAMORA"]; // Masukkan sisa nama di sini
+
+function handleAuth() {
+    const user = document.getElementById('uUser').value.trim();
+    const pass = document.getElementById('uPass').value.trim();
+    const email = document.getElementById('uEmail').value.trim();
+    let accounts = JSON.parse(localStorage.getItem('tv_accounts')) || DEFAULT_ACCOUNTS;
+
+    // Cek Mode (Login atau Daftar)
+    if(document.getElementById('uEmail').style.display === 'none') {
+        if(accounts[user] && accounts[user].pass === pass) {
+            localStorage.setItem('tv_isLoggedIn', 'true');
+            localStorage.setItem('tv_currentUser', user);
+            document.getElementById('authOverlay').style.display = 'none';
+            loadProfile();
+        } else { alert("Username atau Password Salah!"); }
+    } else {
+        if(!user || !pass || !email) return alert("Mohon lengkapi semua data!");
+        accounts[user] = { pass: pass, email: email };
+        localStorage.setItem('tv_accounts', JSON.stringify(accounts));
+        alert("Pendaftaran Berhasil! Silakan Login.");
+        showLogin();
+    }
 }
 
-* { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.25s ease; }
-
-body { 
-    margin: 0; padding: 15px; color: #fff; height: 100vh; 
-    background: radial-gradient(circle at center, #222, #000); 
-    display: flex; justify-content: center; overflow: hidden; position: relative; 
+function showRegister() {
+    document.getElementById('authTitle').innerText = "DAFTAR AKUN";
+    document.getElementById('uEmail').style.display = "block";
+    document.getElementById('uConfirm').style.display = "block";
+    document.getElementById('mainAuthBtn').innerText = "Buat Akun";
+    document.getElementById('toggleText').innerHTML = 'Sudah punya akun? <span onclick="showLogin()">Masuk</span>';
 }
 
-/* AUTH CARD (Gambar 1) */
-#authOverlay { 
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-    background: rgba(0,0,0,0.85); backdrop-filter: blur(20px); 
-    display: flex; justify-content: center; align-items: center; z-index: 9999; 
+function showLogin() {
+    document.getElementById('authTitle').innerText = "LOGIN";
+    document.getElementById('uEmail').style.display = "none";
+    document.getElementById('uConfirm').style.display = "none";
+    document.getElementById('mainAuthBtn').innerText = "➜ Masuk";
+    document.getElementById('toggleText').innerHTML = 'Belum punya akun? <span onclick="showRegister()">Daftar</span>';
 }
 
-.auth-card { 
-    background: #3a3a3a; padding: 40px; border-radius: 20px; 
-    width: 100%; max-width: 420px; border: 1px solid #555; 
-    text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
+function loadProfile() {
+    const user = localStorage.getItem('tv_currentUser');
+    const accs = JSON.parse(localStorage.getItem('tv_accounts')) || DEFAULT_ACCOUNTS;
+    if(user && accs[user]) {
+        document.getElementById('displayProfileName').innerText = user.toUpperCase();
+        document.getElementById('displayProfileEmail').innerText = accs[user].email;
+        document.getElementById('headerName').innerText = user.toUpperCase();
+        document.getElementById('headerEmail').innerText = accs[user].email;
+        document.getElementById('avatarInitial').innerText = user.charAt(0).toUpperCase();
+        document.getElementById('avatarSmall').innerText = user.charAt(0).toUpperCase();
+    }
 }
 
-.input-group { position: relative; margin-bottom: 15px; }
-.input-group .icon { position: absolute; left: 15px; top: 15px; opacity: 0.5; }
-.auth-card input { 
-    width: 100%; height: 55px; background: #4a4a4a; border: 1px solid #666; 
-    color: #fff; padding: 0 15px 0 45px; border-radius: 12px; font-size: 1rem;
+function toggleUserMenu() {
+    const menu = document.getElementById('userDropup');
+    menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
 }
 
-.btn-auth { 
-    width: 100%; background: var(--accent); color: #fff; font-weight: 800; 
-    height: 55px; border-radius: 12px; cursor: pointer; border: none; 
-    font-size: 1.1rem; box-shadow: 0 4px 15px rgba(197, 160, 33, 0.4); 
+function logout() {
+    localStorage.removeItem('tv_isLoggedIn');
+    location.reload();
 }
 
-.auth-links { margin-top: 20px; font-size: 0.85rem; color: #bbb; }
-.auth-links span { color: var(--accent); cursor: pointer; font-weight: 700; }
+// Update Jam
+setInterval(() => {
+    const now = new Date();
+    document.getElementById('clockDisplay').innerText = now.toTimeString().split(' ')[0];
+    document.getElementById('pDate').innerText = now.toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'}).toUpperCase();
+}, 1000);
 
-.ip-indicator { margin-top: 30px; font-size: 0.85rem; color: #777; font-family: 'Orbitron'; }
-.dot-online { color: #00ff88; text-shadow: 0 0 5px #00ff88; }
+window.onload = () => {
+    if(localStorage.getItem('tv_isLoggedIn') === 'true') {
+        document.getElementById('authOverlay').style.display = 'none';
+        loadProfile();
+    }
+    render();
+};
 
-/* LAYOUT UTAMA */
-.main-container { 
-    display: grid; grid-template-columns: 1fr 380px; gap: 20px; 
-    width: 100%; max-width: 1800px; height: 95vh; padding-top: 10px; position: relative; 
-}
-
-.absensi-section { 
-    background: var(--glass); border-radius: 25px; padding: 25px; 
-    border: 1px solid var(--border-glass); display: flex; flex-direction: column; 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-
-.stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; margin-left: 140px; }
-.stat-card { padding: 12px; border-radius: 12px; text-align: center; background: rgba(255,255,255,0.03); }
-.stat-card p { margin: 5px 0 0; font-size: 1.8rem; font-family: 'Orbitron'; font-weight: 900; }
-
-.header-main { display: flex; margin-bottom: 20px; border: 2px solid #fff; border-radius: 12px; overflow: hidden; }
-.date-panel { background: #ffff00; color: #000; padding: 10px 20px; text-align: center; min-width: 160px; font-weight: 800; }
-.title-panel { 
-    background: linear-gradient(90deg, #000, var(--primary)); flex-grow: 1; 
-    display: flex; align-items: center; justify-content: center; 
-    font-size: 1.8rem; font-family: 'Orbitron'; font-weight: 900; letter-spacing: 5px; 
-}
-
-/* TABEL */
-.table-pro-wrap { background: #fff; border-radius: 15px; overflow: hidden; flex-grow: 1; margin-top: 10px; }
-.table-scroll { overflow-y: auto; height: 100%; }
-table { width: 100%; border-collapse: collapse; color: #111; }
-th { background: var(--primary); color: #fff; padding: 15px; font-size: 0.7rem; position: sticky; top: 0; }
-td { padding: 12px; text-align: center; border-bottom: 1px solid #eee; font-weight: 700; }
-
-/* PROFILE BOX (Gambar 2) */
-.user-profile-wrapper { position: absolute; bottom: 0; left: 0; width: 280px; }
-.support-label { color: #666; font-size: 0.8rem; margin-bottom: 10px; padding-left: 10px; cursor: pointer; }
-.profile-card { 
-    background: #111; border: 1px solid #333; border-radius: 12px; 
-    padding: 10px; display: flex; align-items: center; cursor: pointer; 
-}
-.avatar { 
-    width: 40px; height: 40px; background: var(--accent); border-radius: 8px; 
-    display: flex; align-items: center; justify-content: center; 
-    font-weight: 800; color: #000; margin-right: 12px; 
-}
-.profile-name { font-size: 0.85rem; font-weight: 700; color: #fff; }
-.profile-email { font-size: 0.7rem; color: #555; }
-.profile-arrow { margin-left: auto; transform: rotate(-90deg); color: #444; }
-
-.user-dropup { 
-    position: absolute; bottom: 75px; left: 0; width: 100%; 
-    background: #1a1a1a; border: 1px solid #333; border-radius: 12px; 
-    display: none; flex-direction: column; overflow: hidden; 
-}
-.dropup-item { padding: 12px 15px; font-size: 0.85rem; color: #ccc; cursor: pointer; border-bottom: 1px solid #222; }
-.dropup-item:hover { background: #222; }
-
-/* TOOLBAR */
-.tool-bar { display: grid; grid-template-columns: 160px 1fr 160px auto auto auto auto; gap: 10px; margin-bottom: 10px; }
-.digital-clock { background: #000; color: #00ff88; border: 1px solid #00ff88; border-radius: 8px; font-family: 'Orbitron'; display: flex; align-items: center; justify-content: center; }
-.btn { border: none; border-radius: 8px; font-weight: 800; cursor: pointer; padding: 0 15px; height: 50px; }
-.btn-add { background: #007bff; color: #fff; }
+// ... Tambahkan fungsi tambahAbsen(), render(), dll dari kode sebelumnya ...
