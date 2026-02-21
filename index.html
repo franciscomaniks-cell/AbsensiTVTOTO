@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TVTOTO Absensi System</title>
+    <title>TVTOTO Absensi System v18.7</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -13,46 +13,46 @@
         <div class="auth-card">
             <h2 id="authTitle">LOGIN SYSTEM</h2>
             <div id="authFields">
-                <input type="text" id="uUser" placeholder="Username">
+                <input type="text" id="uUser" placeholder="Username" autocomplete="off">
                 <input type="password" id="uPass" placeholder="Password">
             </div>
-            <button class="btn-auth" onclick="handleAuth()">MASUK</button>
+            <button class="btn-auth" id="mainAuthBtn" onclick="handleAuth()">MASUK</button>
         </div>
     </div>
 
     <div class="app-container">
-        
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="brand-logo">TVTOTO</div>
             </div>
             <nav class="nav-menu">
-                <div class="nav-item active" onclick="location.href='index.html'">
-                    🏠 Dashboard Absensi
-                </div>
-                <div class="nav-item" onclick="location.href='jobdesk.html'">
-                    📝 Atur Jobdesk
-                </div>
+                <div class="nav-item active" onclick="location.href='index.html'">🏠 Dashboard Absensi</div>
+                <div class="nav-item" onclick="location.href='jobdesk.html'">📝 Atur Jobdesk</div>
                 <div class="nav-divider"></div>
-                <div class="nav-item logout" onclick="logout()">
-                    🚪 Logout
-                </div>
+                <div class="nav-item logout" onclick="logout()">🚪 Logout</div>
             </nav>
         </aside>
 
         <main class="content-wrapper">
-            <div class="top-logo-container">
-                <div class="logo-box">
-                    <img src="logo.png" alt="TVTOTO Logo" onerror="this.src='https://via.placeholder.com/50/FF0000/FFFFFF?text=TV'">
-                </div>
-            </div>
-
             <div class="dashboard-layout">
+                
                 <div class="absensi-panel">
                     <div class="stat-grid">
-                        <div class="stat-card ontime"><h4>TEPAT WAKTU</h4><p id="sOn">0</p></div>
-                        <div class="stat-card late"><h4>TERLAMBAT</h4><p id="sLate">0</p></div>
-                        <div class="stat-card total"><h4>BELUM ABSEN</h4><p id="sAbs">65</p></div>
+                        <div class="stat-card logo-box-red">
+                            <img src="logo.png" class="img-in-stats" onerror="this.src='logo.jpg'">
+                        </div>
+                        <div class="stat-card ontime">
+                            <h4>TEPAT WAKTU</h4>
+                            <p id="sOn">0</p>
+                        </div>
+                        <div class="stat-card late">
+                            <h4>TERLAMBAT</h4>
+                            <p id="sLate">0</p>
+                        </div>
+                        <div class="stat-card total">
+                            <h4>BELUM ABSEN</h4>
+                            <p id="sAbs">65</p>
+                        </div>
                     </div>
 
                     <div class="header-main">
@@ -73,7 +73,7 @@
                         <input type="text" id="iName" placeholder="Ketik Nama Staff..." list="staffs">
                         <datalist id="staffs"></datalist>
                         <div id="clockDisplay" class="digital-clock">00:00:00</div>
-                        <div class="btn-group-action">
+                        <div class="action-buttons">
                             <button class="btn btn-add" onclick="tambahAbsen()">ABSEN</button>
                             <button class="btn btn-filter" onclick="filterTelat()">CEK TELAT</button>
                             <button class="btn btn-csv" onclick="exportData()">CSV</button>
@@ -104,15 +104,5 @@
                         <strong>SYSTEM VOICE LOGS</strong>
                         <button onclick="hapusChat()" class="btn-clear">Clear</button>
                     </div>
-                    <div class="chat-messages" id="chatWrap"></div>
+                    <div id="chatWrap" class="chat-messages"></div>
                     <div class="chat-footer">
-                        <input type="text" id="chatIn" placeholder="Pesan admin...">
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <script src="script.js"></script>
-</body>
-</html>
