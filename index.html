@@ -7,53 +7,60 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="cyber-bg">
+<body>
 
     <div id="authOverlay" style="display: none;">
         <div class="auth-card">
-            <h2>LOGIN SYSTEM</h2>
-            <input type="text" id="uUser" placeholder="Username">
-            <input type="password" id="uPass" placeholder="Password">
-            <button onclick="handleAuth()">MASUK</button>
-            <div class="auth-links">
-                <a href="#">Belum punya akun? Daftar</a>
-                <a href="#">Lupa Password?</a>
+            <h2 id="authTitle">LOGIN SYSTEM</h2>
+            <div id="authFields">
+                <input type="text" id="uUser" placeholder="Username">
+                <input type="password" id="uPass" placeholder="Password">
+            </div>
+            <button class="btn-auth" onclick="handleAuth()">MASUK</button>
+            <div style="margin-top: 15px; font-size: 12px; color: #8b949e;">
+                <a href="#" style="color: #d4a017; text-decoration: none;">Belum punya akun? Daftar</a> | 
+                <a href="#" style="color: #8b949e; text-decoration: none;">Lupa Password?</a>
             </div>
         </div>
     </div>
 
     <div class="app-container">
-        <aside id="sidebar" class="sidebar">
+        <aside class="sidebar">
             <div class="sidebar-header">
-                <span class="brand-text">DASHBOARD</span>
-                <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+                <div class="brand-logo">TVTOTO</div>
             </div>
             <nav class="nav-menu">
-                <a href="#" class="nav-item active">🏠 Home / Absensi</a>
-                <a href="jobdesk.html" class="nav-item">📝 Atur Jobdesk</a>
-                <div class="nav-spacer"></div>
-                <a href="javascript:void(0)" class="nav-item logout" onclick="logout()">🚪 Logout</a>
+                <div class="nav-item active" onclick="location.href='index.html'">🏠 Dashboard Absensi</div>
+                <div class="nav-item" onclick="location.href='jobdesk.html'">📝 Atur Jobdesk</div>
+                <div class="nav-divider"></div>
+                <div class="nav-item logout" onclick="logout()">🚪 Logout</div>
             </nav>
         </aside>
 
-        <main class="main-content">
-            <div class="stats-container">
-                <div class="stat-box green"><span>TEPAT WAKTU</span><h3 id="sOn">0</h3></div>
-                <div class="stat-box red"><span>TERLAMBAT</span><h3 id="sLate">0</h3></div>
-                <div class="stat-box yellow"><span>BELUM ABSEN</span><h3 id="sAbs">65</h3></div>
-            </div>
-
-            <div class="absensi-banner">
-                <div class="date-side">
-                    <small id="pDay">SABTU</small>
-                    <h2 id="pDate">21 FEB 2026</h2>
+        <main class="content-wrapper">
+            <div class="top-logo-container">
+                <div class="logo-box">
+                    <img src="logo.png" alt="TVTOTO Logo" onerror="this.src='https://via.placeholder.com/50/FF0000/FFFFFF?text=TV'">
                 </div>
-                <div class="title-side">ABSEN TVTOTO</div>
             </div>
 
-            <div class="workspace">
-                <div class="left-panel">
-                    <div class="control-bar">
+            <div class="dashboard-layout">
+                <div class="absensi-panel">
+                    <div class="stat-grid">
+                        <div class="stat-card ontime"><h4>TEPAT WAKTU</h4><p id="sOn">0</p></div>
+                        <div class="stat-card late"><h4>TERLAMBAT</h4><p id="sLate">0</p></div>
+                        <div class="stat-card total"><h4>BELUM ABSEN</h4><p id="sAbs">65</p></div>
+                    </div>
+
+                    <div class="header-main">
+                        <div class="date-panel">
+                            <p id="pDay">SABTU</p>
+                            <h2 id="pDate">21 FEB 2026</h2>
+                        </div>
+                        <div class="title-panel">ABSEN TVTOTO</div>
+                    </div>
+
+                    <div class="tool-bar">
                         <select id="sShift">
                             <option value="PAGI">PAGI (07:45)</option>
                             <option value="SHIFT G">SHIFT G (09:45)</option>
@@ -62,16 +69,16 @@
                         </select>
                         <input type="text" id="iName" placeholder="Ketik Nama Staff..." list="staffs">
                         <datalist id="staffs"></datalist>
-                        <div class="digital-clock" id="clockDisplay">00:00:00</div>
-                        <div class="button-group">
-                            <button class="btn-absen" onclick="tambahAbsen()">ABSEN</button>
-                            <button class="btn-cek" onclick="filterTelat()">CEK TELAT</button>
-                            <button class="btn-csv" onclick="exportData()">CSV</button>
-                            <button class="btn-reset" onclick="resetData()">RESET</button>
+                        <div id="clockDisplay" class="digital-clock">00:00:00</div>
+                        <div class="btn-group-action">
+                            <button class="btn btn-add" onclick="tambahAbsen()">ABSEN</button>
+                            <button class="btn btn-filter" onclick="filterTelat()">CEK TELAT</button>
+                            <button class="btn btn-csv" onclick="exportData()">CSV</button>
+                            <button class="btn btn-reset" onclick="resetData()">RESET</button>
                         </div>
                     </div>
 
-                    <div class="table-wrapper">
+                    <div class="table-container">
                         <table id="tblMain">
                             <thead>
                                 <tr>
@@ -80,6 +87,7 @@
                                     <th>TARGET</th>
                                     <th>AKTUAL</th>
                                     <th>STATUS</th>
+                                    <th>AKSI</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -87,12 +95,12 @@
                     </div>
                 </div>
 
-                <div class="right-panel">
+                <div class="voice-logs-panel">
                     <div class="chat-header">
-                        <span>SYSTEM VOICE LOGS</span>
-                        <button onclick="hapusChat()">Clear</button>
+                        <strong>SYSTEM VOICE LOGS</strong>
+                        <button onclick="hapusChat()" class="btn-clear">Clear</button>
                     </div>
-                    <div class="chat-content" id="chatWrap"></div>
+                    <div class="chat-messages" id="chatWrap"></div>
                     <div class="chat-footer">
                         <input type="text" id="chatIn" placeholder="Pesan admin..." onkeypress="if(event.key==='Enter') sendAdminChat()">
                     </div>
