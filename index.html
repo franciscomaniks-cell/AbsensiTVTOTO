@@ -12,50 +12,48 @@
     <div id="authOverlay" style="display: none;">
         <div class="auth-card">
             <h2>LOGIN SYSTEM</h2>
-            <div class="auth-inputs">
-                <input type="text" id="uUser" placeholder="Username">
-                <input type="password" id="uPass" placeholder="Password">
-            </div>
-            <button class="btn-masuk" onclick="handleAuth()">MASUK</button>
-            <div class="auth-footer">
+            <input type="text" id="uUser" placeholder="Username">
+            <input type="password" id="uPass" placeholder="Password">
+            <button onclick="handleAuth()">MASUK</button>
+            <div class="auth-links">
                 <a href="#">Belum punya akun? Daftar</a>
                 <a href="#">Lupa Password?</a>
             </div>
         </div>
     </div>
 
-    <div class="app-wrapper">
+    <div class="app-container">
         <aside id="sidebar" class="sidebar">
             <div class="sidebar-header">
-                <span class="brand">DASHBOARD</span>
+                <span class="brand-text">DASHBOARD</span>
                 <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
             </div>
             <nav class="nav-menu">
-                <a href="index.html" class="nav-item active">🏠 Home / Absensi</a>
+                <a href="#" class="nav-item active">🏠 Home / Absensi</a>
                 <a href="jobdesk.html" class="nav-item">📝 Atur Jobdesk</a>
-                <div class="spacer"></div>
+                <div class="nav-spacer"></div>
                 <a href="javascript:void(0)" class="nav-item logout" onclick="logout()">🚪 Logout</a>
             </nav>
         </aside>
 
         <main class="main-content">
-            <div class="stats-row">
-                <div class="stat-card ontime"><span>TEPAT WAKTU</span><h3 id="sOn">0</h3></div>
-                <div class="stat-card late"><span>TERLAMBAT</span><h3 id="sLate">0</h3></div>
-                <div class="stat-card absent"><span>BELUM ABSEN</span><h3 id="sAbs">65</h3></div>
+            <div class="stats-container">
+                <div class="stat-box green"><span>TEPAT WAKTU</span><h3 id="sOn">0</h3></div>
+                <div class="stat-box red"><span>TERLAMBAT</span><h3 id="sLate">0</h3></div>
+                <div class="stat-box yellow"><span>BELUM ABSEN</span><h3 id="sAbs">65</h3></div>
             </div>
 
-            <div class="banner-absensi">
-                <div class="date-tag">
+            <div class="absensi-banner">
+                <div class="date-side">
                     <small id="pDay">SABTU</small>
                     <h2 id="pDate">21 FEB 2026</h2>
                 </div>
-                <div class="banner-title">ABSEN TVTOTO</div>
+                <div class="title-side">ABSEN TVTOTO</div>
             </div>
 
-            <div class="main-layout">
+            <div class="workspace">
                 <div class="left-panel">
-                    <div class="control-panel">
+                    <div class="control-bar">
                         <select id="sShift">
                             <option value="PAGI">PAGI (07:45)</option>
                             <option value="SHIFT G">SHIFT G (09:45)</option>
@@ -64,17 +62,16 @@
                         </select>
                         <input type="text" id="iName" placeholder="Ketik Nama Staff..." list="staffs">
                         <datalist id="staffs"></datalist>
-                        <div class="clock-box" id="clockDisplay">14:02:22</div>
-                        
-                        <div class="actions">
-                            <button class="b-blue" onclick="tambahAbsen()">ABSEN</button>
-                            <button class="b-yellow" onclick="filterTelat()">CEK TELAT</button>
-                            <button class="b-green" onclick="exportData()">CSV</button>
-                            <button class="b-red" onclick="resetData()">RESET</button>
+                        <div class="digital-clock" id="clockDisplay">00:00:00</div>
+                        <div class="button-group">
+                            <button class="btn-absen" onclick="tambahAbsen()">ABSEN</button>
+                            <button class="btn-cek" onclick="filterTelat()">CEK TELAT</button>
+                            <button class="btn-csv" onclick="exportData()">CSV</button>
+                            <button class="btn-reset" onclick="resetData()">RESET</button>
                         </div>
                     </div>
 
-                    <div class="table-frame">
+                    <div class="table-wrapper">
                         <table id="tblMain">
                             <thead>
                                 <tr>
@@ -91,12 +88,12 @@
                 </div>
 
                 <div class="right-panel">
-                    <div class="chat-head">
+                    <div class="chat-header">
                         <span>SYSTEM VOICE LOGS</span>
                         <button onclick="hapusChat()">Clear</button>
                     </div>
-                    <div class="chat-body" id="chatWrap"></div>
-                    <div class="chat-input-area">
+                    <div class="chat-content" id="chatWrap"></div>
+                    <div class="chat-footer">
                         <input type="text" id="chatIn" placeholder="Pesan admin..." onkeypress="if(event.key==='Enter') sendAdminChat()">
                     </div>
                 </div>
