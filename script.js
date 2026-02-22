@@ -1,76 +1,57 @@
-const STAFF_LIST = ["RADO DINATA", "IRVAN GANESHA", "JOSIA ROMANDA GINTING", "MUHAMMAD BAKRON", "JANNIFER MENTARI", "CINDY NURUL", "SENDI REVIAN", "SYUKUR KURNIAWAN", "HARYATI DEWI"];
-const SHIFT_TIME = { "PAGI": "07:45", "SHIFT G": "09:45", "SORE": "15:45", "MALAM": "21:45" };
-let currentMode = 'login';
+// CONFIG
+const ADMIN_PIN = "741852963";
+const NAMES = ["MARKUS FEBRIAN", "PUTRI CAHAYA", "RADO DINATA", "IRVAN GANESHA", "CINDY NURUL"];
+const TARGETS = { "PAGI": "07:45:00", "SHIFT G": "09:45:00", "SHIFT G2": "11:45:00", "SORE": "15:45:00", "MALAM": "21:45:00" };
 
-// --- LOGIKA AWAL (CEK LOGIN) ---
-window.onload = () => {
-    const isLogged = localStorage.getItem('tv_logged');
-    const overlay = document.getElementById('authOverlay');
-    
-    if (isLogged === 'true') {
-        overlay.style.display = 'none'; // Tetap sembunyi jika sudah login
-    } else {
-        overlay.style.display = 'flex'; // Tampilkan jika belum
-    }
-    
-    setInterval(updateClock, 1000);
-    document.getElementById('staffs').innerHTML = STAFF_LIST.map(s => `<option value="${s}">`).join('');
-    renderTable();
-    updateStats();
-};
+let authMode = 'LOGIN';
 
-// --- FITUR CHAT (PERBAIKAN) ---
-function sendAdminChat() {
-    const input = document.getElementById('chatIn');
-    const pesan = input.value.trim();
-    
-    if (pesan !== "") {
-        const time = new Date().toLocaleTimeString('en-GB');
-        const wrap = document.getElementById('chatWrap');
-        
-        // Tambahkan ke log tampilan
-        wrap.innerHTML += `<div><span style="color:#8b949e">[${time}]</span> <span style="color:#fff">Admin:</span> ${pesan}</div>`;
-        
-        // Bicara otomatis jika diawali pesan tertentu (opsional)
-        // bicara(pesan); 
-
-        input.value = ""; // Kosongkan input
-        wrap.scrollTop = wrap.scrollHeight; // Auto scroll ke bawah
-    }
-}
-
-// --- FUNGSI LOGIN / DAFTAR ---
-function toggleAuth(mode) {
-    currentMode = mode;
-    document.getElementById('loginGroup').style.display = 'none';
-    document.getElementById('registerGroup').style.display = 'none';
-    document.getElementById('forgotGroup').style.display = 'none';
-    
-    if(mode === 'login') {
-        document.getElementById('authTitle').innerText = "LOGIN SYSTEM";
-        document.getElementById('loginGroup').style.display = 'block';
-    } else if(mode === 'register') {
-        document.getElementById('authTitle').innerText = "DAFTAR AKUN";
-        document.getElementById('registerGroup').style.display = 'block';
-    } else {
-        document.getElementById('authTitle').innerText = "RESET PASSWORD";
-        document.getElementById('forgotGroup').style.display = 'block';
-    }
-}
-
+// --- 1. FITUR LOGIN, REGISTER, FORGOT ---
 function handleAuth() {
-    if (currentMode === 'login') {
-        const u = document.getElementById('uUser').value;
-        const p = document.getElementById('uPass').value;
-        if (u === "admin" && p === "admin123") {
+    const u = document.getElementById('uUser').value;
+    const p = document.getElementById('uPass').value;
+    let accounts = JSON.parse(localStorage.getItem('tv_accounts') || '{"admin":"admin123"}');
+
+    if(authMode === 'LOGIN') {
+        if(accounts[u] === p) {
             localStorage.setItem('tv_logged', 'true');
             document.getElementById('authOverlay').style.display = 'none';
-            bicara("Selamat datang admin");
-        } else { alert("User atau Password salah!"); }
-    } else {
-        alert("Permintaan berhasil diproses.");
-        toggleAuth('login');
+        } else { alert("Login Gagal!"); }
+    } 
+    else if(authMode === 'REGISTER') {
+        accounts[u] = p;
+        localStorage.setItem('tv_accounts', JSON.stringify(accounts));
+        alert("Berhasil Daftar! Silakan Login.");
+        showLogin();
     }
+    else if(authMode === 'FORGOT') {
+        if(accounts[u]) {
+            accounts[u] = p;
+            localStorage.setItem('tv_accounts', JSON.stringify(accounts));
+            alert("Password diperbarui!");
+            showLogin();
+        } else { alert("User tidak ditemukan!"); }
+    }
+}
+
+function showRegister() {
+    authMode = 'REGISTER';
+    document.getElementById('authTitle').innerText = 'DAFTAR AKUN';
+    document.getElementById('mainAuthBtn').innerText = 'BUAT AKUN';
+    document.getElementById('toggleText').innerHTML = 'Sudah punya akun? <span onclick="showLogin()">Masuk</span>';
+}
+
+function showLogin() {
+    authMode = 'LOGIN';
+    document.getElementById('authTitle').innerText = 'LOGIN SYSTEM';
+    document.getElementById('mainAuthBtn').innerText = 'MASUK';
+    document.getElementById('toggleText').innerHTML = 'Belum punya akun? <span onclick="showRegister()">Daftar</span>';
+}
+
+function showForgot() {
+    authMode = 'FORGOT';
+    document.getElementById('authTitle').innerText = 'RESET PASSWORD';
+    document.getElementById('mainAuthBtn').innerText = 'UPDATE PASSWORD';
+    document.getElementById('uPass').placeholder = 'Password Baru';
 }
 
 function logout() {
@@ -78,61 +59,48 @@ function logout() {
     location.reload();
 }
 
-// --- FITUR ABSENSI ---
-function bicara(teks) {
-    const speech = new SpeechSynthesisUtterance(teks);
-    speech.lang = 'id-ID';
-    window.speechSynthesis.speak(speech);
-}
-
-function updateClock() {
-    const now = new Date();
-    document.getElementById('clockDisplay').innerText = now.toLocaleTimeString('en-GB');
-    const days = ["MINGGU", "SENIN", "SELASA", "RABU", "KAMIS", "JUMAT", "SABTU"];
-    document.getElementById('pDay').innerText = days[now.getDay()];
-    document.getElementById('pDate').innerText = now.toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'}).toUpperCase();
-}
-
+// --- SISTEM ABSENSI ---
 function tambahAbsen() {
     const name = document.getElementById('iName').value.toUpperCase();
     const shift = document.getElementById('sShift').value;
     const time = document.getElementById('clockDisplay').innerText;
-
-    if (!STAFF_LIST.includes(name)) return alert("Nama tidak terdaftar!");
-
-    let logs = JSON.parse(localStorage.getItem('tv_logs') || "[]");
-    const status = time.substring(0, 5) > SHIFT_TIME[shift] ? "TERLAMBAT" : "TEPAT WAKTU";
-
-    logs.push({ shift, name, target: SHIFT_TIME[shift], actual: time, status });
-    localStorage.setItem('tv_logs', JSON.stringify(logs));
-
-    bicara(`${name} berhasil absen. Status ${status}`);
-    const wrap = document.getElementById('chatWrap');
-    wrap.innerHTML += `<div><span style="color:#8b949e">[${time}]</span> ${name} - ${status}</div>`;
     
-    document.getElementById('iName').value = "";
-    renderTable();
-    updateStats();
+    if(!NAMES.includes(name)) return alert("Nama tidak terdaftar!");
+    
+    let db = JSON.parse(localStorage.getItem('tv_absensi') || "[]");
+    db.push({ shift, name, target: TARGETS[shift], actual: time });
+    localStorage.setItem('tv_absensi', JSON.stringify(db));
+    render();
 }
 
-function renderTable() {
-    const logs = JSON.parse(localStorage.getItem('tv_logs') || "[]");
-    document.querySelector('#tblMain tbody').innerHTML = logs.slice().reverse().map(x => `
-        <tr>
-            <td>${x.shift}</td>
-            <td style="color: blue">${x.name}</td>
-            <td>${x.target}</td>
-            <td>${x.actual}</td>
-            <td style="color:${x.status==='TERLAMBAT'?'red':'green'}">${x.status}</td>
+function render() {
+    const db = JSON.parse(localStorage.getItem('tv_absensi') || "[]");
+    const tbody = document.querySelector('#tblMain tbody');
+    if(!tbody) return;
+    
+    tbody.innerHTML = db.reverse().map(d => `
+        <tr class="${d.actual > d.target ? 'row-late' : ''}">
+            <td>${d.shift}</td>
+            <td>${d.name}</td>
+            <td>${d.target}</td>
+            <td>${d.actual}</td>
+            <td>${d.actual > d.target ? 'TERLAMBAT' : 'TEPAT'}</td>
+            <td><button onclick="hapusOne('${d.name}')">✕</button></td>
         </tr>
     `).join('');
 }
 
-function updateStats() {
-    const logs = JSON.parse(localStorage.getItem('tv_logs') || "[]");
-    document.getElementById('sOn').innerText = logs.filter(x => x.status === "TEPAT WAKTU").length;
-    document.getElementById('sLate').innerText = logs.filter(x => x.status === "TERLAMBAT").length;
-    document.getElementById('sAbs').innerText = 65 - logs.length;
-}
+// JAM DIGITAL
+setInterval(() => {
+    const now = new Date();
+    if(document.getElementById('clockDisplay')) {
+        document.getElementById('clockDisplay').innerText = now.toTimeString().split(' ')[0];
+    }
+}, 1000);
 
-function hapusChat() { document.getElementById('chatWrap').innerHTML = ""; }
+window.onload = () => {
+    if(localStorage.getItem('tv_logged') === 'true') {
+        document.getElementById('authOverlay').style.display = 'none';
+    }
+    render();
+};
