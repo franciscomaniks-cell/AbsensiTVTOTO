@@ -1,14 +1,16 @@
 const STAFF_LIST = ["RADO DINATA", "IRVAN GANESHA", "JOSIA ROMANDA GINTING", "MUHAMMAD BAKRON", "JANNIFER MENTARI", "CINDY NURUL", "SENDI REVIAN", "SYUKUR KURNIAWAN", "HARYATI DEWI"];
 const SHIFT_TIME = { "PAGI": "07:45", "SHIFT G": "09:45", "SORE": "15:45", "MALAM": "21:45" };
+let currentMode = 'login';
 
-// --- LOGIKA AWAL & ANTI-FLICKER ---
+// --- LOGIKA AWAL (CEK LOGIN) ---
 window.onload = () => {
     const isLogged = localStorage.getItem('tv_logged');
     const overlay = document.getElementById('authOverlay');
     
-    // Jika belum login, tampilkan overlay. Jika sudah, biarkan display:none
-    if (isLogged !== 'true') {
-        overlay.style.display = 'flex';
+    if (isLogged === 'true') {
+        overlay.style.display = 'none'; // Tetap sembunyi jika sudah login
+    } else {
+        overlay.style.display = 'flex'; // Tampilkan jika belum
     }
     
     setInterval(updateClock, 1000);
@@ -17,41 +19,57 @@ window.onload = () => {
     updateStats();
 };
 
-// --- FITUR CHAT (REVISI) ---
+// --- FITUR CHAT (PERBAIKAN) ---
 function sendAdminChat() {
     const input = document.getElementById('chatIn');
-    const msg = input.value.trim();
+    const pesan = input.value.trim();
     
-    if (msg !== "") {
+    if (pesan !== "") {
         const time = new Date().toLocaleTimeString('en-GB');
-        const chatWrap = document.getElementById('chatWrap');
+        const wrap = document.getElementById('chatWrap');
         
-        // Tambahkan pesan ke dalam box
-        chatWrap.innerHTML += `
-            <div style="margin-bottom: 8px; font-family: monospace; font-size: 12px;">
-                <span style="color: #8b949e;">[${time}]</span> 
-                <span style="color: #00ff88; font-weight: bold;">Admin:</span> 
-                <span style="color: #fff;">${msg}</span>
-            </div>
-        `;
+        // Tambahkan ke log tampilan
+        wrap.innerHTML += `<div><span style="color:#8b949e">[${time}]</span> <span style="color:#fff">Admin:</span> ${pesan}</div>`;
         
+        // Bicara otomatis jika diawali pesan tertentu (opsional)
+        // bicara(pesan); 
+
         input.value = ""; // Kosongkan input
-        chatWrap.scrollTop = chatWrap.scrollHeight; // Auto-scroll ke bawah
+        wrap.scrollTop = wrap.scrollHeight; // Auto scroll ke bawah
     }
 }
 
-// --- FUNGSI LOGIN & LOGOUT ---
-function handleAuth() {
-    const u = document.getElementById('uUser').value;
-    const p = document.getElementById('uPass').value;
+// --- FUNGSI LOGIN / DAFTAR ---
+function toggleAuth(mode) {
+    currentMode = mode;
+    document.getElementById('loginGroup').style.display = 'none';
+    document.getElementById('registerGroup').style.display = 'none';
+    document.getElementById('forgotGroup').style.display = 'none';
     
-    // Ganti 'admin' & 'admin123' sesuai keinginan Anda
-    if (u === "admin" && p === "admin123") {
-        localStorage.setItem('tv_logged', 'true');
-        document.getElementById('authOverlay').style.display = 'none';
-        bicara("Selamat datang admin");
+    if(mode === 'login') {
+        document.getElementById('authTitle').innerText = "LOGIN SYSTEM";
+        document.getElementById('loginGroup').style.display = 'block';
+    } else if(mode === 'register') {
+        document.getElementById('authTitle').innerText = "DAFTAR AKUN";
+        document.getElementById('registerGroup').style.display = 'block';
     } else {
-        alert("Username atau Password salah!");
+        document.getElementById('authTitle').innerText = "RESET PASSWORD";
+        document.getElementById('forgotGroup').style.display = 'block';
+    }
+}
+
+function handleAuth() {
+    if (currentMode === 'login') {
+        const u = document.getElementById('uUser').value;
+        const p = document.getElementById('uPass').value;
+        if (u === "admin" && p === "admin123") {
+            localStorage.setItem('tv_logged', 'true');
+            document.getElementById('authOverlay').style.display = 'none';
+            bicara("Selamat datang admin");
+        } else { alert("User atau Password salah!"); }
+    } else {
+        alert("Permintaan berhasil diproses.");
+        toggleAuth('login');
     }
 }
 
@@ -69,9 +87,7 @@ function bicara(teks) {
 
 function updateClock() {
     const now = new Date();
-    const display = document.getElementById('clockDisplay');
-    if(display) display.innerText = now.toLocaleTimeString('en-GB');
-    
+    document.getElementById('clockDisplay').innerText = now.toLocaleTimeString('en-GB');
     const days = ["MINGGU", "SENIN", "SELASA", "RABU", "KAMIS", "JUMAT", "SABTU"];
     document.getElementById('pDay').innerText = days[now.getDay()];
     document.getElementById('pDate').innerText = now.toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'}).toUpperCase();
@@ -85,17 +101,14 @@ function tambahAbsen() {
     if (!STAFF_LIST.includes(name)) return alert("Nama tidak terdaftar!");
 
     let logs = JSON.parse(localStorage.getItem('tv_logs') || "[]");
-    const isLate = time.substring(0, 5) > SHIFT_TIME[shift];
-    const status = isLate ? "TERLAMBAT" : "TEPAT WAKTU";
+    const status = time.substring(0, 5) > SHIFT_TIME[shift] ? "TERLAMBAT" : "TEPAT WAKTU";
 
     logs.push({ shift, name, target: SHIFT_TIME[shift], actual: time, status });
     localStorage.setItem('tv_logs', JSON.stringify(logs));
 
     bicara(`${name} berhasil absen. Status ${status}`);
-    
-    // Log ke chat otomatis
-    const chatWrap = document.getElementById('chatWrap');
-    chatWrap.innerHTML += `<div><span style="color:#8b949e">[${time}]</span> ${name} - ${status}</div>`;
+    const wrap = document.getElementById('chatWrap');
+    wrap.innerHTML += `<div><span style="color:#8b949e">[${time}]</span> ${name} - ${status}</div>`;
     
     document.getElementById('iName').value = "";
     renderTable();
@@ -104,15 +117,13 @@ function tambahAbsen() {
 
 function renderTable() {
     const logs = JSON.parse(localStorage.getItem('tv_logs') || "[]");
-    const tbody = document.querySelector('#tblMain tbody');
-    tbody.innerHTML = logs.slice().reverse().map((x, index) => `
+    document.querySelector('#tblMain tbody').innerHTML = logs.slice().reverse().map(x => `
         <tr>
             <td>${x.shift}</td>
-            <td style="color: #2e3192; font-weight: bold;">${x.name}</td>
+            <td style="color: blue">${x.name}</td>
             <td>${x.target}</td>
             <td>${x.actual}</td>
-            <td style="color:${x.status==='TERLAMBAT'?'red':'green'}; font-weight: bold;">${x.status}</td>
-            <td><button onclick="hapusBaris(${logs.length - 1 - index})" style="background:none; border:none; cursor:pointer;">🗑️</button></td>
+            <td style="color:${x.status==='TERLAMBAT'?'red':'green'}">${x.status}</td>
         </tr>
     `).join('');
 }
@@ -124,22 +135,4 @@ function updateStats() {
     document.getElementById('sAbs').innerText = 65 - logs.length;
 }
 
-function hapusBaris(index) {
-    let logs = JSON.parse(localStorage.getItem('tv_logs') || "[]");
-    logs.splice(index, 1);
-    localStorage.setItem('tv_logs', JSON.stringify(logs));
-    renderTable();
-    updateStats();
-}
-
-function hapusChat() {
-    document.getElementById('chatWrap').innerHTML = "";
-}
-
-function resetData() {
-    if(confirm("Hapus semua data absensi hari ini?")) {
-        localStorage.removeItem('tv_logs');
-        renderTable();
-        updateStats();
-    }
-}
+function hapusChat() { document.getElementById('chatWrap').innerHTML = ""; }
