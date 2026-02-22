@@ -3,95 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TVTOTO | Atur Jobdesk</title>
+    <title>TVTOTO Absensi System</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div class="app-container">
-        <aside class="sidebar">
+<body class="cyber-bg">
+
+    <div id="authOverlay" style="display: none;">
+        <div class="auth-card">
+            <h2>LOGIN SYSTEM</h2>
+            <div class="auth-inputs">
+                <input type="text" id="uUser" placeholder="Username">
+                <input type="password" id="uPass" placeholder="Password">
+            </div>
+            <button class="btn-masuk" onclick="handleAuth()">MASUK</button>
+            <div class="auth-footer">
+                <a href="#">Belum punya akun? Daftar</a>
+                <a href="#">Lupa Password?</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-wrapper">
+        <aside id="sidebar" class="sidebar">
             <div class="sidebar-header">
-                <div class="brand-logo-new">TV<span>TOTO</span></div>
+                <span class="brand">DASHBOARD</span>
+                <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
             </div>
             <nav class="nav-menu">
-                <div class="nav-item" onclick="location.href='index.html'">🏠 Home / Absensi</div>
-                <div class="nav-item active">📝 Atur Jobdesk</div>
-                <div class="nav-divider"></div>
-                <div class="nav-item logout" onclick="logout()">🚪 Logout</div>
+                <a href="index.html" class="nav-item active">🏠 Home / Absensi</a>
+                <a href="jobdesk.html" class="nav-item">📝 Atur Jobdesk</a>
+                <div class="spacer"></div>
+                <a href="javascript:void(0)" class="nav-item logout" onclick="logout()">🚪 Logout</a>
             </nav>
         </aside>
 
-        <main class="content-wrapper">
-            <div class="jobdesk-container">
-                <div class="brand-header">
-                    <h1>PENGACAK JOBDESK</h1>
-                    <div id="displayDate" style="color: var(--accent); font-weight: bold;"></div>
-                </div>
+        <main class="main-content">
+            <div class="stats-row">
+                <div class="stat-card ontime"><span>TEPAT WAKTU</span><h3 id="sOn">0</h3></div>
+                <div class="stat-card late"><span>TERLAMBAT</span><h3 id="sLate">0</h3></div>
+                <div class="stat-card absent"><span>BELUM ABSEN</span><h3 id="sAbs">65</h3></div>
+            </div>
 
-                <div class="main-grid">
-                    <div class="card">
-                        <label>🕒 Pilih Shift</label>
-                        <select id="shiftSelect">
-                            <option value="PAGI">SHIFT PAGI</option>
-                            <option value="SORE">SHIFT SORE</option>
-                            <option value="MALAM">SHIFT MALAM</option>
+            <div class="banner-absensi">
+                <div class="date-tag">
+                    <small id="pDay">SABTU</small>
+                    <h2 id="pDate">21 FEB 2026</h2>
+                </div>
+                <div class="banner-title">ABSEN TVTOTO</div>
+            </div>
+
+            <div class="main-layout">
+                <div class="left-panel">
+                    <div class="control-panel">
+                        <select id="sShift">
+                            <option value="PAGI">PAGI (07:45)</option>
+                            <option value="SHIFT G">SHIFT G (09:45)</option>
+                            <option value="SORE">SORE (15:45)</option>
+                            <option value="MALAM">MALAM (21:45)</option>
                         </select>
-                        <label style="margin-top:15px">👥 Daftar Staff</label>
-                        <textarea id="staffInput" rows="8">RADO DINATA
-IRVAN GANESHA
-JOSIA ROMANDA GINTING</textarea>
+                        <input type="text" id="iName" placeholder="Ketik Nama Staff..." list="staffs">
+                        <datalist id="staffs"></datalist>
+                        <div class="clock-box" id="clockDisplay">14:02:22</div>
+                        
+                        <div class="actions">
+                            <button class="b-blue" onclick="tambahAbsen()">ABSEN</button>
+                            <button class="b-yellow" onclick="filterTelat()">CEK TELAT</button>
+                            <button class="b-green" onclick="exportData()">CSV</button>
+                            <button class="b-red" onclick="resetData()">RESET</button>
+                        </div>
                     </div>
-                    <div class="card">
-                        <label>💼 Daftar Jobdesk</label>
-                        <textarea id="jobInput" rows="12">DEPO BRI
-DEPO MANDIRI
-WD ALL BANK</textarea>
+
+                    <div class="table-frame">
+                        <table id="tblMain">
+                            <thead>
+                                <tr>
+                                    <th>SHIFT</th>
+                                    <th>NAMA STAFF</th>
+                                    <th>TARGET</th>
+                                    <th>AKTUAL</th>
+                                    <th>STATUS</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
                 </div>
 
-                <div class="btn-group">
-                    <button class="btn-auth" onclick="generateJobdesk()">🎲 ACAK & SIMPAN</button>
-                    <button class="btn-auth" style="background:#22c55e" onclick="downloadImage()">📸 UNDUH PNG</button>
-                </div>
-
-                <div id="captureArea" class="capture-card">
-                    <div class="capture-header">
-                        <h2>LAPORAN TUGAS OPERASIONAL</h2>
-                        <div id="shiftDisplayText" class="shift-tag">SHIFT PAGI</div>
+                <div class="right-panel">
+                    <div class="chat-head">
+                        <span>SYSTEM VOICE LOGS</span>
+                        <button onclick="hapusChat()">Clear</button>
                     </div>
-                    <table class="result-table">
-                        <thead><tr><th>NAMA PERSONEL</th><th>TUGAS</th></tr></thead>
-                        <tbody id="resultBody"></tbody>
-                    </table>
+                    <div class="chat-body" id="chatWrap"></div>
+                    <div class="chat-input-area">
+                        <input type="text" id="chatIn" placeholder="Pesan admin..." onkeypress="if(event.key==='Enter') sendAdminChat()">
+                    </div>
                 </div>
             </div>
         </main>
     </div>
+
     <script src="script.js"></script>
-    <script>
-        // Inisialisasi khusus halaman jobdesk
-        const dateOptions = { day: "numeric", month: "long", year: "numeric" };
-        document.getElementById("displayDate").innerText = new Date().toLocaleDateString("id-ID", dateOptions);
-        
-        function generateJobdesk() {
-            const shift = document.getElementById("shiftSelect").value;
-            const staffArr = document.getElementById("staffInput").value.split("\n").filter(t => t.trim() !== "");
-            const jobArr = document.getElementById("jobInput").value.split("\n").filter(t => t.trim() !== "");
-            
-            if(staffArr.length === 0) return alert("Isi nama staff!");
-            
-            document.getElementById("shiftDisplayText").innerText = "SHIFT " + shift;
-            let shuffledJobs = [...jobArr].sort(() => Math.random() - 0.5);
-            
-            const tbody = document.getElementById("resultBody");
-            tbody.innerHTML = staffArr.map((name, i) => `
-                <tr>
-                    <td>${name.toUpperCase()}</td>
-                    <td>${shuffledJobs[i] || "OFF/CADANGAN"}</td>
-                </tr>
-            `).join('');
-        }
-    </script>
 </body>
 </html>
